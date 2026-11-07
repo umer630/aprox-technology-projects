@@ -53,7 +53,7 @@ export function box(w, h, d, material, x = 0, y = 0, z = 0, opts) {
 }
 
 // Rounded box (vehicles/luggage ke liye)
-export function rbox(w, h, d, r, material, segs = 3) {
+export function rbox(w, h, d, r, material, segs = 2) {
   const shape = new THREE.Shape();
   const x = -w / 2, y = -h / 2;
   shape.moveTo(x + r, y); shape.lineTo(x + w - r, y); shape.quadraticCurveTo(x + w, y, x + w, y + r);

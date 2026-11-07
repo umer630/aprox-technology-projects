@@ -2,6 +2,7 @@
 // Character local +Z ki taraf dekhta hai. Uska LEFT = +X, RIGHT = -X.
 import * as THREE from 'three';
 import { mat, mesh, clamp, lerp, TAU, noiseTex } from './util.js';
+import { mergeDirect } from './optimize.js';
 
 function capsule(r, len, material, segs = 12) {
   const m = mesh(new THREE.CapsuleGeometry(r, len, 6, segs), material);
@@ -214,6 +215,10 @@ export function createCharacter(look = LOOKS.umer, seed = 1) {
   }
 
   root.traverse(o => { if (o.isMesh) { o.castShadow = true; } });
+  const skip = new Set(J.camStraps || []);
+  for (const k of Object.keys(J)) if (J[k] && J[k].isObject3D) mergeDirect(J[k], skip);
+  for (const f of [...J.fingersL, ...J.fingersR]) { mergeDirect(f[0]); mergeDirect(f[1]); }
+  mergeDirect(face, skip);
 
   const C = {
     root, rig, J, eyes, mouth, look: L,

@@ -2,6 +2,7 @@
 import * as THREE from 'three';
 import { SEQ_A } from './seqA_house.js';
 import { disposeTree, clamp } from './lib/util.js';
+import { freezeStatic } from './lib/optimize.js';
 
 const FPS = 24;
 const registry = { A: SEQ_A };
@@ -21,7 +22,7 @@ function timeline(ids) {
 async function init({ width = 1920, height = 1080, seqs = ['A'] } = {}) {
   for (const id of seqs) if (!registry[id]) { const m = await import(`./seq${id}.js`); register(m.default); }
   W = width; H = height;
-  renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, powerPreference: 'high-performance' });
+  renderer = new THREE.WebGLRenderer({ antialias: !window.NO_AA, preserveDrawingBuffer: true, powerPreference: 'high-performance' });
   renderer.setSize(W, H); renderer.setPixelRatio(1);
   renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
@@ -40,7 +41,8 @@ function activate(entry) {
   camera = new THREE.PerspectiveCamera(40, W / H, 0.05, 30000);
   renderer.toneMappingExposure = entry.seq.exposure || 0.82;
   ctx = entry.seq.build(scene, renderer, camera);
-  active = entry;
+  if (!window.NO_FREEZE) { const r = freezeStatic(scene, ctx); console.warn('freeze', entry.seq.id, JSON.stringify(r)); }
+  active = entry; window.__r = renderer; window.__s = scene; window.__c = ctx;
 }
 
 function locate(t) {
@@ -140,5 +142,5 @@ function subtitles() {
   return { subs: out, sfx, seqs, shots: seqList.flatMap(e => e.shots.map(sh => ({ seq: e.seq.id, id: sh.id, t0: e.t0 + sh.s0, t1: e.t0 + sh.s1, desc: sh.desc }))) };
 }
 
-window.SPLASH = { init, renderFrame, renderThumb, subtitles, locate: (t) => { const l = locate(t); return { seq: l.e.seq.id, shot: l.shot.id, lt: l.lt }; } };
+window.SPLASH = { init, renderFrame, __prof: () => { const gl = renderer.getContext(); const px = new Uint8Array(4); const T = []; T.push(performance.now()); renderer.render(scene, camera); gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, px); T.push(performance.now()); renderer.shadowMap.autoUpdate = false; renderer.render(scene, camera); gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, px); T.push(performance.now()); renderer.shadowMap.autoUpdate = true; cg.drawImage(renderer.domElement, 0, 0); T.push(performance.now()); comp.toDataURL('image/jpeg', 0.92); T.push(performance.now()); return { render: T[1] - T[0], renderNoShadowUpdate: T[2] - T[1], drawImage: T[3] - T[2], jpeg: T[4] - T[3] }; }, renderThumb, subtitles, locate: (t) => { const l = locate(t); return { seq: l.e.seq.id, shot: l.shot.id, lt: l.lt }; } };
 window.SPLASH_READY = true;

@@ -1,6 +1,7 @@
 // Vehicles: sab local +X ki taraf face karte hain. Pakistan = right-hand drive (driver seat +Z side).
 import * as THREE from 'three';
 import { mat, mesh, box, rbox, rng, canvasTex } from './util.js';
+import { mergeChildren } from './optimize.js';
 
 const glassMat = () => new THREE.MeshPhysicalMaterial({ color: '#0d1318', roughness: 0.05, metalness: 0.1, transparent: true, opacity: 0.62, clearcoat: 1, envMapIntensity: 1.5, side: THREE.DoubleSide });
 
@@ -13,21 +14,22 @@ function profileExtrude(points, width, material, bevel = 0.05, holes = null) {
     else shape.lineTo(p[0], p[1]);
   }
   shape.closePath();
-  const geo = new THREE.ExtrudeGeometry(shape, { depth: width - bevel * 2, bevelEnabled: bevel > 0, bevelThickness: bevel, bevelSize: bevel, bevelSegments: 3, curveSegments: 16 });
+  const geo = new THREE.ExtrudeGeometry(shape, { depth: width - bevel * 2, bevelEnabled: bevel > 0, bevelThickness: bevel, bevelSize: bevel, bevelSegments: 1, curveSegments: 8 });
   geo.translate(0, 0, -(width - bevel * 2) / 2);
   return mesh(geo, material);
 }
 
 export function createWheel(r = 0.39, w = 0.26, rimColor = '#1c1c1c', spokes = 6) {
   const g = new THREE.Group();
-  const tyre = mesh(new THREE.TorusGeometry(r * 0.78, r * 0.24, 12, 28), mat('#141414', 0.92)); tyre.scale.z = w / (r * 0.48); g.add(tyre);
-  const rim = mesh(new THREE.CylinderGeometry(r * 0.62, r * 0.62, w * 0.7, 24), mat(rimColor, 0.35, 0.7)); rim.rotation.x = Math.PI / 2; g.add(rim);
+  const tyre = mesh(new THREE.TorusGeometry(r * 0.78, r * 0.24, 8, 18), mat('#141414', 0.92)); tyre.scale.z = w / (r * 0.48); g.add(tyre);
+  const rim = mesh(new THREE.CylinderGeometry(r * 0.62, r * 0.62, w * 0.7, 14), mat(rimColor, 0.35, 0.7)); rim.rotation.x = Math.PI / 2; g.add(rim);
   const sm = mat('#2c2c2c', 0.4, 0.6);
   for (let i = 0; i < spokes; i++) {
     const s = box(r * 1.1, r * 0.12, 0.04, sm); s.rotation.z = (i / spokes) * Math.PI; s.position.z = w * 0.36; g.add(s);
     const s2 = s.clone(); s2.position.z = -w * 0.36; g.add(s2);
   }
   const hub = mesh(new THREE.CylinderGeometry(r * 0.16, r * 0.16, w * 0.8, 12), mat('#888', 0.3, 0.9)); hub.rotation.x = Math.PI / 2; g.add(hub);
+  mergeChildren(g);
   return g;
 }
 
@@ -120,6 +122,7 @@ export function createRevo(color = '#101214') {
   { const cap = mesh(new THREE.CylinderGeometry(0.05, 0.05, 0.03, 12), mat('#c9a020', 0.4, 0.5)); cap.position.set(2.25, 1.13, -0.3); eng.add(cap); }
   const hoodPiv = new THREE.Group(); hoodPiv.position.set(1.06, 1.175, 0); g.add(hoodPiv);
   const hood = box(1.38, 0.035, W - 0.12, paint, 0.69, 0, 0); hood.rotation.z = -0.045; hoodPiv.add(hood);
+  mergeChildren(g, [...wheels, tail, hoodPiv]);
   const V = { group: g, wheels, tail, R, dist: 0, hoodPiv, setHood(o) { hoodPiv.rotation.z = o * 0.95; }, seats: { driver: new THREE.Vector3(0.38, 0.62, zDriver), passenger: new THREE.Vector3(0.38, 0.62, zPass) },
     roll(d) { this.dist = d; for (const w of wheels) w.rotation.z = -d / R; },
     setTail(open) { tail.rotation.z = open * (Math.PI / 2); } // open=1 → neeche khula
@@ -167,6 +170,7 @@ export function createCar(type = 'sedan', seed = 1) {
   const head = mesh(new THREE.SphereGeometry(0.11, 10, 8), mat('#2a1d16', 0.8)); head.position.set(type === 'bus' ? 4.6 : 0.0, (type === 'bus' ? 2.1 : roofY - 0.3), (W / 2) * 0.45); g.add(head);
   g.traverse(o => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = false; } });
   cab.castShadow = false;
+  mergeChildren(g, wheels);
   return { group: g, wheels, R, L, roll(d) { for (const w of wheels) w.rotation.z = -d / R; } };
 }
 
@@ -194,6 +198,7 @@ export function createRickshaw(seed = 1) {
   const head = mesh(new THREE.SphereGeometry(0.11, 10, 8), mat('#2a1d16', 0.8)); head.position.set(0.55, 1.3, 0); g.add(head);
   const bodyD = mesh(new THREE.CylinderGeometry(0.15, 0.18, 0.5, 10), mat('#d9d6cc', 0.9)); bodyD.position.set(0.55, 0.95, 0); g.add(bodyD);
   g.traverse(o => { if (o.isMesh) o.castShadow = true; });
+  mergeChildren(g, wheels);
   return { group: g, wheels, R: 0.22, L: 2.6, roll(d) { for (const w of wheels) w.rotation.z = -d / 0.22; } };
 }
 
@@ -220,12 +225,13 @@ export function createBike(seed = 1) {
     const sh = box(0.12, 0.45, 0.12, mat('#2c2c2c', 0.9), 0.15, 0.68, s * 0.17); sh.rotation.z = 0.1; g.add(sh);
   }
   g.traverse(o => { if (o.isMesh) o.castShadow = true; });
+  mergeChildren(g, wheels);
   return { group: g, wheels, R: 0.3, L: 1.9, roll(d) { for (const w of wheels) w.rotation.z = -d / 0.3; } };
 }
 
 // Traffic manager — LEFT-hand traffic. Road X axis par: +X heading lanes z<0 (left), −X heading lanes z>0.
 // Har lane ki ek speed → same-lane vehicles kabhi overlap nahi karte. Window centre ke gird wrap hota hai.
-export function createTraffic(scene, { lanes, window: win = 520, seed = 7 }) {
+export function createTraffic(scene, { lanes, window: win = 380, seed = 7 }) {
   const r = rng(seed); const items = [];
   for (const ln of lanes) {
     const n = ln.count; const gap = win / n;

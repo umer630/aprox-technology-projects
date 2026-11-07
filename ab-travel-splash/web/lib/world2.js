@@ -3,6 +3,7 @@
 import * as THREE from 'three';
 import { mat, mesh, box, rbox, rng, canvasTex, noiseTex, softSprite, TAU } from './util.js';
 import { createWheel } from './vehicles.js';
+import { mergeChildren } from './optimize.js';
 
 // ---------------- BRAND BANNERS ----------------
 export const BRANDS = [
@@ -329,6 +330,7 @@ export function createCorolla(color = '#f4f4f2') {
   const sw = mesh(new THREE.TorusGeometry(0.17, 0.02, 8, 24), mat('#111', 0.6)); sw.position.set(0.55, 0.98, 0.4); sw.rotation.y = Math.PI / 2; sw.rotateX(-0.45); g.add(sw);
   const wheels = []; for (const ax of [fa, ra]) for (const s of [-1, 1]) { const w = createWheel(R, 0.2, '#b9bcc0', 5); w.position.set(ax, R, s * (W / 2 - 0.12)); g.add(w); wheels.push(w); }
   g.traverse(o => o.isMesh && (o.castShadow = true));
+  mergeChildren(g, [...wheels, doorPiv]);
   return { group: g, wheels, doorPiv, R, seats: { driver: new THREE.Vector3(0.12, 0.45, 0.4), passenger: new THREE.Vector3(0.12, 0.45, -0.4) },
     roll(d) { for (const w of wheels) w.rotation.z = -d / R; }, setDoor(o) { doorPiv.rotation.y = o * 1.15; } };
 }
@@ -349,7 +351,7 @@ export function buildMall(scene, x, z, w, d, h, name, rotY = 0, seed = 1) {
 
 // ---------------- FOOD COURT (airport lounge) ----------------
 export function buildFoodCourt(scene, at) {
-  const g = new THREE.Group(); g.position.copy(at); scene.add(g);
+  const g = new THREE.Group(); g.userData.static = true; g.position.copy(at); scene.add(g);
   const stall = (x, name, bg, fg, sub) => {
     const s = new THREE.Group(); s.position.set(x, 0, 0); g.add(s);
     s.add(box(6, 1.1, 1.0, mat('#f2efe8', 0.4), 0, 0.55, 0)); s.add(box(6, 3.2, 0.2, mat('#efe9df', 0.6), 0, 1.6, -2.2));

@@ -11,12 +11,12 @@ export function setupSkyAndLight(scene, renderer, { elev = 25, azim = 140, turbi
   // environment map from sky (reflections on cars, glass)
   const pm = new THREE.PMREMGenerator(renderer); const envScene = new THREE.Scene(); const sky2 = new Sky(); sky2.scale.setScalar(1000);
   Object.assign(sky2.material.uniforms.sunPosition.value, sun); for (const k of ['turbidity', 'rayleigh', 'mieCoefficient', 'mieDirectionalG']) sky2.material.uniforms[k].value = u[k].value;
-  envScene.add(sky2); const rt = pm.fromScene(envScene, 0, 0.1, 2000); scene.environment = rt.texture;
+  envScene.add(sky2); const rt = pm.fromScene(envScene, 0, 0.1, 2000); // scene.environment band: SwiftShader par 2.5x tez render
   const dl = new THREE.DirectionalLight(sunColor, sunI); dl.position.copy(sun).multiplyScalar(100); dl.castShadow = true;
   dl.shadow.mapSize.set(2048, 2048); const sc = dl.shadow.camera; sc.left = -shadowSize; sc.right = shadowSize; sc.top = shadowSize; sc.bottom = -shadowSize; sc.near = 1; sc.far = 400;
   dl.shadow.bias = -0.0004; dl.shadow.normalBias = 0.03; dl.shadow.radius = 3;
   scene.add(dl); scene.add(dl.target);
-  const hemi = new THREE.HemisphereLight('#cfe2ff', '#7a6a52', hemiI * 0.7); scene.add(hemi);
+  const hemi = new THREE.HemisphereLight('#cfe2ff', '#7a6a52', hemiI * 1.0); scene.add(hemi);
   if (fog) scene.fog = new THREE.Fog(fog[0], fog[1], fog[2]);
   return { sky, sun, dl, hemi, follow(p) { dl.position.copy(p).add(sun.clone().multiplyScalar(100)); dl.target.position.copy(p); } };
 }
@@ -105,17 +105,37 @@ function facadeTex(seed, base, floors, cols, { glass = false } = {}) {
     }
   });
 }
+const _tileMats = new Map();
+function tileMat(base, glass, variant) {
+  const key = base + glass + variant;
+  if (!_tileMats.has(key)) {
+    const r = rng(variant * 31 + 7);
+    const t = canvasTex(128, 128, (g, w, h) => {
+      g.fillStyle = base; g.fillRect(0, 0, w, h);
+      if (glass) { g.fillStyle = `rgb(${50 + r() * 25},${80 + r() * 25},${100 + r() * 25})`; g.fillRect(2, 3, w - 4, h - 5); g.fillStyle = 'rgba(255,255,255,0.12)'; g.fillRect(2, 3, w * 0.4, h - 5); return; }
+      for (let i = 0; i < 600; i++) { g.fillStyle = `rgba(0,0,0,${r() * 0.05})`; g.fillRect(r() * w, r() * h, 3, 3); }
+      g.fillStyle = variant % 3 === 0 ? '#3a3f44' : '#22282e'; g.fillRect(w * 0.15, h * 0.2, w * 0.7, h * 0.55);
+      g.strokeStyle = 'rgba(255,255,255,0.25)'; g.lineWidth = 2; g.strokeRect(w * 0.15, h * 0.2, w * 0.7, h * 0.55);
+      if (variant % 2) { g.fillStyle = '#e8e8e2'; g.fillRect(w * 0.6, h * 0.62, w * 0.25, h * 0.14); }
+      g.fillStyle = 'rgba(0,0,0,0.25)'; g.fillRect(0, h * 0.86, w, 4);
+    }, { repeat: [1, 1] });
+    _tileMats.set(key, new THREE.MeshStandardMaterial({ map: t, roughness: glass ? 0.25 : 0.9, metalness: glass ? 0.4 : 0 }));
+  }
+  return _tileMats.get(key);
+}
+// Building: shared tile texture (repeat UV geometry mein baked) → bohat saari imaratein ek material share karti hain
 export function building(scene, x, z, w, d, h, seed, { base, glass = false, rotY = 0 } = {}) {
   const r = rng(seed);
   const cols = ['#d8cdb8', '#e4dccb', '#c9bfa8', '#b9b2a3', '#e6e1d6', '#d3c3a4', '#a8a59d'];
   const c = base || cols[Math.floor(r() * cols.length)];
-  const floors = Math.max(1, Math.round(h / 3.2));
-  const t = facadeTex(seed, c, floors, Math.max(2, Math.round(w / 3)), { glass });
-  const tSide = facadeTex(seed + 1, c, floors, Math.max(2, Math.round(d / 3)), { glass });
+  const floors = Math.max(1, Math.round(h / 3.2)), cw = Math.max(2, Math.round(w / 3)), cd = Math.max(2, Math.round(d / 3));
+  const geo = new THREE.BoxGeometry(w, h, d); const uv = geo.attributes.uv;
+  // BoxGeometry faces: 0 +x,1 -x,2 +y,3 -y,4 +z,5 -z (har face 4 vertices)
+  const rep = [[cd, floors], [cd, floors], [0, 0], [0, 0], [cw, floors], [cw, floors]];
+  for (let f = 0; f < 6; f++) for (let v = 0; v < 4; v++) { const i = f * 4 + v; uv.setXY(i, uv.getX(i) * (rep[f][0] || 0.01), uv.getY(i) * (rep[f][1] || 0.01)); }
+  const tm = tileMat(c, glass, Math.floor(r() * 4)); tm.map.wrapS = tm.map.wrapT = THREE.RepeatWrapping;
   const plain = mat(c, 0.9);
-  const ms = [new THREE.MeshStandardMaterial({ map: tSide, roughness: glass ? 0.25 : 0.9, metalness: glass ? 0.4 : 0 }), new THREE.MeshStandardMaterial({ map: tSide, roughness: 0.9 }), plain, plain,
-    new THREE.MeshStandardMaterial({ map: t, roughness: glass ? 0.25 : 0.9, metalness: glass ? 0.4 : 0 }), new THREE.MeshStandardMaterial({ map: t, roughness: 0.9 })];
-  const b = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), ms); b.castShadow = true; b.receiveShadow = true;
+  const b = new THREE.Mesh(geo, [tm, tm, plain, plain, tm, tm]); b.castShadow = true; b.receiveShadow = true;
   b.position.set(x, h / 2, z); b.rotation.y = rotY; scene.add(b);
   if (r() < 0.5) { const tank = mesh(new THREE.CylinderGeometry(0.6, 0.6, 1.2, 10), mat('#2b2b2b', 0.8)); tank.position.set(x + (r() - 0.5) * w * 0.5, h + 0.6, z); scene.add(tank); }
   return b;
@@ -257,7 +277,7 @@ export function buildJinnahTerminal(scene) {
   ground(scene, 3000, '#9e9278');
   const beige = new THREE.MeshStandardMaterial({ color: '#e6dcc6', roughness: 0.85, map: noiseTex('#e6dcc6', 12, 128, 61, [6, 6]) });
   const darkGlass = new THREE.MeshPhysicalMaterial({ color: '#2a2f38', roughness: 0.12, metalness: 0.6, clearcoat: 1, map: curtainTex() });
-  const T = new THREE.Group(); T.position.set(0, 0, -40); scene.add(T);
+  const T = new THREE.Group(); T.userData.static = true; T.position.set(0, 0, -40); scene.add(T);
   // central block
   T.add(box(70, 24, 22, beige, 0, 12, -4));
   const cw = mesh(new THREE.BoxGeometry(48, 15, 0.4), darkGlass); cw.position.set(0, 14.5, 7.2); T.add(cw);
@@ -455,7 +475,7 @@ export function buildIslamabadAvenue(scene, R = scene, { hills = true } = {}) {
 // ===================== FAISAL MOSQUE =====================
 // Reference: 8-facet tent-like prayer hall, 4 pencil minarets (~88 m), crescent finial, white marble courtyard.
 export function buildFaisalMosque(scene, at = new THREE.Vector3(0, 0, 0), scale = 1) {
-  const M = new THREE.Group(); M.position.copy(at); M.scale.setScalar(scale); scene.add(M);
+  const M = new THREE.Group(); M.userData.static = true; M.position.copy(at); M.scale.setScalar(scale); scene.add(M);
   const white = new THREE.MeshPhysicalMaterial({ color: '#f4f3ef', roughness: 0.35, clearcoat: 0.3 });
   const ribbed = new THREE.MeshPhysicalMaterial({ color: '#f1efe9', roughness: 0.45, map: ribTex() });
   const marble = new THREE.MeshPhysicalMaterial({ color: '#efeee9', roughness: 0.15, clearcoat: 0.8 });
@@ -529,7 +549,7 @@ function lattice() {
 }
 
 function blobGeo(seed) {
-  const g = new THREE.IcosahedronGeometry(1, 3); const p = g.attributes.position; const r = rng(seed + 99);
+  const g = new THREE.IcosahedronGeometry(1, 2); const p = g.attributes.position; const r = rng(seed + 99);
   const k = [r() * 6, r() * 6, r() * 6];
   for (let i = 0; i < p.count; i++) { const x = p.getX(i), y = p.getY(i), z = p.getZ(i);
     const n = 1 + 0.16 * Math.sin(x * 5 + k[0]) * Math.sin(y * 4 + k[1]) + 0.1 * Math.sin(z * 7 + k[2] + x * 3) + 0.06 * Math.sin((x + y + z) * 13);
