@@ -21,7 +21,7 @@ export const LOOKS = {
   umer: {
     height: 1.76, skin: '#b5774f', hair: '#1a1411', beard: '#3a2b21', beardStyle: 'trim',
     shirt: '#3a6ea5', shirtStyle: 'polo', pants: '#3d4350', shoes: '#e8e4dc', sole: '#5a4a3a',
-    kameez: false, cap: false, glasses: false, build: 1.0, eyes: '#2a1a10'
+    kameez: false, cap: false, glasses: false, build: 1.0, eyes: '#2a1a10', cameraBag: true
   },
   driver: {
     height: 1.71, skin: '#9c6644', hair: '#2a2420', beard: '#2a2420', beardStyle: 'moustache',
@@ -167,6 +167,20 @@ export function createCharacter(look = LOOKS.umer, seed = 1) {
     const sole = mesh(new THREE.BoxGeometry(0.09, 0.022, 0.25), soleMat); sole.position.set(0, -0.067, 0.06); ankle.add(sole);
   };
   leg('L'); leg('R');
+
+  // CAMERA BAG (reference: tan waxed-canvas sling, leather strap, brass buckle) — left kandhe se right hip tak
+  if (L.cameraBag) {
+    const canvasM = new THREE.MeshStandardMaterial({ color: '#a8895a', roughness: 0.95, map: noiseTex('#a8895a', 26, 128, seed + 21) });
+    const leather = mat('#7a4a24', 0.6); const brass = mat('#c9a24a', 0.3, 0.9);
+    const a = new THREE.Vector2(0.15, 0.23), b = new THREE.Vector2(-0.2, -0.3);
+    const len = a.distanceTo(b), ang = Math.atan2(b.y - a.y, b.x - a.x);
+    for (const z of [0.128, -0.128]) { const st = mesh(new THREE.BoxGeometry(len, 0.04, 0.008), mat('#5a4630', 0.9)); st.position.set((a.x + b.x) / 2, (a.y + b.y) / 2 + 0.06, z); st.rotation.z = ang; chest.add(st); }
+    const cb = new THREE.Group(); cb.position.set(-0.25, -0.06, 0.03); hips.add(cb);
+    cb.add(mesh(new THREE.BoxGeometry(0.1, 0.17, 0.25), canvasM));
+    const flap = mesh(new THREE.BoxGeometry(0.106, 0.11, 0.255), mat('#9a7c4e', 0.95)); flap.position.y = 0.035; cb.add(flap);
+    const tab = mesh(new THREE.BoxGeometry(0.11, 0.08, 0.04), leather); tab.position.y = -0.01; cb.add(tab);
+    const buckle = mesh(new THREE.TorusGeometry(0.014, 0.004, 6, 12), brass); buckle.rotation.y = Math.PI / 2; buckle.position.set(-0.058, -0.02, 0); cb.add(buckle);
+  }
 
   root.traverse(o => { if (o.isMesh) { o.castShadow = true; } });
 

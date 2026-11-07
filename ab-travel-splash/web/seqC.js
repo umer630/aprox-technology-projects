@@ -21,7 +21,7 @@ export default {
       { z: 2.6, dir: 1, speed: 10, count: 8, kinds: ['sedan', 'hatch', 'van'] }, { z: 9.4, dir: -1, speed: 11, count: 8, kinds: ['sedan', 'hatch', 'van', 'bus'] }], seed: 33, window: 400 });
     // other travellers (NPC) on sidewalk
     const npcs = [];
-    const looks = [{ ...LOOKS.driver, shirt: '#e8e4da', pants: '#e8e4da', grey: false, hair: '#111' }, { ...LOOKS.umer, shirt: '#7a2e2e', beardStyle: 'none', pants: '#222' }, { ...LOOKS.agent, vest: null, shirt: '#2f5d50' }];
+    const looks = [{ ...LOOKS.driver, shirt: '#e8e4da', pants: '#e8e4da', grey: false, hair: '#111' }, { ...LOOKS.umer, cameraBag: false, shirt: '#7a2e2e', beardStyle: 'none', pants: '#222' }, { ...LOOKS.agent, vest: null, shirt: '#2f5d50' }];
     for (let i = 0; i < 6; i++) { const n = createCharacter(looks[i % 3], 50 + i); n.root.position.set(-20 + i * 8, SW, -24 - (i % 3) * 1.6); n.root.rotation.y = (i % 2 ? 1 : -1) * 1.4; scene.add(n.root); npcs.push(n); }
     const uP = plan(c.umer, [-1.0, -21.9], Math.PI, [{ at: 5.3, to: [-0.6, -27.4] }, { at: 10.4, to: [0.0, -31.6] }]);
     return { L, term, traffic, npcs, uP, ...c };

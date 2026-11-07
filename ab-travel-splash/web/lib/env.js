@@ -524,3 +524,102 @@ function leafTex(c, seed) {
   return canvasTex(128, 128, (g, w, h) => { g.fillStyle = c; g.fillRect(0, 0, w, h);
     for (let i = 0; i < 1400; i++) { const k = 0.6 + r() * 0.8; g.fillStyle = `rgb(${base.r * 255 * k | 0},${base.g * 255 * k | 0},${base.b * 255 * k | 0})`; g.beginPath(); g.ellipse(r() * w, r() * h, 2 + r() * 3, 1 + r() * 2, r() * 3, 0, 7); g.fill(); } });
 }
+
+// ===================== GATE LOUNGE + GLASS JET BRIDGE (Karachi) =====================
+// Reference: glass-sided jet bridge (white frame, blue carpet), steel gate seating, big glass wall with aircraft outside.
+// Aircraft origin par (nose +X). Port door (x=14, z=-1.98). Bridge floor = cabin floor height FL.
+export function buildGateAndBridge(scene, FL = 2.25) {
+  const white = mat('#f2f3f4', 0.45, 0.2), steel = mat('#b9bfc5', 0.35, 0.8);
+  const glass = new THREE.MeshPhysicalMaterial({ color: '#cfe0ea', roughness: 0.05, metalness: 0, transparent: true, opacity: 0.22, side: THREE.DoubleSide, depthWrite: false });
+  const carpetT = canvasTex(256, 256, (g, w, h) => { g.fillStyle = '#1f3f7a'; g.fillRect(0, 0, w, h); g.strokeStyle = '#2b4f92'; g.lineWidth = 6; for (let i = -w; i < w * 2; i += 28) { g.beginPath(); g.moveTo(i, 0); g.lineTo(i + 40, h / 2); g.lineTo(i, h); g.stroke(); } }, { repeat: [2, 14] });
+  const B = new THREE.Group(); scene.add(B);
+  const X = 14, z0 = -3.4, z1 = -40, Wd = 2.6, Hh = 2.6; const L = z0 - z1, zc = (z0 + z1) / 2;
+  // tunnel
+  B.add(box(Wd, 0.12, L, mat('#d9dcdf', 0.6), X, FL - 0.06, zc));
+  { const c = mesh(new THREE.PlaneGeometry(Wd - 0.1, L), new THREE.MeshStandardMaterial({ map: carpetT, roughness: 0.95 }), { cast: false }); c.rotation.x = -Math.PI / 2; c.position.set(X, FL + 0.005, zc); B.add(c); }
+  B.add(box(Wd + 0.2, 0.25, L, white, X, FL + Hh, zc));
+  for (const s of [-1, 1]) {
+    const gl = mesh(new THREE.PlaneGeometry(L, Hh), glass, { cast: false }); gl.rotation.y = Math.PI / 2; gl.position.set(X + s * Wd / 2, FL + Hh / 2, zc); B.add(gl);
+    B.add(box(0.1, 0.18, L, white, X + s * Wd / 2, FL + 0.09, zc));
+    B.add(box(0.05, 0.05, L, steel, X + s * (Wd / 2 - 0.12), FL + 0.95, zc)); // handrail
+    for (let z = z0; z >= z1; z -= 2.2) { const p = box(0.12, Hh, 0.12, white, X + s * Wd / 2, FL + Hh / 2, z); B.add(p); const d = box(0.07, 3.3, 0.07, white, X + s * Wd / 2, FL + Hh / 2, z - 1.1); d.rotation.x = s * 0.75; B.add(d); }
+  }
+  // ceiling lights inside
+  for (let z = z0 - 1; z > z1; z -= 2.2) { const l = mesh(new THREE.PlaneGeometry(1.4, 0.3), new THREE.MeshBasicMaterial({ color: '#fffaf0' }), { cast: false }); l.rotation.x = Math.PI / 2; l.position.set(X, FL + Hh - 0.13, z); B.add(l); }
+  // cab + bellows at aircraft door
+  B.add(box(3.4, 3.0, 1.6, mat('#e6e8ea', 0.5), X, FL + 1.35, -2.6));
+  for (let i = 0; i < 5; i++) B.add(box(3.0 - i * 0.05, 2.7, 0.08, mat('#2a2c2e', 0.9), X, FL + 1.3, -1.95 - i * 0.12));
+  // drive leg + wheels
+  B.add(box(0.35, FL, 0.35, steel, X, FL / 2, -16)); B.add(box(2.6, 0.4, 0.8, mat('#3b3f44', 0.6, 0.4), X, 0.6, -16));
+  for (const s of [-1, 1]) { const w = mesh(new THREE.CylinderGeometry(0.4, 0.4, 0.35, 16), mat('#111', 0.9)); w.rotation.z = Math.PI / 2; w.position.set(X + s * 1.0, 0.4, -16); B.add(w); }
+  // stairs (reference)
+  for (let i = 0; i < 9; i++) B.add(box(0.9, 0.05, 0.3, mat('#d8b424', 0.6), X + 1.9, FL - 0.25 * i - 0.25, -6 - i * 0.28));
+  // TERMINAL GATE LOUNGE (z < -40): floor at FL, glass wall at z=-40.2
+  const lfloorT = canvasTex(512, 512, (g, w, h) => { g.fillStyle = '#e6e2da'; g.fillRect(0, 0, w, h); g.strokeStyle = '#cbc5ba'; g.lineWidth = 2; for (let i = 0; i <= w; i += 128) { g.beginPath(); g.moveTo(i, 0); g.lineTo(i, h); g.stroke(); g.beginPath(); g.moveTo(0, i); g.lineTo(w, i); g.stroke(); } }, { repeat: [25, 6] });
+  const T = new THREE.Group(); scene.add(T);
+  T.add(box(200, FL, 30, mat('#d9d2c2', 0.8), X, FL / 2 - 0.01, -55));
+  { const f = mesh(new THREE.PlaneGeometry(200, 30), new THREE.MeshPhysicalMaterial({ map: lfloorT, roughness: 0.2, clearcoat: 0.6 }), { cast: false }); f.rotation.x = -Math.PI / 2; f.position.set(X, FL + 0.01, -55); T.add(f); }
+  T.add(box(200, 0.4, 30, mat('#f4f4f2', 0.8), X, FL + 8, -55));
+  for (let x = -60; x <= 90; x += 4) { T.add(box(0.2, 8, 0.25, steel, x, FL + 4, -40.2)); }
+  { const gw = mesh(new THREE.PlaneGeometry(200, 8), glass, { cast: false }); gw.position.set(X, FL + 4, -40.25); T.add(gw); }
+  T.add(box(200, 8, 0.3, mat('#ebe8e2', 0.7), X, FL + 4, -70));
+  for (let x = -40; x < 70; x += 12) for (let z = -44; z > -66; z -= 2.2) if (Math.abs(x - X) > 4) {
+    const row = new THREE.Group(); row.position.set(x, FL, z); T.add(row);
+    for (let k = 0; k < 6; k++) { row.add(box(0.5, 0.06, 0.48, steel, k * 0.55 - 1.4, 0.45, 0)); const bk = box(0.5, 0.45, 0.05, steel, k * 0.55 - 1.4, 0.7, -0.24); bk.rotation.x = -0.15; row.add(bk); }
+    row.add(box(3.3, 0.06, 0.2, mat('#555', 0.5, 0.6), 0, 0.2, 0));
+  }
+  for (let x = -60; x < 90; x += 8) { const l = mesh(new THREE.CircleGeometry(0.25, 12), new THREE.MeshBasicMaterial({ color: '#fffbee' }), { cast: false }); l.rotation.x = Math.PI / 2; for (const z of [-46, -54, -62]) { const c = l.clone(); c.position.set(x, FL + 7.79, z); T.add(c); } }
+  // gate sign (no number/name — sirf "Gate" + icon)
+  const st = canvasTex(512, 128, (g, w, h) => { g.fillStyle = '#123a75'; g.fillRect(0, 0, w, h); g.fillStyle = '#ffd34d'; g.font = 'bold 70px DejaVu Sans'; g.fillText('GATE  ✈', 30, 90); });
+  const sg = mesh(new THREE.PlaneGeometry(3, 0.75), new THREE.MeshBasicMaterial({ map: st }), { cast: false }); sg.position.set(X, FL + 3.4, -40.6); sg.rotation.y = Math.PI; T.add(sg);
+  const sg2 = sg.clone(); sg2.rotation.y = 0; sg2.position.z = -41.0; T.add(sg2);
+  B.traverse(o => { if (o.isMesh && o.material !== glass) { o.castShadow = true; o.receiveShadow = true; } });
+  T.traverse(o => { if (o.isMesh) o.receiveShadow = true; });
+  return { X, FL, z1 };
+}
+
+// ===================== ISLAMABAD AIRPORT ARRIVAL HALL =====================
+// Reference: white coffered ceiling with round downlight grid, white pillars, polished floor with dark inlay stripes, teal signage band.
+export function buildArrivalHall(scene) {
+  const floorT = canvasTex(1024, 1024, (g, w, h) => { g.fillStyle = '#eceae6'; g.fillRect(0, 0, w, h);
+    g.strokeStyle = '#d8d4cd'; g.lineWidth = 2; for (let i = 0; i <= w; i += 128) { g.beginPath(); g.moveTo(i, 0); g.lineTo(i, h); g.stroke(); g.beginPath(); g.moveTo(0, i); g.lineTo(w, i); g.stroke(); }
+    g.fillStyle = '#6b6560'; for (let k = 0; k < 4; k++) g.fillRect(380 + k * 70, 300, 30, 420); }, { repeat: [12, 12] });
+  const f = mesh(new THREE.PlaneGeometry(200, 200), new THREE.MeshPhysicalMaterial({ map: floorT, roughness: 0.12, clearcoat: 0.9 }), { cast: false }); f.rotation.x = -Math.PI / 2; scene.add(f);
+  const ceil = mesh(new THREE.PlaneGeometry(200, 200), mat('#f6f6f4', 0.9), { cast: false }); ceil.rotation.x = Math.PI / 2; ceil.position.y = 9; scene.add(ceil);
+  const lg = new THREE.InstancedMesh(new THREE.CircleGeometry(0.18, 12), new THREE.MeshBasicMaterial({ color: '#fffcf2' }), 1600); const o = new THREE.Object3D(); let k = 0;
+  for (let x = -60; x < 60; x += 2.5) for (let z = -60; z < 40; z += 2.5) { o.position.set(x, 8.98, z); o.rotation.set(Math.PI / 2, 0, 0); o.updateMatrix(); if (k < 1600) lg.setMatrixAt(k++, o.matrix); }
+  lg.count = k; scene.add(lg);
+  for (const x of [-18, -6, 6, 18]) for (const z of [-30, -12, 6]) scene.add(box(1.4, 9, 1.4, mat('#f3f3f1', 0.4), x, 4.5, z));
+  // teal signage band (Roman/English + Urdu, no brand names)
+  const bandT = canvasTex(2048, 128, (g, w, h) => { g.fillStyle = '#0f6b6b'; g.fillRect(0, 0, w, h); g.fillStyle = '#ffffff'; g.font = 'bold 64px DejaVu Sans'; g.textBaseline = 'middle';
+    g.textAlign = 'left'; g.fillText('Welcome to Islamabad International Airport', 40, h / 2 + 2);
+    g.textAlign = 'right'; g.direction = 'rtl'; g.fillText('خوش آمدید', w - 40, h / 2 + 2); });
+  const band = mesh(new THREE.BoxGeometry(44, 1.6, 0.3), [mat('#0f6b6b'), mat('#0f6b6b'), mat('#0f6b6b'), mat('#0f6b6b'), new THREE.MeshBasicMaterial({ map: bandT }), mat('#0f6b6b')], { cast: false });
+  band.position.set(0, 6.6, -14); scene.add(band);
+  scene.add(box(200, 9, 0.4, mat('#e9e7e2', 0.7), 0, 4.5, -45));
+  // benches + exit glass
+  for (let x = -14; x <= 14; x += 7) for (const z of [-24, -20]) { const g = new THREE.Group(); g.position.set(x, 0, z); scene.add(g); for (let i = 0; i < 4; i++) g.add(box(0.5, 0.06, 0.5, mat('#9aa1a8', 0.35, 0.8), i * 0.55 - 0.8, 0.45, 0)); g.add(box(2.3, 0.45, 0.05, mat('#9aa1a8', 0.35, 0.8), 0, 0.7, -0.24)); }
+  const exitG = mesh(new THREE.PlaneGeometry(200, 9), new THREE.MeshBasicMaterial({ color: '#e3eef5' }), { cast: false }); exitG.position.set(0, 4.5, 30); exitG.rotation.y = Math.PI; scene.add(exitG);
+  scene.add(new THREE.HemisphereLight('#ffffff', '#dcd8d0', 1.5));
+  const key = new THREE.DirectionalLight('#fff7ea', 1.4); key.position.set(-10, 30, 20); key.castShadow = true; key.shadow.mapSize.set(2048, 2048);
+  Object.assign(key.shadow.camera, { left: -25, right: 25, top: 25, bottom: -25, near: 1, far: 100 }); key.shadow.radius = 6; key.shadow.bias = -0.0005; scene.add(key);
+  scene.background = new THREE.Color('#ecebe7'); scene.fog = new THREE.Fog('#ecebe7', 30, 110);
+}
+
+// ===================== ISLAMABAD GLASS TOWERS (reference skyline) =====================
+export function islamabadTowers(scene, at) {
+  const g = new THREE.Group(); g.position.copy(at); scene.add(g);
+  const gl = new THREE.MeshPhysicalMaterial({ color: '#5d7f95', roughness: 0.12, metalness: 0.5, clearcoat: 1 });
+  const bands = canvasTex(64, 512, (c, w, h) => { c.fillStyle = '#6f8fa3'; c.fillRect(0, 0, w, h); c.fillStyle = '#dfe6ea'; for (let y = 0; y < h; y += 16) c.fillRect(0, y, w, 3); }, { repeat: [10, 1] });
+  const bm = new THREE.MeshPhysicalMaterial({ map: bands, roughness: 0.15, metalness: 0.4 });
+  for (const [x, z, h, r] of [[0, 0, 120, 13], [34, 6, 110, 12], [-34, 6, 105, 12]]) {
+    const t = mesh(new THREE.CylinderGeometry(r * 0.9, r, h, 6), bm); t.position.set(x, h / 2, z); g.add(t);
+    const top = mesh(new THREE.CylinderGeometry(r * 0.6, r * 0.9, 6, 6), gl); top.position.set(x, h + 3, z); g.add(top);
+  }
+  g.add(box(110, 22, 40, mat('#d9d6cf', 0.7), 0, 11, 10));
+  // badi LED screen (bina brand/text — sirf gradient)
+  const scr = canvasTex(256, 512, (c, w, h) => { const gr = c.createLinearGradient(0, 0, 0, h); gr.addColorStop(0, '#1d5fb8'); gr.addColorStop(1, '#58b7f0'); c.fillStyle = gr; c.fillRect(0, 0, w, h); });
+  const s = mesh(new THREE.PlaneGeometry(14, 40), new THREE.MeshBasicMaterial({ map: scr }), { cast: false }); s.position.set(0, 70, 11.6); g.add(s);
+  g.traverse(o => { if (o.isMesh) o.castShadow = true; });
+  return g;
+}

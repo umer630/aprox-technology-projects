@@ -1,6 +1,6 @@
 // SEQUENCE E — Islamabad: avenue (Revo, left-hand) → Faisal Mosque → Umer ka vlog outro
 import * as THREE from 'three';
-import { setupSkyAndLight, buildIslamabadAvenue, buildFaisalMosque, margallaHills, ground } from './lib/env.js';
+import { setupSkyAndLight, buildIslamabadAvenue, buildFaisalMosque, margallaHills, ground, islamabadTowers } from './lib/env.js';
 import { createTraffic } from './lib/vehicles.js';
 import { createCast, seatInRevo, selfieCam } from './lib/cast.js';
 import { plan, applyPlan, holdCamera, camLerp, handheld, V3 } from './lib/anim.js';
@@ -20,6 +20,8 @@ export default {
     buildIslamabadAvenue(scene, R);
     margallaHills(scene, { z0: -540, height: 560, seed: 3 });
     const M = buildFaisalMosque(scene, MOSQUE, 1);
+    islamabadTowers(scene, new THREE.Vector3(-170, 0, 420)); // Islamabad skyline reference
+    islamabadTowers(scene, new THREE.Vector3(190, 0, 150)).scale.setScalar(0.8);
     // traffic in road-local frame (left-hand): +X lanes z<0
     const T = new THREE.Group(); R.add(T);
     const traffic = createTraffic(T, { lanes: [
@@ -31,7 +33,7 @@ export default {
     R.add(c.revo.group);
     // visitors on courtyard
     const npcs = [];
-    const looks = [{ ...LOOKS.driver, grey: false, hair: '#111', shirt: '#f1efe8', pants: '#f1efe8' }, { ...LOOKS.umer, shirt: '#5b6b3a', beardStyle: 'none', pants: '#222' }, { ...LOOKS.driver, shirt: '#9fb1c2', pants: '#9fb1c2' }];
+    const looks = [{ ...LOOKS.driver, grey: false, hair: '#111', shirt: '#f1efe8', pants: '#f1efe8' }, { ...LOOKS.umer, cameraBag: false, shirt: '#5b6b3a', beardStyle: 'none', pants: '#222' }, { ...LOOKS.driver, shirt: '#9fb1c2', pants: '#9fb1c2' }];
     for (let i = 0; i < 9; i++) { const n = createCharacter(looks[i % 3], 120 + i); n.root.position.set(-30 + i * 7.5, PLAT, -360 - (i % 3) * 6); n.root.rotation.y = Math.PI + (i % 2 ? 0.4 : -0.4); scene.add(n.root); npcs.push(n); }
     const uP = plan(c.umer, [-6, -352], Math.PI, [{ at: 0.0, to: [-5.5, -357.5] }, { at: 4.95, face: 0, dur: 0.8 }]);
     return { L, R, M, traffic, npcs, uP, ...c };

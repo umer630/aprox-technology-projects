@@ -46,7 +46,7 @@ export default {
     const officer = createCharacter({ ...LOOKS.agent, vest: '#2b3a2b', shirt: '#cfd6cf', height: 1.78 }, 8); officer.root.position.set(40 + 1.6, 0, 2.6); officer.root.rotation.y = -Math.PI / 2 - 0.4; scene.add(officer.root);
     // queue + other passengers at neighbouring counters
     const npcs = [];
-    const looks = [{ ...LOOKS.driver, grey: false, hair: '#111', shirt: '#ece7dc', pants: '#ece7dc' }, { ...LOOKS.umer, shirt: '#6b4a2e', beardStyle: 'none', pants: '#1f1f1f' }, { ...LOOKS.agent, vest: null, shirt: '#3e5f7a', pants: '#2b2b2b' }, { ...LOOKS.driver, shirt: '#8aa0b4', pants: '#8aa0b4', grey: true }];
+    const looks = [{ ...LOOKS.driver, grey: false, hair: '#111', shirt: '#ece7dc', pants: '#ece7dc' }, { ...LOOKS.umer, cameraBag: false, shirt: '#6b4a2e', beardStyle: 'none', pants: '#1f1f1f' }, { ...LOOKS.agent, vest: null, shirt: '#3e5f7a', pants: '#2b2b2b' }, { ...LOOKS.driver, shirt: '#8aa0b4', pants: '#8aa0b4', grey: true }];
     const spots = [[-3.4, -7.0, Math.PI], [3.0, -7.0, Math.PI], [6.2, -6.9, Math.PI], [-6.4, -7.0, Math.PI], [2.2, -3.6, Math.PI], [2.4, -2.4, Math.PI], [-4.5, -1.0, Math.PI * 0.9], [7.5, -1.5, -2.6]];
     spots.forEach(([x, z, h], i) => { const n = createCharacter(looks[i % 4], 70 + i); n.root.position.set(x, 0, z); n.root.rotation.y = h; scene.add(n.root); npcs.push(n); });
     for (const x of [-6.4, 6.4, 3.2, -3.2]) { const a = createCharacter(LOOKS.agent, 90 + x * 3); a.root.position.set(x + 0.2, 0, -8.75); scene.add(a.root); npcs.push(a); }

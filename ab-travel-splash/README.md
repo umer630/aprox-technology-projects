@@ -32,14 +32,39 @@ node render.js --seqs E --thumb 19.5 --w 1280 --h 720 --out renders/thumb.jpg
 node render.js --seqs I,A,B,C,K,D,F,L,E --srt renders/ep1.srt
 ```
 
-## Sequences (29 shots, ~2:29)
+## Sequences (34 shots, ~2:56)
 I Intro drone + title · A Ghar: gate khulta hai, Umer camera + suitcase ke saath bahar, selfie, driver salaam, bag Revo ke bed mein, Revo LEFT lane mein ·
 B Karachi shahrah (aerial, side tracking, car ke andar selfie) · C Jinnah International drop-off, driver Allah Hafiz ·
 K Check-in (bag belt par, boarding pass haath-se-haath) + security (camera tray mein → x-ray → wapas haath mein) ·
+G Gate lounge + glass jet bridge → aircraft door ·
 D Taxi → takeoff roll → rotation → climb · F Cruise exterior, window POV (wing + baadal), seat selfie ·
-L Islamabad landing (Margalla peeche, touchdown smoke) · E Islamabad avenue → Faisal Masjid → selfie outro → end card
+L Islamabad landing (Margalla peeche, touchdown smoke) · M Islamabad airport arrival hall + walking selfie · E Islamabad avenue → Faisal Masjid → selfie outro → end card
 
 ## Identity lock
 `LOOKS.umer` (`web/lib/character.js`) Umer ka single locked profile hai. Har sequence `lib/cast.js` se yahi model banata hai.
 Is session mein Umer ki apni photo attach nahi thi. Isliye face/hair/beard abhi generic Pakistani male hain.
 Photo milne par sirf `LOOKS.umer` update karke poora episode dobara render ho jata hai.
+
+## Reference images → 3D asset mapping
+Har photo sirf reference hai. Final frame mein koi photo paste nahi hui.
+
+| Reference images | 3D mein kya bana |
+|---|---|
+| Sony mirrorless camera haath mein, Flash-O-Matic | Compact black vlog camera, right haath ki grip mein locked |
+| Tan canvas camera bag | Umer ka shoulder sling camera bag (leather strap, brass buckle) |
+| Camera backpack (purple) | Bag design/colour reference (episode mein sling bag use hua) |
+| Karachi roads, traffic, Shahrah | Dual carriageway, yellow-black kerbs, median trees, rickshaw/bike/bus traffic (LEFT-hand) |
+| Toyota Hilux/Revo (black, GR, Rocco) | Black Revo-style double cab, sport bar, RHD |
+| Jinnah International (front, aerial, signage) | Beige twin towers + arch recess, dark curtain wall, canopy, flag, English + Urdu sign |
+| Check-in halls, Dubai/Doha/Islamabad terminals | Check-in counters, stanchions, gate lounge seating, glass wall |
+| Security tray, x-ray, metal detector | Conveyor, x-ray tunnel, walk-through arch, trays |
+| Jet bridge (glass, white frame, blue carpet) | Glass jet bridge + cab + drive wheels + stairs |
+| Airblue A320/A321 photos | A320-family aircraft, white body, blue tail/engines, "air blue" livery |
+| Cabin interiors, wing-from-window | Cabin seats, window bezels, wing + winglet + clouds POV |
+| Islamabad airport interior | Arrival hall: downlight grid, white pillars, teal signage band |
+| Margalla Hills, winding roads | Procedural Margalla terrain behind runway and mosque |
+| Islamabad avenues, towers | Green avenue, median trees, 3-tower glass skyline |
+| Faisal Masjid (exterior, sunset, aerial, interior) | Tent-shaped hall, 4 pencil minarets, crescent finial, marble courtyard |
+| Pakistani crowds | Background passengers/visitors (shalwar kameez, Pakistani look) |
+
+Indian flags wali crowd photo jaan boojh kar use nahi ki gayi, kyun ke brief mein Indian/Hindi visual identity mana hai.
