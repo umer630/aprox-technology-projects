@@ -3,3 +3,5 @@ frames/
 renders/_parts/
 renders/_qa/
 logs/
+renders/preview/
+*.mp4
