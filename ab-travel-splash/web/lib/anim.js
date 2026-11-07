@@ -94,3 +94,12 @@ export function placeWorld(obj, scene, pos, rotY = 0) {
   if (obj.parent !== scene) scene.add(obj);
   obj.position.copy(pos); obj.rotation.set(0, rotY, 0); obj.scale.setScalar(1);
 }
+
+// Subtitles se mouth animation: jis waqt us speaker ki line chal rahi ho
+export function speaking(subs, t, who) { for (const s of subs) if (s[2] === who && t >= s[0] && t < s[1]) return 1; return 0; }
+// Root ko hips pivot ke gird ghumana (letna ↔ uthna)
+export function placeByHips(C, hipsWorld, rigRotX) {
+  const s = C.rig.scale.x; C.rig.rotation.x = rigRotX;
+  const v = new THREE.Vector3(0, 0.94 * s, 0).applyAxisAngle(new THREE.Vector3(1, 0, 0), rigRotX).applyAxisAngle(new THREE.Vector3(0, 1, 0), C.root.rotation.y);
+  C.root.position.copy(hipsWorld).sub(v);
+}

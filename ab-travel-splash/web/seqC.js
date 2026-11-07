@@ -9,7 +9,7 @@ import { smooth, range, clamp } from './lib/util.js';
 
 const SW = 0.25; // sidewalk height
 export default {
-  id: 'C', title: 'Jinnah International Airport, Karachi',
+  id: 'C', ambience: 'street', sfx: [[4.2, 'door']], title: 'Jinnah International Airport, Karachi',
   build(scene, renderer) {
     const L = setupSkyAndLight(scene, renderer, { elev: 34, azim: 175, hemiI: 1.3, sunI: 3.3, fog: [0xdcd6c8, 120, 900], shadowSize: 60, sunColor: '#fff3df' });
     const term = buildJinnahTerminal(scene);
@@ -33,9 +33,9 @@ export default {
       cam(t, c, cam) { const h = handheld(t, 0.8); camLerp(cam, V3(-1.8, 1.75, -31.0).add(h), V3(-1.5, 1.7, -30.2).add(h), V3(-1.0, 1.2, -21.5), V3(-0.7, 1.25, -23.5), t / 5.4, 44); } }
   ],
   subs: [
-    [5.2, 7.2, 'Driver', 'Allah Hafiz Umer bhai, safar mubarak!'],
-    [7.2, 8.6, 'Umer', 'Allah Hafiz chacha, shukriya!'],
-    [8.8, 10.4, 'Umer', 'Chalein dosto — check-in karte hain.']
+    [5.2, 7.2, 'Driver', 'Allah Hafiz Umer bhai, safar mubarak!', 'اللہ حافظ عمر بھائی، سفر مبارک!'],
+    [7.2, 8.6, 'Umer', 'Allah Hafiz chacha, shukriya!', 'اللہ حافظ چچا، شکریہ!'],
+    [8.8, 10.4, 'Umer', 'Chalein dosto — check-in karte hain.', 'چلیں دوستو، چیک ان کرتے ہیں۔']
   ],
   update(t, c) {
     const { revo, umer, driver, bag, vcam } = c;

@@ -20,6 +20,7 @@ export function createCast(scene, { revo = true, driver = true } = {}) {
 export function seatInRevo(c, t, { selfie = 0, talk = 0 } = {}) {
   const { umer, driver, revo, vcam } = c;
   if (umer.root.parent !== revo.group) revo.group.add(umer.root);
+  if (driver && driver.root.parent !== revo.group) revo.group.add(driver.root);
   for (const [C, seat] of [[umer, revo.seats.passenger], [driver, revo.seats.driver]]) {
     if (!C) continue;
     C.setNeutral(); poseSit(C, 1); C.root.position.set(seat.x - 0.1, 0.43, seat.z); C.root.rotation.y = Math.PI / 2;
@@ -43,4 +44,24 @@ export function selfieCam(c, cam, t, { fov = 70, shake = 0.8 } = {}) {
   const dir = head.clone().sub(p).normalize();
   const sh = new THREE.Vector3(Math.sin(t * 1.7) * 0.006 + Math.sin(t * 4.3) * 0.003, Math.sin(t * 2.1) * 0.005, 0).multiplyScalar(shake);
   cam.position.copy(p).addScaledVector(dir, 0.07).add(sh); cam.lookAt(head.x, head.y - 0.1, head.z); cam.fov = fov; cam.updateProjectionMatrix();
+}
+
+// Corolla Grande mein Umer khud driver seat (RIGHT, +Z) par — haath steering par
+export function seatInCorolla(c, car, t, { talk = 0 } = {}) {
+  const { umer, vcam } = c;
+  if (umer.root.parent !== car.group) car.group.add(umer.root);
+  umer.setNeutral(); poseSit(umer, 1);
+  umer.root.position.set(car.seats.driver.x - 0.12, 0.2, car.seats.driver.z); umer.root.rotation.y = Math.PI / 2;
+  umer.J.upperArmL.rotation.x = -0.9; umer.J.upperArmR.rotation.x = -0.9; umer.J.forearmL.rotation.x = -0.55; umer.J.forearmR.rotation.x = -0.55;
+  umer.J.upperArmL.rotation.z = -0.15; umer.J.upperArmR.rotation.z = 0.15;
+  umer.J.head.rotation.y = 0.05 * Math.sin(t * 0.6);
+  // vlog camera dashboard par mounted (Umer ki taraf)
+  if (vcam.parent !== car.group) car.group.add(vcam);
+  vcam.position.set(0.85, 1.02, 0.15); vcam.scale.setScalar(1); vcam.rotation.set(0, -Math.PI / 2 + 0.35, 0);
+  faceUpdate(umer, t, talk);
+}
+export function dashCam(c, car, cam, t) {
+  c.vcam.updateMatrixWorld(true); const p = new THREE.Vector3(); c.vcam.getWorldPosition(p);
+  const hd = new THREE.Vector3(); c.umer.J.head.getWorldPosition(hd);
+  cam.position.copy(p).addScaledVector(hd.clone().sub(p).normalize(), 0.06); cam.lookAt(hd.x, hd.y - 0.12, hd.z); cam.fov = 78; cam.updateProjectionMatrix();
 }

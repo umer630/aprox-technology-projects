@@ -1,8 +1,10 @@
-// SEQUENCE E — Islamabad: avenue (Revo, left-hand) → Faisal Mosque → Umer ka vlog outro
+// SEQUENCE E — Islamabad: avenue (Corolla Grande, left-hand) → Faisal Mosque → Umer ka vlog outro
 import * as THREE from 'three';
 import { setupSkyAndLight, buildIslamabadAvenue, buildFaisalMosque, margallaHills, ground, islamabadTowers } from './lib/env.js';
 import { createTraffic } from './lib/vehicles.js';
-import { createCast, seatInRevo, selfieCam } from './lib/cast.js';
+import { createCast, seatInCorolla, selfieCam } from './lib/cast.js';
+import { createCorolla, brandBillboard } from './lib/world2.js';
+import { speaking } from './lib/anim.js';
 import { plan, applyPlan, holdCamera, camLerp, handheld, V3 } from './lib/anim.js';
 import { poseCarryCam, poseSelfie, faceUpdate, createCharacter, LOOKS } from './lib/character.js';
 import { smooth, range, clamp } from './lib/util.js';
@@ -12,7 +14,7 @@ const PLAT = 3.0; // courtyard platform height
 const ROADZ = 660; // avenue group offset (avenue z: -340 … 1660)
 
 export default {
-  id: 'E', title: 'Islamabad — Faisal Masjid',
+  id: 'E', ambience: 'outdoor', sfx: [[11.0, 'birds']], title: 'Islamabad — Faisal Masjid',
   build(scene, renderer) {
     const L = setupSkyAndLight(scene, renderer, { elev: 28, azim: 165, sunI: 3.4, turbidity: 3.5, rayleigh: 2.6, fog: [0xbfcfdc, 500, 4500], shadowSize: 70, sunColor: '#fff1dc' });
     // avenue along Z: group rotated +90° → local +X = world −Z (mosque ki taraf)
@@ -29,13 +31,13 @@ export default {
       { z: -4.9, dir: 1, speed: 17, count: 5, kinds: ['sedan', 'sedan'] },
       { z: 4.9, dir: -1, speed: 16, count: 8, kinds: ['sedan', 'hatch', 'van', 'bike'] },
       { z: 12.1, dir: -1, speed: 12, count: 8, kinds: ['sedan', 'bike', 'hatch'] }], seed: 61, window: 900 });
-    const c = createCast(scene);
-    R.add(c.revo.group);
+    const c = createCast(scene, { revo: false, driver: false });
+    c.car = createCorolla('#f4f4f2'); R.add(c.car.group);
     // visitors on courtyard
     const npcs = [];
     const looks = [{ ...LOOKS.driver, grey: false, hair: '#111', shirt: '#f1efe8', pants: '#f1efe8' }, { ...LOOKS.umer, cameraBag: false, shirt: '#5b6b3a', beardStyle: 'none', pants: '#222' }, { ...LOOKS.driver, shirt: '#9fb1c2', pants: '#9fb1c2' }];
     for (let i = 0; i < 9; i++) { const n = createCharacter(looks[i % 3], 120 + i); n.root.position.set(-30 + i * 7.5, PLAT, -360 - (i % 3) * 6); n.root.rotation.y = Math.PI + (i % 2 ? 0.4 : -0.4); scene.add(n.root); npcs.push(n); }
-    const uP = plan(c.umer, [-6, -352], Math.PI, [{ at: 0.0, to: [-5.5, -357.5] }, { at: 4.95, face: 0, dur: 0.8 }]);
+    const uP = plan(c.umer, [-22, -366.5], Math.PI, [{ at: 0.0, to: [-21.5, -372.0] }, { at: 4.95, face: 0, dur: 0.8 }]);
     return { L, R, M, traffic, npcs, uP, ...c };
   },
   shots: [
@@ -51,21 +53,21 @@ export default {
       cam(t, c, cam) { camLerp(cam, V3(-12, PLAT + 6, -330), V3(-60, 90, -120), V3(0, 25, -430), V3(0, 30, -440), t / 5, 48); } }
   ],
   subs: [
-    [1.0, 4.8, 'Umer', 'Islamabad ki sarkein — saaf, hari bhari, aur peeche Margalla!'],
-    [6.5, 10.5, 'Umer', 'Aur yeh hai Faisal Masjid... SubhanAllah.'],
-    [17.0, 20.0, 'Umer', 'Dosto, Karachi se Islamabad ka safar mukammal hua!'],
-    [20.0, 22.8, 'Umer', 'Video pasand aaye to like, share aur subscribe zaroor karein.'],
-    [22.8, 25.3, 'Umer', 'Agli episode mein milte hain — Allah Hafiz!']
+    [1.0, 4.8, 'Umer', 'Islamabad ki sarkein — saaf, hari bhari, aur peeche Margalla!', 'اسلام آباد کی سڑکیں، صاف، ہری بھری، اور پیچھے مارگلہ!'],
+    [6.5, 10.5, 'Umer', 'Aur yeh hai Faisal Masjid... SubhanAllah.', 'اور یہ ہے فیصل مسجد... سبحان اللہ۔'],
+    [17.0, 20.0, 'Umer', 'Dosto, Karachi se Islamabad ka safar mukammal hua!', 'دوستو، کراچی سے اسلام آباد کا سفر مکمل ہوا!'],
+    [20.0, 22.8, 'Umer', 'Video pasand aaye to like, share aur subscribe zaroor karein.', 'ویڈیو پسند آئے تو لائک، شیئر اور سبسکرائب ضرور کریں۔'],
+    [22.8, 25.3, 'Umer', 'Agli episode mein milte hain — Allah Hafiz!', 'اگلی ایپی سوڈ میں ملتے ہیں، اللہ حافظ!']
   ],
   update(t, c, cam, shot) {
     // Revo: road-local +X par (world −Z), lane z = −8.5 (left), mosque ki taraf
     const x = -260 + 15 * Math.min(t, 6.0);
-    c.revo.group.position.set(x, 0, -8.3); c.revo.roll(x);
+    c.car.group.position.set(x, 0, -8.3); c.car.roll(x);
     c.revoWorldZ = ROADZ - x;
     c.traffic.update(t, x);
     for (const n of c.npcs) { n.setNeutral(); faceUpdate(n, t, 0); }
     if (t < 11.0) {
-      seatInRevo(c, t);
+      seatInCorolla(c, c.car, t, { talk: speaking(this.subs, t, 'Umer') });
     } else {
       const lt = t - 11.0; const { umer, vcam } = c;
       if (umer.root.parent !== c.R.parent) c.R.parent.add(umer.root);

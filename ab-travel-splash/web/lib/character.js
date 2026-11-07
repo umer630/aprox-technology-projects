@@ -28,6 +28,29 @@ export const LOOKS = {
     shirt: '#d9d6cc', shirtStyle: 'kameez', pants: '#d9d6cc', shoes: '#3b2a1e', sole: '#2a1d14',
     kameez: true, cap: false, build: 1.05, eyes: '#24160d', grey: true
   },
+  ammi: {
+    height: 1.6, skin: '#b8805a', hair: '#1a1411', beard: null, beardStyle: 'none',
+    shirt: '#c0567a', shirtStyle: 'kameez', pants: '#efe6d6', shoes: '#4a2a1a', sole: '#2a1a10',
+    kameez: true, build: 0.9, eyes: '#24160d', dupatta: '#e9c46a', female: true
+  },
+  mechanic: {
+    height: 1.72, skin: '#93603f', hair: '#1c1714', beard: '#1c1714', beardStyle: 'trim',
+    shirt: '#8295a8', shirtStyle: 'kameez', pants: '#8295a8', shoes: '#2b2118', sole: '#1a120c',
+    kameez: true, build: 1.0, eyes: '#24160d'
+  },
+  guard: {
+    height: 1.78, skin: '#a06c4a', hair: '#141110', beard: '#141110', beardStyle: 'moustache',
+    shirt: '#c9b98f', shirtStyle: 'shirt', pants: '#c9b98f', shoes: '#111', sole: '#111',
+    kameez: false, build: 1.05, eyes: '#24160d', vest: '#3a4a2e', beret: '#2d3b22'
+  },
+  friend1: {
+    height: 1.74, skin: '#b07650', hair: '#120f0d', beard: '#1a1411', beardStyle: 'trim',
+    shirt: '#d9d4c7', shirtStyle: 'kameez', pants: '#d9d4c7', shoes: '#3a2a1e', sole: '#2a1d14', kameez: true, build: 1.0, eyes: '#24160d'
+  },
+  friend2: {
+    height: 1.79, skin: '#a8714c', hair: '#18120f', beard: null, beardStyle: 'none',
+    shirt: '#b04848', shirtStyle: 'polo', pants: '#3b4a63', shoes: '#ddd', sole: '#555', kameez: false, build: 1.05, eyes: '#24160d'
+  },
   agent: {
     height: 1.70, skin: '#a87452', hair: '#0f0c0b', beard: null, beardStyle: 'none',
     shirt: '#e9edf2', shirtStyle: 'shirt', pants: '#1b2230', shoes: '#111', sole: '#111',
@@ -100,11 +123,19 @@ export function createCharacter(look = LOOKS.umer, seed = 1) {
   const mouthIn = mesh(new THREE.SphereGeometry(0.012, 12, 8), mat('#3a1712', 0.8), { cast: false }); mouthIn.scale.set(1.4, 0.05, 0.4); mouthIn.position.z = 0.0; mouth.add(mouthIn);
 
   // Hair (short natural crop, side part)
-  const hairCap = mesh(new THREE.SphereGeometry(0.102, 28, 18, 0, TAU, 0, Math.PI * 0.42), hairMat); hairCap.scale.set(0.94, 1.14, 1.04); hairCap.position.set(0, 0.112, -0.012); hairCap.rotation.x = -0.32; head.add(hairCap);
+  const hairCap = mesh(new THREE.SphereGeometry(0.102, 28, 18, 0, TAU, 0, Math.PI * 0.46), hairMat); hairCap.scale.set(0.94, 1.14, 1.04); hairCap.position.set(0, 0.112, -0.01); hairCap.rotation.x = -0.16; head.add(hairCap);
   const hairBack = mesh(new THREE.SphereGeometry(0.1, 24, 16, Math.PI, Math.PI, Math.PI * 0.35, Math.PI * 0.3), hairMat); hairBack.scale.set(0.93, 1.12, 1.03); hairBack.position.set(0, 0.105, -0.004); head.add(hairBack);
   const quiff = mesh(new THREE.SphereGeometry(0.05, 16, 10), hairMat); quiff.scale.set(1.55, 0.32, 1.1); quiff.position.set(-0.008, 0.2, 0.045); quiff.rotation.set(-0.35, 0, 0.12); head.add(quiff);
   for (const sx of [-1, 1]) { const side = mesh(new THREE.SphereGeometry(0.05, 12, 10), hairMat); side.scale.set(0.35, 0.9, 1.25); side.position.set(sx * 0.085, 0.13, -0.02); head.add(side); }
   if (L.grey) { hairCap.material = mat('#4a4540', 0.85); }
+  if (L.female) { quiff.visible = false; }
+  if (L.dupatta) {
+    const dm = new THREE.MeshStandardMaterial({ color: L.dupatta, roughness: 0.9, side: THREE.DoubleSide, map: noiseTex(L.dupatta, 16, 64, seed + 31) });
+    // chehra khula: front (+Z) wala hissa nahi banaya
+    const hood = mesh(new THREE.SphereGeometry(0.115, 26, 16, Math.PI * 0.8, Math.PI * 1.4, 0, Math.PI * 0.6), dm); hood.scale.set(0.95, 1.1, 1.05); hood.position.set(0, 0.11, -0.012); head.add(hood);
+    const drape = mesh(new THREE.CylinderGeometry(0.13, 0.2, 0.26, 22, 1, true, Math.PI * 0.35, Math.PI * 1.3), dm); drape.position.set(0, 0.17, -0.01); drape.scale.z = 0.75; chest.add(drape);
+  }
+  if (L.beret) { const b = mesh(new THREE.CylinderGeometry(0.105, 0.11, 0.05, 18), mat(L.beret, 0.9)); b.position.set(0.01, 0.2, -0.005); b.rotation.z = -0.2; head.add(b); }
 
   // Beard / moustache
   const beardMat = new THREE.MeshStandardMaterial({ color: L.beard || '#000', roughness: 0.95, map: noiseTex(L.beard || '#000000', 40, 64, seed + 7) });
@@ -174,8 +205,8 @@ export function createCharacter(look = LOOKS.umer, seed = 1) {
     const leather = mat('#7a4a24', 0.6); const brass = mat('#c9a24a', 0.3, 0.9);
     const a = new THREE.Vector2(0.15, 0.23), b = new THREE.Vector2(-0.2, -0.3);
     const len = a.distanceTo(b), ang = Math.atan2(b.y - a.y, b.x - a.x);
-    for (const z of [0.128, -0.128]) { const st = mesh(new THREE.BoxGeometry(len, 0.04, 0.008), mat('#5a4630', 0.9)); st.position.set((a.x + b.x) / 2, (a.y + b.y) / 2 + 0.06, z); st.rotation.z = ang; chest.add(st); }
-    const cb = new THREE.Group(); cb.position.set(-0.25, -0.06, 0.03); hips.add(cb);
+    J.camStraps = []; for (const z of [0.128, -0.128]) { const st = mesh(new THREE.BoxGeometry(len, 0.04, 0.008), mat('#5a4630', 0.9)); st.position.set((a.x + b.x) / 2, (a.y + b.y) / 2 + 0.06, z); st.rotation.z = ang; chest.add(st); J.camStraps.push(st); }
+    const cb = new THREE.Group(); cb.position.set(-0.25, -0.06, 0.03); hips.add(cb); J.camBag = cb;
     cb.add(mesh(new THREE.BoxGeometry(0.1, 0.17, 0.25), canvasM));
     const flap = mesh(new THREE.BoxGeometry(0.106, 0.11, 0.255), mat('#9a7c4e', 0.95)); flap.position.y = 0.035; cb.add(flap);
     const tab = mesh(new THREE.BoxGeometry(0.11, 0.08, 0.04), leather); tab.position.y = -0.01; cb.add(tab);
@@ -188,7 +219,8 @@ export function createCharacter(look = LOOKS.umer, seed = 1) {
     root, rig, J, eyes, mouth, look: L,
     walkPhase: 0, talk: 0, blink: 0, held: null,
     setNeutral() {
-      for (const k of Object.keys(J)) { const j = J[k]; if (j.isObject3D) j.rotation.set(0, 0, 0); }
+      for (const k of Object.keys(J)) { const j = J[k]; if (j.isObject3D && k !== 'camBag') j.rotation.set(0, 0, 0); }
+      this.rig.rotation.set(0, 0, 0); this.rig.position.set(0, 0, 0);
       J.hips.position.y = 0.94; J.hips.position.z = 0;
       J.upperArmL.rotation.z = 0.08; J.upperArmR.rotation.z = -0.08;
       J.forearmL.rotation.x = -0.15; J.forearmR.rotation.x = -0.15;
@@ -314,3 +346,56 @@ export function faceUpdate(C, t, talking = 0) {
 // World-space helper: kisi joint ki world position
 const _v = new THREE.Vector3();
 export function jointWorld(C, name, out = new THREE.Vector3()) { C.root.updateMatrixWorld(true); return C.J[name].getWorldPosition(out); }
+
+// ---- extra actions ----
+// Bistar par letna: root ko X axis par ghuma do (pith neeche, chehra upar)
+export function poseLie(C, w = 1) { C.rig.rotation.x = -Math.PI / 2 * w; C.rig.position.y = 0; }
+// Daant brush: right haath munh ke paas, chhoti si oscillation
+export function poseBrush(C, t, w = 1) {
+  const J = C.J;
+  J.upperArmR.rotation.x = lerp(J.upperArmR.rotation.x, -0.55, w); J.upperArmR.rotation.z = lerp(J.upperArmR.rotation.z, 0.15, w);
+  J.forearmR.rotation.x = lerp(J.forearmR.rotation.x, -2.15 + 0.12 * Math.sin(t * 16), w);
+  J.forearmR.rotation.z = lerp(J.forearmR.rotation.z, 0.55, w);
+  setGrip(C, 'R', 0.85);
+}
+// Phone kaan par (left haath)
+export function posePhone(C, w = 1, side = 'L') {
+  const J = C.J; const sx = side === 'L' ? -1 : 1;
+  J['upperArm' + side].rotation.x = lerp(J['upperArm' + side].rotation.x, -0.45, w); J['upperArm' + side].rotation.z = lerp(J['upperArm' + side].rotation.z, -sx * 0.55, w);
+  J['forearm' + side].rotation.x = lerp(J['forearm' + side].rotation.x, -2.35, w);
+  J['forearm' + side].rotation.z = lerp(J['forearm' + side].rotation.z, sx * 0.35, w);
+  setGrip(C, side, 0.7); J.head.rotation.z = lerp(J.head.rotation.z, sx * 0.12, w);
+}
+// Khana: right haath plate se munh tak
+export function poseEat(C, t, w = 1) {
+  const J = C.J; const k = 0.5 + 0.5 * Math.sin(t * 2.2);
+  J.upperArmR.rotation.x = lerp(J.upperArmR.rotation.x, -0.5 - 0.25 * k, w); J.upperArmR.rotation.z = lerp(J.upperArmR.rotation.z, 0.2, w);
+  J.forearmR.rotation.x = lerp(J.forearmR.rotation.x, -1.2 - 0.9 * k, w); setGrip(C, 'R', 0.7);
+  J.upperArmL.rotation.x = lerp(J.upperArmL.rotation.x, -0.5, w); J.forearmL.rotation.x = lerp(J.forearmL.rotation.x, -0.9, w);
+}
+// Pareshani: dono haath sar par / kamar par
+export function poseWorried(C, t, w = 1) {
+  const J = C.J;
+  for (const s of ['L', 'R']) { const sx = s === 'L' ? 1 : -1;
+    J['upperArm' + s].rotation.x = lerp(J['upperArm' + s].rotation.x, -0.2, w); J['upperArm' + s].rotation.z = lerp(J['upperArm' + s].rotation.z, sx * 2.4, w);
+    J['forearm' + s].rotation.z = lerp(J['forearm' + s].rotation.z, sx * 1.6, w); }
+  J.head.rotation.x = lerp(J.head.rotation.x, 0.15 + 0.05 * Math.sin(t * 3), w);
+}
+// Ghari dekhna (left kalai)
+export function poseWatch(C, w = 1) {
+  const J = C.J; J.upperArmL.rotation.x = lerp(J.upperArmL.rotation.x, -0.9, w); J.upperArmL.rotation.z = lerp(J.upperArmL.rotation.z, -0.3, w);
+  J.forearmL.rotation.x = lerp(J.forearmL.rotation.x, -1.3, w); J.forearmL.rotation.z = lerp(J.forearmL.rotation.z, -0.6, w); J.head.rotation.x = lerp(J.head.rotation.x, 0.35, w);
+}
+// Dono haath se cheez pakadna (kapre / bag)
+export function poseCarryFront(C, w = 1) {
+  const J = C.J; for (const s of ['L', 'R']) { const sx = s === 'L' ? 1 : -1;
+    J['upperArm' + s].rotation.x = lerp(J['upperArm' + s].rotation.x, -0.55, w); J['upperArm' + s].rotation.z = lerp(J['upperArm' + s].rotation.z, -sx * 0.12, w);
+    J['forearm' + s].rotation.x = lerp(J['forearm' + s].rotation.x, -1.0, w); setGrip(C, s, 0.5); }
+}
+// Mechanic kaam: haath aage-neeche, halki harkat
+export function poseWork(C, t, w = 1) {
+  const J = C.J; J.spine.rotation.x = lerp(J.spine.rotation.x, 0.55, w);
+  for (const s of ['L', 'R']) { const ph = s === 'L' ? 0 : 1.7; J['upperArm' + s].rotation.x = lerp(J['upperArm' + s].rotation.x, -1.0 + 0.15 * Math.sin(t * 5 + ph), w); J['forearm' + s].rotation.x = lerp(J['forearm' + s].rotation.x, -0.5, w); }
+}
+
+export function showCamBag(C, v) { if (C.J.camBag) { C.J.camBag.visible = v; C.J.camStraps.forEach(s => s.visible = v); } }

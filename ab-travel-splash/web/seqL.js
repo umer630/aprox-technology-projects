@@ -16,7 +16,7 @@ function state(t) {
 }
 
 export default {
-  id: 'L', title: 'Islamabad — Landing',
+  id: 'L', ambience: 'jet', sfx: [[0.0, 'jet_approach'], [4.2, 'touchdown']], title: 'Islamabad — Landing',
   build(scene, renderer) {
     const L = setupSkyAndLight(scene, renderer, { elev: 26, azim: 210, sunI: 3.2, fog: [0xc6d3dc, 400, 5000], shadowSize: 60, sunColor: '#fff0da' });
     buildRunway(scene, { terrain: 'islamabad' });
@@ -34,8 +34,8 @@ export default {
       cam(t, c, cam) { const p = c.ac.group.position; cam.position.set(p.x - 30 + t * 4, 3.2, 48); cam.lookAt(p.x + 4, 3.5, 0); cam.fov = 42; } }
   ],
   subs: [
-    [0.4, 3.6, 'Umer', 'Islamabad aa gaya! Peeche Margalla Hills dekhiye.'],
-    [5.0, 7.6, 'Umer', 'Smooth landing — Alhamdulillah!']
+    [0.4, 3.6, 'Umer', 'Islamabad aa gaya! Peeche Margalla Hills dekhiye.', 'اسلام آباد آ گیا! پیچھے مارگلہ ہلز دیکھیے۔'],
+    [5.0, 7.6, 'Umer', 'Smooth landing — Alhamdulillah!', 'اسموتھ لینڈنگ، الحمدللہ!']
   ],
   update(t, c) {
     const s = state(t); const ac = c.ac;

@@ -8,7 +8,7 @@ import { plan, applyPlan, holdCamera, camLerp, handheld, V3 } from './lib/anim.j
 import { mat, mesh } from './lib/util.js';
 
 export default {
-  id: 'G', title: 'Gate aur Jet Bridge',
+  id: 'G', ambience: 'hall', title: 'Gate aur Jet Bridge',
   build(scene, renderer) {
     const L = setupSkyAndLight(scene, renderer, { elev: 34, azim: 150, sunI: 3.2, hemiI: 1.1, fog: [0xdcd8cc, 150, 1500], shadowSize: 60 });
     ground(scene, 3000, '#b5ab92');
@@ -33,8 +33,8 @@ export default {
       cam(t, c, cam) { camLerp(cam, V3(46, 6, -36), V3(40, 5, -30), V3(12, 3.5, -10), V3(12, 3.5, -8), t / 4.5, 40); } }
   ],
   subs: [
-    [0.6, 3.6, 'Umer', 'Boarding shuru ho gayi — gate ki taraf chalte hain!'],
-    [6.0, 9.6, 'Umer', 'Yeh jet bridge seedha jahaz ke darwaze tak jata hai.']
+    [0.6, 3.6, 'Umer', 'Boarding shuru ho gayi — gate ki taraf chalte hain!', 'بورڈنگ شروع ہو گئی، گیٹ کی طرف چلتے ہیں!'],
+    [6.0, 9.6, 'Umer', 'Yeh jet bridge seedha jahaz ke darwaze tak jata hai.', 'یہ جیٹ برج سیدھا جہاز کے دروازے تک جاتا ہے۔']
   ],
   update(t, c) {
     const { umer, vcam } = c;

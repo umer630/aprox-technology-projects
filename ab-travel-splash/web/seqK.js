@@ -38,7 +38,7 @@ function buildSecurity(scene, X) {
 }
 
 export default {
-  id: 'K', title: 'Check-in aur Security',
+  id: 'K', ambience: 'hall', sfx: [[4.8, 'belt']], title: 'Check-in aur Security',
   build(scene, renderer) {
     const hall = buildCheckinHall(scene);
     const c = createCast(scene, { revo: false, driver: false }); scene.add(c.bag.group);
@@ -67,11 +67,11 @@ export default {
       cam(t, c, cam) { camLerp(cam, V3(40 - 2.5, 2.4, 5.8), V3(40 + 2.0, 2.2, 5.4), V3(40 - 2.6, 1.0, -0.5), V3(40 + 2.8, 1.0, -0.5), t / 9.6, 46); } }
   ],
   subs: [
-    [5.0, 6.8, 'Agent', 'Assalam o Alaikum! Aap ka CNIC aur ticket, please.'],
-    [6.9, 8.4, 'Agent', 'Yeh rahi aap ki boarding pass. Safar mubarak!'],
-    [8.4, 10.0, 'Umer', 'Bohat shukriya!'],
-    [12.2, 14.4, 'Umer', 'Camera tray mein — security check zaroori hai.'],
-    [20.2, 21.6, 'Umer', 'Camera wapas mil gaya! Ab gate ki taraf.']
+    [5.0, 6.8, 'Agent', 'Assalam o Alaikum! Aap ka CNIC aur ticket, please.', 'السلام علیکم! آپ کا شناختی کارڈ اور ٹکٹ، پلیز۔'],
+    [6.9, 8.4, 'Agent', 'Yeh rahi aap ki boarding pass. Safar mubarak!', 'یہ رہا آپ کا بورڈنگ پاس۔ سفر مبارک!'],
+    [8.4, 10.0, 'Umer', 'Bohat shukriya!', 'بہت شکریہ!'],
+    [12.2, 14.4, 'Umer', 'Camera tray mein — security check zaroori hai.', 'کیمرا ٹرے میں، سیکیورٹی چیک ضروری ہے۔'],
+    [20.2, 21.6, 'Umer', 'Camera wapas mil gaya! Ab gate ki taraf.', 'کیمرا واپس مل گیا! اب گیٹ کی طرف۔']
   ],
   update(t, c, cam, shot) {
     const { umer, bag, vcam, agent, pass, sec } = c;

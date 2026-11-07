@@ -7,7 +7,7 @@ import { camLerp, V3 } from './lib/anim.js';
 import { clamp, smooth } from './lib/util.js';
 
 export default {
-  id: 'I', title: null, exposure: 0.8,
+  id: 'I', ambience: 'street', sfx: [[0.0, 'music_sting']], title: null, exposure: 0.8,
   build(scene, renderer) {
     const L = setupSkyAndLight(scene, renderer, { elev: 9, azim: 95, sunI: 3.0, turbidity: 6, rayleigh: 2.2, fog: [0xe6c9a4, 90, 700], shadowSize: 120, sunColor: '#ffd29a' });
     buildKarachiRoad(scene);

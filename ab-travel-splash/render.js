@@ -23,7 +23,9 @@ const samples = +(args.samples || 1);
   const meta = await page.evaluate(([w, h, s]) => window.SPLASH.init({ width: w, height: h, seqs: s }), [W, H, seqs]);
   console.log(`seqs=${seqs} duration=${meta.duration.toFixed(2)}s frames=${meta.frames} shots=${meta.shots.length}`);
 
-  if (args.srt) {
+  if (args.info) { console.log('FRAMES', meta.frames); }
+  else if (args.json) { fs.writeFileSync(args.json, JSON.stringify(await page.evaluate(() => window.SPLASH.subtitles()), null, 1)); console.log('wrote', args.json); }
+  else if (args.srt) {
     const { subs, shots } = await page.evaluate(() => window.SPLASH.subtitles());
     const ts = (x) => { const ms = Math.round(x * 1000); const p = (n, l = 2) => String(n).padStart(l, '0'); return `${p(Math.floor(ms / 3600000))}:${p(Math.floor(ms / 60000) % 60)}:${p(Math.floor(ms / 1000) % 60)},${p(ms % 1000, 3)}`; };
     fs.writeFileSync(args.srt, subs.map((s, i) => `${i + 1}\n${ts(s.t0)} --> ${ts(s.t1)}\n${s.who}: ${s.text}\n`).join('\n'));

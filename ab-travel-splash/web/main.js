@@ -84,15 +84,19 @@ function drawOverlay(info, t) {
   }
   // brand bug
   cg.font = 'bold 24px DejaVu Sans'; cg.fillStyle = 'rgba(255,255,255,0.75)'; cg.textAlign = 'right'; cg.fillText('Ab Travel Splash · EP 1', W - 60, 64); cg.textAlign = 'left';
-  // subtitles (Roman Urdu)
+  // subtitles (Roman Urdu) — lambi line do hisson mein
   for (const [t0, t1, who, text] of (e.seq.subs || [])) {
     if (lt >= t0 && lt < t1) {
-      cg.font = '600 40px DejaVu Sans'; const line = (who ? who + ': ' : '') + text; const tw = cg.measureText(line).width;
-      cg.fillStyle = 'rgba(0,0,0,0.6)'; cg.fillRect(W / 2 - tw / 2 - 24, H - 128, tw + 48, 64);
-      cg.fillStyle = '#fff'; cg.textAlign = 'center';
-      if (who) { cg.fillStyle = '#ffd34d'; const ww = cg.measureText(who + ': ').width; cg.textAlign = 'left'; cg.fillText(who + ': ', W / 2 - tw / 2, H - 82); cg.fillStyle = '#fff'; cg.fillText(text, W / 2 - tw / 2 + ww, H - 82); }
-      else cg.fillText(line, W / 2, H - 82);
-      cg.textAlign = 'left';
+      cg.font = '600 40px DejaVu Sans'; const prefix = who ? who + ': ' : '';
+      const words = (prefix + text).split(' '); const lines = ['']; const maxW = W - 260;
+      for (const wd of words) { const tryL = (lines[lines.length - 1] + ' ' + wd).trim(); if (cg.measureText(tryL).width > maxW && lines[lines.length - 1]) lines.push(wd); else lines[lines.length - 1] = tryL; }
+      lines.forEach((ln, i) => {
+        const y = H - 82 - (lines.length - 1 - i) * 56; const tw = cg.measureText(ln).width;
+        cg.fillStyle = 'rgba(0,0,0,0.6)'; cg.fillRect(W / 2 - tw / 2 - 24, y - 46, tw + 48, 60);
+        let x = W / 2 - tw / 2; cg.textAlign = 'left';
+        if (i === 0 && who && ln.startsWith(prefix)) { cg.fillStyle = '#ffd34d'; cg.fillText(prefix, x, y); x += cg.measureText(prefix).width; cg.fillStyle = '#fff'; cg.fillText(ln.slice(prefix.length), x, y); }
+        else { cg.fillStyle = '#fff'; cg.fillText(ln, x, y); }
+      });
     }
   }
   if (e.seq.overlay) e.seq.overlay(cg, W, H, lt, ctx);
@@ -130,8 +134,10 @@ async function renderThumb(t, { quality = 0.93 } = {}) {
 
 function subtitles() {
   const out = [];
-  for (const e of seqList) for (const [t0, t1, who, text] of (e.seq.subs || [])) out.push({ t0: e.t0 + t0, t1: e.t0 + t1, who, text });
-  return { subs: out, shots: seqList.flatMap(e => e.shots.map(sh => ({ seq: e.seq.id, id: sh.id, t0: e.t0 + sh.s0, t1: e.t0 + sh.s1, desc: sh.desc }))) };
+  for (const e of seqList) for (const [t0, t1, who, text, urdu] of (e.seq.subs || [])) out.push({ t0: e.t0 + t0, t1: e.t0 + t1, who, text, urdu: urdu || '' });
+  const sfx = []; for (const e of seqList) for (const [t, name] of (e.seq.sfx || [])) sfx.push({ t: e.t0 + t, name });
+  const seqs = seqList.map(e => ({ id: e.seq.id, t0: e.t0, t1: e.t1, ambience: e.seq.ambience || 'outdoor' }));
+  return { subs: out, sfx, seqs, shots: seqList.flatMap(e => e.shots.map(sh => ({ seq: e.seq.id, id: sh.id, t0: e.t0 + sh.s0, t1: e.t0 + sh.s1, desc: sh.desc }))) };
 }
 
 window.SPLASH = { init, renderFrame, renderThumb, subtitles, locate: (t) => { const l = locate(t); return { seq: l.e.seq.id, shot: l.shot.id, lt: l.lt }; } };

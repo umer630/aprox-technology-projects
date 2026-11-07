@@ -1,6 +1,6 @@
 // SEQUENCE A — Karachi: ghar ka main gate → Umer bahar aata hai → driver → Revo
 import * as THREE from 'three';
-import { createCharacter, LOOKS, poseCarryCam, poseSelfie, posePullBag, poseSalaam, poseSit, poseReach, faceUpdate, setGrip } from './lib/character.js';
+import { createCharacter, LOOKS, poseCarryCam, poseSelfie, posePullBag, poseSalaam, poseSit, poseReach, faceUpdate, setGrip, poseIdle, poseWave, showCamBag } from './lib/character.js';
 import { createVlogCam, createSuitcase } from './lib/props.js';
 import { createRevo, createCar, createBike } from './lib/vehicles.js';
 import { setupSkyAndLight, buildHouseStreet } from './lib/env.js';
@@ -8,7 +8,7 @@ import { plan, applyPlan, evalPlan, attachBagToHand, holdCamera, handheld, camLe
 import { clamp, lerp, smooth, range } from './lib/util.js';
 
 export const SEQ_A = {
-  id: 'A', title: 'Karachi — Ghar se rawangi',
+  id: 'A', ambience: 'street', sfx: [[4.6, 'gate'], [19.8, 'door'], [20.3, 'engine']], title: 'Karachi — Ghar se rawangi',
   build(scene, renderer) {
     const L = setupSkyAndLight(scene, renderer, { elev: 24, azim: 35, sunI: 3.2, hemiI: 0.85, fog: [0xd6dbd8, 60, 400], shadowSize: 22, sunColor: '#ffeccd' });
     const H = buildHouseStreet(scene);
@@ -20,6 +20,7 @@ export const SEQ_A = {
     // parked car opposite + passing bike
     const pc = createCar('hatch', 5); pc.group.position.set(-9, 0, 7.6); pc.group.rotation.y = Math.PI; scene.add(pc.group);
     const bike = createBike(9); bike.group.rotation.y = Math.PI; scene.add(bike.group);
+    const ammi = createCharacter({ ...LOOKS.ammi, cameraBag: false }, 5); ammi.root.position.set(-1.3, 0, -1.2); ammi.root.rotation.y = 0.2; scene.add(ammi.root);
     // plans
     const uP = plan(umer, [-0.3, -2.8], 0, [
       { at: 5.0, to: [-0.3, 0.9] },
@@ -37,7 +38,7 @@ export const SEQ_A = {
       { at: 17.5, face: Math.PI / 2, dur: 0.5 }
     ]);
     const bedPos = new THREE.Vector3(3.5 - 2.15, 0.88, 2.8);
-    return { L, H, umer, driver, vcam, bag, revo, bike, uP, dP, bedPos };
+    return { L, H, umer, driver, vcam, bag, revo, bike, uP, dP, bedPos, ammi };
   },
   shots: [
     { id: 'A01', dur: 4.5, desc: 'Wide establishing crane — ghar, gate, Revo, driver',
@@ -58,14 +59,16 @@ export const SEQ_A = {
       cam(t, c, cam) { const x = c.revo.group.position.x; cam.position.set(15.5, 0.55, 7.7); cam.lookAt(x + 1.0, 1.0, 2.8); cam.fov = 36; cam.updateProjectionMatrix(); } }
   ],
   subs: [
-    [9.1, 11.2, 'Umer', 'Assalam o Alaikum dosto! Main hoon Umer.'],
-    [11.2, 13.0, 'Umer', 'Ab Travel Splash ke Episode 1 mein khush aamdeed!'],
-    [13.4, 14.8, 'Driver', 'Walaikum Assalam, Umer bhai! Saman mujhe de dein.'],
-    [14.8, 15.6, 'Umer', 'Shukriya chacha!'],
-    [16.0, 19.0, 'Umer', 'Aaj ka safar — Karachi se Islamabad. Chalo, airport chalte hain!']
+    [9.1, 11.2, 'Umer', 'Assalam o Alaikum dosto! Main hoon Umer.', 'السلام علیکم دوستو! میں ہوں عمر۔'],
+    [11.2, 13.0, 'Umer', 'Ab Travel Splash ke Episode 1 mein khush aamdeed!', 'اب ٹریول اسپلیش کی ایپی سوڈ ون میں خوش آمدید!'],
+    [13.4, 14.8, 'Driver', 'Walaikum Assalam, Umer bhai! Saman mujhe de dein.', 'وعلیکم السلام عمر بھائی! سامان مجھے دے دیں۔'],
+    [14.8, 15.6, 'Umer', 'Shukriya chacha!', 'شکریہ چچا!'],
+    [16.0, 19.0, 'Umer', 'Aaj ka safar — Karachi se Islamabad. Chalo, airport chalte hain!', 'آج کا سفر، کراچی سے اسلام آباد۔ چلو، ایئرپورٹ چلتے ہیں!'],
+    [20.2, 22.6, 'Ammi', 'Allah Hafiz beta, Fi Amanillah!', 'اللہ حافظ بیٹا، فی امان اللہ!']
   ],
   update(t, c) {
-    const { umer, driver, vcam, bag, revo, H, L } = c;
+    const { umer, driver, vcam, bag, revo, H, L, ammi } = c;
+    ammi.setNeutral(); poseIdle(ammi, t); ammi.root.visible = t > 5.5; if (t > 15) poseWave(ammi, t, 'R', smooth(range(t, 15, 15.5))); faceUpdate(ammi, t, t > 20.2 && t < 22.6 ? 1 : 0);
     // gate: 4.6 → 6.4 andar ki taraf khulta hai
     const g = smooth(range(t, 4.6, 6.6)) * 1.45; H.leafL.rotation.y = g; H.leafR.rotation.y = -g;
     // passing motorbike (−X heading → far lane z>5.2, left-hand traffic)

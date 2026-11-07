@@ -61,3 +61,44 @@ export function createBoardingPass() {
   const b = mesh(new THREE.PlaneGeometry(0.2, 0.08), mt); b.rotation.y = Math.PI; m.add(b);
   return m;
 }
+
+export function createToothbrush() {
+  const g = new THREE.Group();
+  g.add(box(0.012, 0.17, 0.01, mat('#2a7de1', 0.4), 0, 0, 0));
+  g.add(box(0.012, 0.025, 0.014, mat('#ffffff', 0.8), 0, 0.09, 0.008));
+  return g;
+}
+export function createPhone() {
+  const g = new THREE.Group();
+  g.add(rbox(0.072, 0.15, 0.009, 0.006, mat('#111', 0.3, 0.3)));
+  const sc = box(0.064, 0.138, 0.001, new THREE.MeshStandardMaterial({ color: '#0d2a45', emissive: '#1f5f9a', emissiveIntensity: 0.4 }), 0, 0, 0.005); g.add(sc);
+  return g;
+}
+export function createTeapot() {
+  const g = new THREE.Group(); const m = mat('#c0c4c8', 0.25, 0.9);
+  { const b = mesh(new THREE.SphereGeometry(0.08, 16, 12), m); b.scale.set(1, 0.8, 1); g.add(b); }
+  const sp = mesh(new THREE.CylinderGeometry(0.01, 0.018, 0.1, 8), m); sp.rotation.z = -1.0; sp.position.set(0.09, 0.02, 0); g.add(sp);
+  const h = mesh(new THREE.TorusGeometry(0.04, 0.008, 6, 12, Math.PI), m); h.position.set(-0.08, 0.02, 0); h.rotation.z = Math.PI / 2; g.add(h);
+  return g;
+}
+// Khula suitcase (bistar par letaya hua): base + lid (hinge -X side). Origin = base bottom centre.
+export function createOpenSuitcase(color = '#2e4a6b') {
+  const g = new THREE.Group(); const shell = new THREE.MeshPhysicalMaterial({ color, roughness: 0.35, clearcoat: 0.6 });
+  const lining = mat('#1d2633', 0.95);
+  const W = 0.38, L = 0.56, H = 0.11;
+  g.add(box(W, 0.012, L, shell, 0, 0.006, 0));
+  for (const s of [-1, 1]) { g.add(box(0.012, H, L, shell, s * W / 2, H / 2, 0)); g.add(box(W, H, 0.012, shell, 0, H / 2, s * L / 2)); }
+  g.add(box(W - 0.02, 0.005, L - 0.02, lining, 0, 0.014, 0));
+  const lidPiv = new THREE.Group(); lidPiv.position.set(-W / 2, H, 0); g.add(lidPiv);
+  const lid = new THREE.Group(); lidPiv.add(lid);
+  lid.add(box(W, 0.012, L, shell, W / 2, 0.1, 0)); for (const s of [-1, 1]) { lid.add(box(0.012, 0.1, L, shell, W / 2 + s * W / 2, 0.05, 0)); lid.add(box(W, 0.1, 0.012, shell, W / 2, 0.05, s * L / 2)); }
+  lid.add(box(W - 0.02, 0.005, L - 0.02, lining, W / 2, 0.092, 0));
+  g.traverse(o => o.isMesh && (o.castShadow = true));
+  return { group: g, lidPiv, setLid(open) { lidPiv.rotation.z = -Math.PI * 0.62 * open; }, // open=1 → khula (−X side par gira hua)
+    slots: [new THREE.Vector3(0, 0.02, -0.14), new THREE.Vector3(0, 0.02, 0.14), new THREE.Vector3(0, 0.06, 0)] };
+}
+export function createClothStack(color, n = 3) {
+  const g = new THREE.Group(); const m = new THREE.MeshStandardMaterial({ color, roughness: 0.95 });
+  for (let i = 0; i < n; i++) { const b = rbox(0.32, 0.03, 0.24, 0.012, m); b.position.y = 0.016 + i * 0.032; b.rotation.y = (i % 2 - 0.5) * 0.06; g.add(b); }
+  return g;
+}

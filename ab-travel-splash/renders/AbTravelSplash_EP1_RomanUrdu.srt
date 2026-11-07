@@ -1,123 +1,399 @@
 1
-00:00:14,600 --> 00:00:16,700
-Umer: Assalam o Alaikum dosto! Main hoon Umer.
+00:00:06,500 --> 00:00:10,100
+Umer: Uff... subah ke chhe baj gaye!
 
 2
-00:00:16,700 --> 00:00:18,500
-Umer: Ab Travel Splash ke Episode 1 mein khush aamdeed!
+00:00:18,100 --> 00:00:21,100
+Umer: Chalo Umer, uth jao — aaj safar ka din hai!
 
 3
-00:00:18,900 --> 00:00:20,300
-Driver: Walaikum Assalam, Umer bhai! Saman mujhe de dein.
+00:00:26,000 --> 00:00:30,100
+Umer: Assalam o Alaikum dosto! Main hoon Umer, aur yeh hai Ab Travel Splash.
 
 4
-00:00:20,300 --> 00:00:21,100
-Umer: Shukriya chacha!
+00:00:30,300 --> 00:00:33,900
+Umer: Aaj hum Karachi se Islamabad ja rahe hain — bohat khaas din hai!
 
 5
-00:00:21,500 --> 00:00:24,500
-Umer: Aaj ka safar — Karachi se Islamabad. Chalo, airport chalte hain!
+00:00:34,100 --> 00:00:37,100
+Umer: Lekin pehle... daant saaf karte hain!
 
 6
-00:00:40,000 --> 00:00:42,400
-Umer: Dekhiye dosto, Karachi ki sarkon par subah ka rush!
+00:00:58,100 --> 00:01:01,100
+Umer: Daant saaf, din saaf! Ab packing ka time.
 
 7
-00:00:42,400 --> 00:00:44,600
-Umer: Airport bas thori hi door hai.
+00:01:04,100 --> 00:01:08,100
+Umer: Ammi! Ammi! Mera bag nikaal dein, please!
 
 8
-00:00:49,800 --> 00:00:51,800
-Driver: Allah Hafiz Umer bhai, safar mubarak!
+00:01:09,900 --> 00:01:12,900
+Ammi: Aa rahi hoon beta! Yeh lo tumhara bag.
 
 9
-00:00:51,800 --> 00:00:53,200
-Umer: Allah Hafiz chacha, shukriya!
+00:01:15,500 --> 00:01:19,100
+Umer: Shukriya Ammi! Aur meri blue shirt kahan hai?
 
 10
-00:00:53,400 --> 00:00:55,000
-Umer: Chalein dosto — check-in karte hain.
+00:01:19,500 --> 00:01:23,500
+Ammi: Almari mein hai beta — sab istri karke rakha hai.
 
 11
-00:01:00,000 --> 00:01:01,800
-Agent: Assalam o Alaikum! Aap ka CNIC aur ticket, please.
+00:01:35,500 --> 00:01:39,100
+Ammi: Charger aur dawai bhi rakh lena!
 
 12
-00:01:01,900 --> 00:01:03,400
-Agent: Yeh rahi aap ki boarding pass. Safar mubarak!
+00:01:41,500 --> 00:01:44,500
+Umer: Ji Ammi, sab rakh liya!
 
 13
-00:01:03,400 --> 00:01:05,000
-Umer: Bohat shukriya!
+00:01:51,500 --> 00:01:55,100
+Umer: Packing mukammal! Ab chacha ko phone karta hoon.
 
 14
-00:01:07,200 --> 00:01:09,400
-Umer: Camera tray mein — security check zaroori hai.
+00:01:58,500 --> 00:02:03,900
+Umer: Hello chacha, Assalam o Alaikum! Revo le kar aa jayein — aath baje nikalna hai.
 
 15
-00:01:15,200 --> 00:01:16,600
-Umer: Camera wapas mil gaya! Ab gate ki taraf.
+00:02:04,300 --> 00:02:08,500
+Driver: Walaikum Assalam Umer bhai! Bas aadhe ghante mein pohanch raha hoon.
 
 16
-00:01:17,200 --> 00:01:20,200
-Umer: Boarding shuru ho gayi — gate ki taraf chalte hain!
+00:02:08,900 --> 00:02:10,900
+Umer: Theek hai, shukriya!
 
 17
-00:01:22,600 --> 00:01:26,200
-Umer: Yeh jet bridge seedha jahaz ke darwaze tak jata hai.
+00:02:16,500 --> 00:02:20,100
+Ammi: Araam se khao beta, garam garam paratha hai.
 
 18
-00:01:33,200 --> 00:01:36,200
-Umer: Boarding ho gayi — ab runway ki taraf!
+00:02:21,500 --> 00:02:25,900
+Umer: Ammi, aap ke haath ka paratha — iska koi jawab nahi!
 
 19
-00:01:38,000 --> 00:01:41,000
-Umer: Takeoff... Bismillah!
+00:02:27,500 --> 00:02:32,500
+Ammi: Safar mein apna khayal rakhna, aur pohanch kar phone karna.
 
 20
-00:01:55,600 --> 00:01:58,200
-Umer: Dekhiye dosto — baadalon ke upar kya nazara hai!
+00:02:33,100 --> 00:02:35,500
+Umer: Ji Ammi, InshaAllah.
 
 21
-00:02:00,900 --> 00:02:03,200
-Umer: Karachi peeche reh gaya — Islamabad ab zyada door nahi.
+00:02:43,900 --> 00:02:46,900
+Umer: Lagta hai chacha aa gaye!
 
 22
-00:02:03,200 --> 00:02:05,600
-Umer: Thori der mein landing hogi, InshaAllah!
+00:02:47,500 --> 00:02:51,900
+Ammi: Fi Amanillah beta — Allah ki amaan mein.
 
 23
-00:02:06,000 --> 00:02:09,200
-Umer: Islamabad aa gaya! Peeche Margalla Hills dekhiye.
+00:03:02,600 --> 00:03:04,700
+Umer: Assalam o Alaikum dosto! Main hoon Umer.
 
 24
-00:02:10,600 --> 00:02:13,200
-Umer: Smooth landing — Alhamdulillah!
+00:03:04,700 --> 00:03:06,500
+Umer: Ab Travel Splash ke Episode 1 mein khush aamdeed!
 
 25
-00:02:19,500 --> 00:02:22,100
-Umer: Dosto, hum Islamabad pohanch gaye!
+00:03:06,900 --> 00:03:08,300
+Driver: Walaikum Assalam, Umer bhai! Saman mujhe de dein.
 
 26
-00:02:22,100 --> 00:02:24,500
-Umer: Airport bohat khoobsurat aur saaf hai.
+00:03:08,300 --> 00:03:09,100
+Umer: Shukriya chacha!
 
 27
-00:02:25,600 --> 00:02:29,400
-Umer: Islamabad ki sarkein — saaf, hari bhari, aur peeche Margalla!
+00:03:09,500 --> 00:03:12,500
+Umer: Aaj ka safar — Karachi se Islamabad. Chalo, airport chalte hain!
 
 28
-00:02:31,100 --> 00:02:35,100
-Umer: Aur yeh hai Faisal Masjid... SubhanAllah.
+00:03:13,700 --> 00:03:16,100
+Ammi: Allah Hafiz beta, Fi Amanillah!
 
 29
-00:02:41,600 --> 00:02:44,600
-Umer: Dosto, Karachi se Islamabad ka safar mukammal hua!
+00:03:24,100 --> 00:03:27,300
+Umer: Karachi ki subah — har taraf rush hi rush!
 
 30
-00:02:44,600 --> 00:02:47,400
-Umer: Video pasand aaye to like, share aur subscribe zaroor karein.
+00:03:28,100 --> 00:03:32,300
+Umer: Dekhiye dosto, Karachi mein sab apni left side par chalte hain.
 
 31
-00:02:47,400 --> 00:02:49,900
+00:03:35,100 --> 00:03:38,500
+Driver: Signal laal hai, Umer bhai — zara rukte hain.
+
+32
+00:03:38,900 --> 00:03:42,700
+Umer: Zebra crossing par log guzar rahe hain — bilkul theek!
+
+33
+00:03:47,100 --> 00:03:51,100
+Umer: Woh dekhiye — Karachi Circular Railway ki train!
+
+34
+00:03:55,700 --> 00:04:00,500
+Umer: Har taraf Aprox AI, Aprox Technology aur Next Group ke banners!
+
+35
+00:04:06,500 --> 00:04:09,500
+Driver: Arey! Yeh bonnet se dhuaan kyun nikal raha hai?
+
+36
+00:04:10,100 --> 00:04:13,100
+Umer: Chacha, gaari kinare par laga dein!
+
+37
+00:04:19,500 --> 00:04:23,500
+Driver: Umer bhai, radiator garam ho gaya hai — paani khatam!
+
+38
+00:04:24,500 --> 00:04:29,100
+Umer: Yaar yeh kya ho gaya! Main late ho raha hoon — meri flight nikal jayegi!
+
+39
+00:04:30,100 --> 00:04:34,500
+Driver: Fikar na karein, paas hi ek workshop hai. Dheere dheere le chalte hain.
+
+40
+00:04:35,500 --> 00:04:40,500
+Umer: Dosto, dekh rahe hain? Safar mein kuch bhi ho sakta hai... dua karein!
+
+41
+00:04:50,700 --> 00:04:54,700
+Umer: Ustad ji, jaldi kijiye please — meri flight ka time ho raha hai!
+
+42
+00:04:55,300 --> 00:04:59,900
+Mechanic: Bas paanch minute sahib. Radiator ka pipe leak tha — naya laga raha hoon.
+
+43
+00:05:04,100 --> 00:05:08,100
+Umer: Dosto, sach mein tension ho rahi hai... ghari dekhte reh jao!
+
+44
+00:05:09,100 --> 00:05:12,500
+Driver: Umer bhai, waqt hai abhi — pareshan na hon.
+
+45
+00:05:16,700 --> 00:05:19,500
+Mechanic: Lo ji, gaari bilkul theek!
+
+46
+00:05:19,900 --> 00:05:22,700
+Umer: Shukriya ustad ji! Kitne paise?
+
+47
+00:05:22,900 --> 00:05:24,900
+Mechanic: Bas aath sau rupay.
+
+48
+00:05:25,100 --> 00:05:28,100
+Umer: Yeh lijiye. Chalo chacha, jaldi airport!
+
+49
+00:05:29,100 --> 00:05:32,500
+Umer: Dosto, gaari theek ho gayi — ab full speed airport!
+
+50
+00:05:35,700 --> 00:05:39,100
+Umer: Dua karein flight na nikle!
+
+51
+00:05:39,700 --> 00:05:43,700
+Driver: Fikar na karein Umer bhai, bas das minute mein airport!
+
+52
+00:05:59,100 --> 00:06:02,500
+Guard: Assalam o Alaikum. Ticket aur shanakhti card dikhayein.
+
+53
+00:06:02,900 --> 00:06:05,900
+Umer: Yeh lijiye — Karachi se Islamabad, aaj ki flight.
+
+54
+00:06:06,700 --> 00:06:09,700
+Guard: Theek hai. Gaari ki checking hogi.
+
+55
+00:06:16,700 --> 00:06:19,100
+Guard: Sab theek hai — jaayein!
+
+56
+00:06:21,100 --> 00:06:25,700
+Umer: Dosto, departure upar hai aur arrival neeche — hum upar ja rahe hain!
+
+57
+00:06:30,700 --> 00:06:34,700
+Umer: Woh raha Jinnah International Airport!
+
+58
+00:06:41,300 --> 00:06:43,300
+Driver: Allah Hafiz Umer bhai, safar mubarak!
+
+59
+00:06:43,300 --> 00:06:44,700
+Umer: Allah Hafiz chacha, shukriya!
+
+60
+00:06:44,900 --> 00:06:46,500
+Umer: Chalein dosto — check-in karte hain.
+
+61
+00:06:51,500 --> 00:06:53,300
+Agent: Assalam o Alaikum! Aap ka CNIC aur ticket, please.
+
+62
+00:06:53,400 --> 00:06:54,900
+Agent: Yeh rahi aap ki boarding pass. Safar mubarak!
+
+63
+00:06:54,900 --> 00:06:56,500
+Umer: Bohat shukriya!
+
+64
+00:06:58,700 --> 00:07:00,900
+Umer: Camera tray mein — security check zaroori hai.
+
+65
+00:07:06,700 --> 00:07:08,100
+Umer: Camera wapas mil gaya! Ab gate ki taraf.
+
+66
+00:07:17,100 --> 00:07:20,500
+Umer: Ek burger, fries aur ek chai, please.
+
+67
+00:07:20,900 --> 00:07:23,500
+Staff: Ji sir, abhi lijiye!
+
+68
+00:07:29,100 --> 00:07:32,500
+Bilal: Arey Umer! Tum bhi Islamabad ja rahe ho?
+
+69
+00:07:32,900 --> 00:07:37,700
+Umer: Haan yaar! Raaste mein gaari kharab ho gayi thi, bas abhi pohancha hoon.
+
+70
+00:07:38,100 --> 00:07:41,700
+Hamza: Shukar hai pohanch gaye! Chalo, araam se nashta karo.
+
+71
+00:07:42,500 --> 00:07:45,700
+Umer: Yeh burger to zabardast hai, yaar!
+
+72
+00:07:49,100 --> 00:07:57,100
+Announcement: Mohtaram musafiron, Islamabad jane wali parwaz ki boarding shuru ho chuki hai. Baraye meharbani gate ki taraf tashreef le jayen. Shukriya.
+
+73
+00:07:57,700 --> 00:08:00,500
+Umer: Chalo yaar, boarding shuru!
+
+74
+00:08:08,700 --> 00:08:11,700
+Umer: Boarding shuru ho gayi — gate ki taraf chalte hain!
+
+75
+00:08:14,100 --> 00:08:17,700
+Umer: Yeh jet bridge seedha jahaz ke darwaze tak jata hai.
+
+76
+00:08:24,700 --> 00:08:27,700
+Umer: Boarding ho gayi — ab runway ki taraf!
+
+77
+00:08:29,500 --> 00:08:32,500
+Umer: Takeoff... Bismillah!
+
+78
+00:08:47,100 --> 00:08:49,700
+Umer: Dekhiye dosto — baadalon ke upar kya nazara hai!
+
+79
+00:08:52,400 --> 00:08:54,700
+Umer: Karachi peeche reh gaya — Islamabad ab zyada door nahi.
+
+80
+00:08:54,700 --> 00:08:57,100
+Umer: Thori der mein landing hogi, InshaAllah!
+
+81
+00:08:57,500 --> 00:09:00,700
+Umer: Islamabad aa gaya! Peeche Margalla Hills dekhiye.
+
+82
+00:09:02,100 --> 00:09:04,700
+Umer: Smooth landing — Alhamdulillah!
+
+83
+00:09:06,600 --> 00:09:10,200
+Umer: Islamabad pohanch gaye! Ab bas apna bag mil jaye...
+
+84
+00:09:13,000 --> 00:09:16,000
+Umer: Woh raha — mera blue bag!
+
+85
+00:09:23,000 --> 00:09:26,000
+Umer: Dosto, yeh hai Islamabad International Airport!
+
+86
+00:09:26,200 --> 00:09:29,800
+Umer: Kitna bada, saaf aur khoobsurat hai — maza aa gaya!
+
+87
+00:09:30,600 --> 00:09:34,600
+Umer: Bahar se dekhiye — Islamabad airport ki lehrati hui chhat!
+
+88
+00:09:38,600 --> 00:09:42,200
+Umer: Meri Corolla Grande parking mein khadi hai — chalo!
+
+89
+00:09:50,600 --> 00:09:54,000
+Umer: Bag andar, seat belt laga li — Bismillah!
+
+90
+00:09:58,600 --> 00:10:03,000
+Umer: Ab seedha Murree Road ki taraf — Islamabad ki sair!
+
+91
+00:10:08,600 --> 00:10:12,600
+Umer: Yeh hai Murree Road — upar Metro Bus chal rahi hai!
+
+92
+00:10:24,000 --> 00:10:28,600
+Umer: Dekhiye dosto — Islamabad sirf hara bhara nahi, yahan bari bari imaratein aur malls bhi hain!
+
+93
+00:10:29,000 --> 00:10:32,600
+Umer: Aur har jagah Aprox AI aur Next Group ke banners!
+
+94
+00:10:38,600 --> 00:10:42,200
+Umer: Signal laal — zebra crossing par log guzar rahe hain.
+
+95
+00:10:52,200 --> 00:10:56,200
+Umer: Aage Margalla Hills — aur phir Faisal Masjid!
+
+96
+00:10:59,100 --> 00:11:02,900
+Umer: Islamabad ki sarkein — saaf, hari bhari, aur peeche Margalla!
+
+97
+00:11:04,600 --> 00:11:08,600
+Umer: Aur yeh hai Faisal Masjid... SubhanAllah.
+
+98
+00:11:15,100 --> 00:11:18,100
+Umer: Dosto, Karachi se Islamabad ka safar mukammal hua!
+
+99
+00:11:18,100 --> 00:11:20,900
+Umer: Video pasand aaye to like, share aur subscribe zaroor karein.
+
+100
+00:11:20,900 --> 00:11:23,400
 Umer: Agli episode mein milte hain — Allah Hafiz!

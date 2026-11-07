@@ -6,10 +6,10 @@ Koi bhi supplied reference photo video frame mein paste nahi ki gayi. Photos sir
 ## Output (`renders/`)
 | File | Kya hai |
 |---|---|
-| `AbTravelSplash_EP1_Karachi_to_Islamabad_1080p24.mp4` | Final episode, 1920×1080, 24 fps, H.264, Roman Urdu subtitles burned-in |
-| `AbTravelSplash_EP1_thumbnail_1280x720.jpg` / `_1920.jpg` | YouTube thumbnail (3D render + title) |
-| `AbTravelSplash_EP1_RomanUrdu.srt` | Alag subtitle file (Roman Urdu) |
-| `AbTravelSplash_EP1_RomanUrdu_shots.csv` | Render shuda shots ki list (timecodes ke saath) |
+| `AbTravelSplash_EP1_Karachi_to_Islamabad_11min_1080p24.mp4` | Final episode (v2): 11:29, 1920×1080, 24 fps, H.264 + AAC, Urdu voice-over, Roman Urdu subtitles burned-in |
+| `AbTravelSplash_EP1_thumbnail_*.jpg` | Thumbnail |
+| `AbTravelSplash_EP1_RomanUrdu.srt` | Subtitles (Roman Urdu) |
+| `AbTravelSplash_EP1_timeline.json` | Har line (Roman + Urdu), sound effects aur sequences ki timing |
 
 ## Pipeline
 ```
@@ -32,13 +32,28 @@ node render.js --seqs E --thumb 19.5 --w 1280 --h 720 --out renders/thumb.jpg
 node render.js --seqs I,A,B,C,K,D,F,L,E --srt renders/ep1.srt
 ```
 
-## Sequences (34 shots, ~2:56)
-I Intro drone + title · A Ghar: gate khulta hai, Umer camera + suitcase ke saath bahar, selfie, driver salaam, bag Revo ke bed mein, Revo LEFT lane mein ·
-B Karachi shahrah (aerial, side tracking, car ke andar selfie) · C Jinnah International drop-off, driver Allah Hafiz ·
-K Check-in (bag belt par, boarding pass haath-se-haath) + security (camera tray mein → x-ray → wapas haath mein) ·
-G Gate lounge + glass jet bridge → aircraft door ·
-D Taxi → takeoff roll → rotation → climb · F Cruise exterior, window POV (wing + baadal), seat selfie ·
-L Islamabad landing (Margalla peeche, touchdown smoke) · M Islamabad airport arrival hall + walking selfie · E Islamabad avenue → Faisal Masjid → selfie outro → end card
+## Story (v2, 19 sequences, 83 shots, ~11.5 min)
+1. **I** Intro drone + title
+2. **H** Ghar: alarm 6:00 → uthna → bedroom vlog → daant brush → "Ammi! Bag nikaal dein!" → Ammi bag laati hain → almari se kapre → packing → driver ko phone → nashta (paratha, chai) → horn
+3. **A** Gate, driver salaam, bag Revo mein, Ammi ki dua
+4. **B** Karachi shahrah: brand banners (Aprox AI, Aprox Attendant, Aprox Technology, Next Group), laal signal + zebra crossing par log, Circular Railway train
+5. **X** Revo kharab: bonnet se bhaap, hazard lights, "Main late ho raha hoon!"
+6. **Y** Auto Workshop: mechanic radiator pipe badalta hai, Umer pareshan, paise, rawangi
+7. **R** Tez raftar airport ki taraf
+8. **J** Jinnah International entry: guard ticket + shanakhti card, mirror se gaari ki checking, barrier, **Departures upar / Arrivals neeche**
+9. **C** Drop-off · **K** Check-in + security · **N** Lounge: McDonald's / Chai Khana / Karachi Biryani, doston (Bilal, Hamza) ke saath nashta, speaker par boarding announcement
+10. **G** Gate + jet bridge · **D** Takeoff · **F** Cruise · **L** Islamabad landing
+11. **M** Islamabad airport: baggage carousel, arrival hall, selfie
+12. **Q** Airport exterior (wavy roof) → parking → **Toyota Corolla Grande 1.8** → driver door → rawangi
+13. **S** Murree Road: elevated Metro Bus, malls, banners, signal + zebra, "Murree Road" sign, Margalla Hills
+14. **E** Faisal Masjid (behtar structure: tent shells, beams, pencil minarets with 2 balconies, sahn, hauz, portico) → outro
+
+## Audio
+`audio/make_audio.py`: Meta MMS-TTS (`facebook/mms-tts-urd-script_arabic`) se Urdu voice. Har kirdar ki alag pitch (rubberband). Announcement mein speaker jaisa echo, phone call par telephone EQ. Saath mein ambience (ghar, sadak, workshop, hall, jahaz), sound effects (alarm, horn, bhaap, train, chime, touchdown, parinde) aur halki music, jo awaaz ke waqt dheemi ho jati hai.
+```bash
+python audio/make_audio.py renders/AbTravelSplash_EP1_timeline.json renders/AbTravelSplash_EP1_audio.wav /tmp/tts_cache
+./render_all.sh && ./concat.sh
+```
 
 ## Identity lock
 `LOOKS.umer` (`web/lib/character.js`) Umer ka single locked profile hai. Har sequence `lib/cast.js` se yahi model banata hai.

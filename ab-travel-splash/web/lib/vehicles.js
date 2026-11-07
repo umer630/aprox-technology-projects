@@ -114,7 +114,13 @@ export function createRevo(color = '#101214') {
   }
   g.traverse(o => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
   cab.castShadow = false;
-  const V = { group: g, wheels, tail, R, dist: 0, seats: { driver: new THREE.Vector3(0.38, 0.62, zDriver), passenger: new THREE.Vector3(0.38, 0.62, zPass) },
+  // HOOD (bonnet) — windshield ki taraf hinge; andar engine
+  const eng = new THREE.Group(); g.add(eng);
+  eng.add(box(0.7, 0.04, 1.2, mat('#2a2a2a', 0.5, 0.6), 1.75, 1.135, 0)); eng.add(box(0.25, 0.04, 0.2, mat('#1a1a1a', 0.5), 1.4, 1.155, 0.55));
+  { const cap = mesh(new THREE.CylinderGeometry(0.05, 0.05, 0.03, 12), mat('#c9a020', 0.4, 0.5)); cap.position.set(2.25, 1.13, -0.3); eng.add(cap); }
+  const hoodPiv = new THREE.Group(); hoodPiv.position.set(1.06, 1.175, 0); g.add(hoodPiv);
+  const hood = box(1.38, 0.035, W - 0.12, paint, 0.69, 0, 0); hood.rotation.z = -0.045; hoodPiv.add(hood);
+  const V = { group: g, wheels, tail, R, dist: 0, hoodPiv, setHood(o) { hoodPiv.rotation.z = o * 0.95; }, seats: { driver: new THREE.Vector3(0.38, 0.62, zDriver), passenger: new THREE.Vector3(0.38, 0.62, zPass) },
     roll(d) { this.dist = d; for (const w of wheels) w.rotation.z = -d / R; },
     setTail(open) { tail.rotation.z = open * (Math.PI / 2); } // open=1 → neeche khula
   };

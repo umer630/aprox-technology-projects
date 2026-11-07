@@ -16,7 +16,7 @@ function state(lt) {
 }
 
 export default {
-  id: 'D', title: 'Runway — Takeoff',
+  id: 'D', ambience: 'jet', sfx: [[0.0, 'jet_taxi'], [5.0, 'jet_roar']], title: 'Runway — Takeoff',
   build(scene, renderer) {
     const L = setupSkyAndLight(scene, renderer, { elev: 30, azim: 200, sunI: 3.4, fog: [0xd8d6cc, 300, 3500], shadowSize: 50, sunColor: '#fff2dc' });
     buildRunway(scene, { terrain: 'karachi' });
@@ -33,8 +33,8 @@ export default {
       cam(t, c, cam) { const p = c.ac.group.position; cam.position.set(1700, 1.8, 120); cam.lookAt(p.x, p.y + 4, p.z); cam.fov = 30 - t * 1.2; } }
   ],
   subs: [
-    [0.6, 3.6, 'Umer', 'Boarding ho gayi — ab runway ki taraf!'],
-    [5.4, 8.4, 'Umer', 'Takeoff... Bismillah!']
+    [0.6, 3.6, 'Umer', 'Boarding ho gayi — ab runway ki taraf!', 'بورڈنگ ہو گئی، اب رن وے کی طرف!'],
+    [5.4, 8.4, 'Umer', 'Takeoff... Bismillah!', 'ٹیک آف... بسم اللہ!']
   ],
   update(lt, c) {
     const s = state(lt); const ac = c.ac;

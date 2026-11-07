@@ -39,7 +39,7 @@ function buildCabin(ac) {
 }
 
 export default {
-  id: 'F', title: 'Baadalon ke upar',
+  id: 'F', ambience: 'cabin', title: 'Baadalon ke upar',
   build(scene, renderer) {
     const L = setupSkyAndLight(scene, renderer, { elev: 11, azim: 120, sunI: 3.6, turbidity: 5, rayleigh: 2.6, fog: [0xc9d6e6, 800, 7000], shadowSize: 30, sunColor: '#ffe2b8' });
     scene.fog.color.set('#cfdcec');
@@ -59,9 +59,9 @@ export default {
       cam(t, c, cam) { selfieCam(c, cam, t, { fov: 72, shake: 0.5 }); } }
   ],
   subs: [
-    [6.0, 8.6, 'Umer', 'Dekhiye dosto — baadalon ke upar kya nazara hai!'],
-    [11.3, 13.6, 'Umer', 'Karachi peeche reh gaya — Islamabad ab zyada door nahi.'],
-    [13.6, 16.0, 'Umer', 'Thori der mein landing hogi, InshaAllah!']
+    [6.0, 8.6, 'Umer', 'Dekhiye dosto — baadalon ke upar kya nazara hai!', 'دیکھیے دوستو، بادلوں کے اوپر کیا نظارہ ہے!'],
+    [11.3, 13.6, 'Umer', 'Karachi peeche reh gaya — Islamabad ab zyada door nahi.', 'کراچی پیچھے رہ گیا، اسلام آباد اب زیادہ دور نہیں۔'],
+    [13.6, 16.0, 'Umer', 'Thori der mein landing hogi, InshaAllah!', 'تھوڑی دیر میں لینڈنگ ہوگی، ان شاء اللہ!']
   ],
   update(lt, c, cam, shot) {
     const { ac, umer, vcam } = c; const x = V * lt;

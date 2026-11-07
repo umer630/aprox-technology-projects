@@ -210,7 +210,7 @@ function stoneTex() {
 }
 
 // ===================== KARACHI ARTERIAL ROAD (Shahrah-e-Faisal style) =====================
-export function buildKarachiRoad(scene) {
+export function buildKarachiRoad(scene, opts = {}) {
   ground(scene, 3000, '#a0957c');
   // dual carriageway along X: +X lanes at z∈[-8,-0.8] (LEFT side), −X lanes at z∈[0.8,8]
   road(scene, { length: 1200, width: 7.4, z: -4.6, laneLines: [0] });
@@ -220,8 +220,8 @@ export function buildKarachiRoad(scene) {
   kerb(scene, { length: 1200, z: -0.72, w: 0.14, h: 0.28 }); kerb(scene, { length: 1200, z: 0.72, w: 0.14, h: 0.28 });
   kerb(scene, { length: 1200, z: -8.35, w: 0.14, h: 0.22 }); kerb(scene, { length: 1200, z: 8.35, w: 0.14, h: 0.22 });
   const tp = []; for (let x = -600; x < 600; x += 7) tp.push([x, 0]);
-  trees(scene, tp, { seed: 41, scale: 0.75, shape: 'tall', palette: ['#4f7a2e', '#5b8a35', '#466e29'] });
-  for (let x = -600; x < 600; x += 38) streetLight(scene, x, 0, 1, 10, true);
+  if (!opts.noMedianTrees) trees(scene, tp, { seed: 41, scale: 0.75, shape: 'tall', palette: ['#4f7a2e', '#5b8a35', '#466e29'] });
+  for (let x = -600; x < 600; x += 38) streetLight(scene, x, opts.metro ? -8.6 : 0, opts.metro ? -1 : 1, 10, !opts.metro);
   // service footpaths
   for (const z of [-9.4, 9.4]) scene.add(box(1200, 0.15, 2, mat('#b5ad9a', 0.95), 0, 0.075, z, { cast: false }));
   // buildings (mixed: plazas, glass towers, older blocks)
@@ -230,15 +230,18 @@ export function buildKarachiRoad(scene) {
     let x = -600;
     while (x < 600) {
       const w = 12 + r() * 22, d = 12 + r() * 10, tall = r() < 0.18, h = tall ? 35 + r() * 45 : 8 + r() * 18;
-      building(scene, x + w / 2, side * (13 + d / 2 + r() * 6), w, d, h, Math.floor(x * 7 + side * 3 + 1000), { glass: tall && r() < 0.7 });
+      const off = (opts.railway && side < 0) ? 12 : 0;
+      if (opts.skip && opts.skip(x, w, side)) { x += w + 4; continue; }
+      building(scene, x + w / 2, side * (13 + off + d / 2 + r() * 6), w, d, h, Math.floor(x * 7 + side * 3 + 1000), { glass: tall && r() < 0.7 });
       x += w + 2 + r() * 8;
     }
     const tp2 = []; for (let x2 = -600; x2 < 600; x2 += 9 + r() * 6) tp2.push([x2, side * (10.8 + r() * 1.2)]);
     trees(scene, tp2, { seed: 50 + side, scale: 0.9 });
   }
-  for (let i = 0; i < 10; i++) billboard(scene, -500 + i * 110, (i % 2 ? 1 : -1) * 12, (i % 2 ? 1 : 0) * Math.PI, i + 3);
+  if (opts.brands) { for (let i = 0; i < 22; i++) opts.brands(scene, -560 + i * 52, (i % 2 ? 1 : -1) * 11.6, i % 2 ? Math.PI - 0.5 : 0.5, i); }
+  else for (let i = 0; i < 10; i++) billboard(scene, -500 + i * 110, (i % 2 ? 1 : -1) * 12, (i % 2 ? 1 : 0) * Math.PI, i + 3);
   // pedestrian bridge (Karachi signature)
-  for (const bx of [-180, 140]) {
+  for (const bx of (opts.noBridges ? [] : [-180, 140])) {
     const pb = new THREE.Group(); pb.position.x = bx; scene.add(pb);
     const pm = mat('#1f6f8b', 0.6, 0.3);
     pb.add(box(2.4, 0.5, 22, pm, 0, 6.2, 0)); for (const z of [-10, 0, 10]) pb.add(box(0.4, 6, 0.4, mat('#9aa', 0.6), 0, 3, z));
@@ -488,14 +491,28 @@ export function buildFaisalMosque(scene, at = new THREE.Vector3(0, 0, 0), scale 
   // crescent finial at top
   const cres = mesh(new THREE.TorusGeometry(1.8, 0.25, 8, 24, Math.PI * 1.3), mat('#c9a646', 0.3, 0.9)); cres.position.set(0, hTop + 6, 0); cres.rotation.z = Math.PI * 0.85; M.add(cres);
   M.add(box(0.3, 4, 0.3, mat('#c9a646', 0.3, 0.9), 0, hTop + 2.2, 0));
-  // minarets (4) at corners, ~88 m tall pencil shape
+  // roof shell edges (white beams) — tent ki tez lakeerein
+  const beamM = new THREE.MeshPhysicalMaterial({ color: '#ffffff', roughness: 0.3, clearcoat: 0.5 });
+  const beam = (a2, b2, r = 0.45) => { const d = b2.clone().sub(a2); const m = mesh(new THREE.CylinderGeometry(r, r, d.length(), 8), beamM); m.position.copy(a2).add(b2).multiplyScalar(0.5); m.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), d.normalize()); M.add(m); };
+  for (let i = 0; i < 4; i++) { beam(Mid[i], C[(i + 1) % 4]); beam(Mid[i], C[i]); beam(Mid[i], top, 0.35); beam(ground0[i], C[i], 0.6); }
+  // minarets (4) — Turkish pencil style: podium, fluted shaft, do balconies, nukeela cone, sunehra finial
+  const gold = mat('#c9a646', 0.3, 0.9);
   for (const [x, z] of [[-48, -48], [48, -48], [48, 48], [-48, 48]]) {
     const mn = new THREE.Group(); mn.position.set(x, 3, z); M.add(mn);
-    const shaft = mesh(new THREE.CylinderGeometry(2.0, 2.6, 70, 16), ribbed); shaft.position.y = 35; mn.add(shaft);
-    const bal = mesh(new THREE.CylinderGeometry(3.0, 2.2, 3, 16), white); bal.position.y = 68; mn.add(bal);
-    const cap = mesh(new THREE.ConeGeometry(2.3, 17, 16), white); cap.position.y = 78; mn.add(cap);
-    const tip = mesh(new THREE.ConeGeometry(0.3, 3, 8), mat('#c9a646', 0.3, 0.9)); tip.position.y = 88; mn.add(tip);
+    const pod = mesh(new THREE.CylinderGeometry(4.2, 4.6, 6, 16), white); pod.position.y = 3; mn.add(pod);
+    const shaft = mesh(new THREE.CylinderGeometry(2.0, 2.7, 64, 16), ribbed); shaft.position.y = 38; mn.add(shaft);
+    for (const [yb, rb] of [[52, 3.2], [68, 2.9]]) { const bal = mesh(new THREE.CylinderGeometry(rb, rb - 0.8, 1.8, 16), white); bal.position.y = yb; mn.add(bal); const rail = mesh(new THREE.TorusGeometry(rb - 0.1, 0.12, 6, 24), white); rail.rotation.x = Math.PI / 2; rail.position.y = yb + 1.2; mn.add(rail); }
+    const up = mesh(new THREE.CylinderGeometry(1.7, 2.0, 6, 16), ribbed); up.position.y = 72; mn.add(up);
+    const cap = mesh(new THREE.ConeGeometry(2.0, 15, 16), white); cap.position.y = 82.5; mn.add(cap);
+    const tip = mesh(new THREE.ConeGeometry(0.28, 3.2, 8), gold); tip.position.y = 91.5; mn.add(tip);
   }
+  // sahn (courtyard) — saamne (south, +Z) portico + hauz (pool) + fountain
+  const pool = mesh(new THREE.BoxGeometry(34, 0.3, 14), new THREE.MeshPhysicalMaterial({ color: '#4fa3c7', roughness: 0.05, clearcoat: 1, transmission: 0.0 })); pool.position.set(0, 3.15, 55); M.add(pool);
+  M.add(box(36, 0.8, 16, marble, 0, 2.7, 55)); const fnt = mesh(new THREE.CylinderGeometry(1.2, 1.6, 1.4, 16), white); fnt.position.set(0, 3.8, 55); M.add(fnt);
+  M.add(box(150, 1.2, 9, white, 0, 10.6, 83)); for (let k = -18; k <= 18; k++) M.add(box(0.8, 7, 0.8, white, k * 4, 6.5, 80));
+  M.add(box(24, 14, 4, white, 0, 10, 86)); // main darwaza
+  const arch = new THREE.Shape(); arch.moveTo(-5, 0); arch.lineTo(-5, 7); arch.lineTo(0, 11); arch.lineTo(5, 7); arch.lineTo(5, 0); arch.closePath();
+  const ag = mesh(new THREE.ShapeGeometry(arch), mat('#6f8796', 0.3, 0.3), { cast: false }); ag.position.set(0, 3, 88.05); M.add(ag);
   // long arcade wings (front)
   for (const s of [-1, 1]) { M.add(box(10, 10, 100, white, s * 85, 8, 20)); for (let k = 0; k < 12; k++) M.add(box(0.7, 7, 0.7, white, s * 79.5, 6.5, -28 + k * 8.5)); }
   // planters (courtyard reference)
