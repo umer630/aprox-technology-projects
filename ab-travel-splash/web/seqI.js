@@ -2,7 +2,7 @@
 import * as THREE from 'three';
 import { setupSkyAndLight, buildKarachiRoad } from './lib/env.js';
 import { createTraffic } from './lib/vehicles.js';
-import { KHI_LANES } from './seqB.js';
+import { SHAHRAH_LANES as KHI_LANES } from './lib/karachi.js';
 import { camLerp, V3 } from './lib/anim.js';
 import { clamp, smooth } from './lib/util.js';
 

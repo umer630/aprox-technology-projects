@@ -9,10 +9,16 @@ function capsule(r, len, material, segs = 12) {
   return m;
 }
 // Limb jo joint se neeche (-Y) latakta hai
-function limb(parent, r1, r2, len, material) {
-  const geo = new THREE.CylinderGeometry(r2, r1, len, 14, 1);
-  const m = mesh(geo, material); m.position.y = -len / 2; parent.add(m);
-  const cap = mesh(new THREE.SphereGeometry(r1, 14, 10), material); parent.add(cap);
+// Anatomical lathe: profile [[radius, y], ...] Y axis ke gird, x/z scale se oval cross-section
+function lathe(profile, material, sx = 1, sz = 1, segs = 20) {
+  const pts = profile.map(([r, y]) => new THREE.Vector2(Math.max(0.0005, r), y));
+  const m = mesh(new THREE.LatheGeometry(pts, segs), material); m.scale.set(sx, 1, sz); return m;
+}
+// Limb jo joint se neeche latakta hai: tapered + muscle bulge (r1 upar, rMid beech, r2 neeche)
+function limb(parent, r1, r2, len, material, bulge = 1.08, bulgeAt = 0.3) {
+  const rm = (r1 * (1 - bulgeAt) + r2 * bulgeAt) * bulge;
+  const prof = [[0, 0.02 * len], [r1 * 0.9, 0.01 * len], [r1, -0.04 * len], [rm, -bulgeAt * len], [(rm + r2) / 2, -0.7 * len], [r2, -0.98 * len], [r2 * 0.8, -1.03 * len], [0, -1.05 * len]];
+  const m = lathe(prof, material, 1, 0.92, 16); parent.add(m);
   return m;
 }
 
@@ -21,7 +27,7 @@ export const LOOKS = {
   // photo milte hi yahan adjust ho jati hain aur har shot mein same locked model use hota hai.
   umer: {
     height: 1.76, skin: '#b5774f', hair: '#1a1411', beard: '#3a2b21', beardStyle: 'trim',
-    shirt: '#3f8f4a', shirtStyle: 'hoodie', pants: '#2b3445', shoes: '#ecebe6', sole: '#9a9a9a',
+    shirt: '#4a9a55', shirtStyle: 'hoodie', pants: '#34405a', shoes: '#ecebe6', sole: '#9a9a9a',
     kameez: false, cap: false, glasses: false, build: 1.0, eyes: '#2a1a10', cameraBag: false, backpack: '#1c1d20', inner: '#1f4a63'
   },
   driver: {
@@ -99,15 +105,26 @@ export function createCharacter(look = LOOKS.umer, seed = 1) {
 
   // Torso
   const bw = L.build;
-  const pelvis = mesh(new THREE.SphereGeometry(0.15, 18, 12), pantMat); pelvis.scale.set(1.15 * bw, 0.75, 0.85); hips.add(pelvis);
-  const abdomen = mesh(new THREE.CylinderGeometry(0.155 * bw, 0.15 * bw, 0.26, 18), shirtMat); abdomen.position.y = 0.1; abdomen.scale.z = 0.72; spine.add(abdomen);
-  const torso = mesh(new THREE.SphereGeometry(0.2, 22, 16), shirtMat); torso.scale.set(0.98 * bw, 1.0, 0.62); torso.position.y = 0.08; chest.add(torso);
-  const shoulders = mesh(new THREE.CapsuleGeometry(0.075, 0.28 * bw, 6, 12), shirtMat); shoulders.rotation.z = Math.PI / 2; shoulders.position.y = 0.2; shoulders.scale.z = 0.9; chest.add(shoulders);
+  const fem = !!L.female;
+  const pelvis = lathe([[0, -0.13], [0.11, -0.12], [0.15, -0.07], [0.16, 0.0], [0.15, 0.06], [0.0, 0.07]], pantMat, (fem ? 1.12 : 1.05) * bw, 0.68); hips.add(pelvis);
+  const abdomen = lathe([[0.145, -0.06], [0.14, 0.04], fem ? [0.125, 0.12] : [0.138, 0.12], [0.145, 0.2], [0.15, 0.24]], shirtMat, bw, 0.68); spine.add(abdomen);
+  // chest: rib cage → pecs → trapezius → gardan
+  const torso = lathe([[0.15, -0.05], [0.162, 0.03], fem ? [0.16, 0.09] : [0.17, 0.1], [0.172, 0.16], [0.15, 0.21], [0.1, 0.25], [0.06, 0.275], [0, 0.28]], shirtMat, (fem ? 0.92 : 1.0) * bw, 0.64, 24); chest.add(torso);
+  const shoulders = mesh(new THREE.CapsuleGeometry(0.06, (fem ? 0.24 : 0.28) * bw, 6, 12), shirtMat); shoulders.rotation.z = Math.PI / 2; shoulders.position.y = 0.195; shoulders.scale.set(1, 0.85, 0.85); chest.add(shoulders);
+  // kapron ki silwatein (seam lines) — flat look ko todne ke liye
+  for (const sx of [-1, 1]) { const seam = mesh(new THREE.BoxGeometry(0.006, 0.2, 0.004), mat('#000000', 1, 0, { transparent: true, opacity: 0.18 })); seam.position.set(sx * 0.16 * bw, 0.06, 0.0); seam.rotation.y = sx * 1.4; chest.add(seam); }
   if (L.shirtStyle === 'polo') { // collar + placket
     const collar = mesh(new THREE.TorusGeometry(0.06, 0.016, 8, 20, Math.PI * 1.4), shirtMat); collar.rotation.x = Math.PI / 2 + 0.25; collar.rotation.z = Math.PI * 0.8; collar.position.set(0, 0.255, 0.005); chest.add(collar);
     const plack = mesh(new THREE.BoxGeometry(0.03, 0.09, 0.01), mat('#16263a', 0.9)); plack.position.set(0, 0.2, 0.123); plack.rotation.x = -0.15; chest.add(plack);
   }
-  if (L.vest) { const v = mesh(new THREE.SphereGeometry(0.205, 20, 14), mat(L.vest, 0.8)); v.scale.set(0.98 * bw, 0.9, 0.64); v.position.y = 0.05; chest.add(v); }
+  if (L.vest) { // waistcoat: torso ke upar patla khol, saamne se V khula
+    const vg = new THREE.LatheGeometry([[0.152, -0.06], [0.168, 0.03], [0.178, 0.12], [0.168, 0.19], [0.12, 0.23]].map(([r, y]) => new THREE.Vector2(r, y)), 24, Math.PI * 0.62, Math.PI * 1.76);
+    const v = mesh(vg, new THREE.MeshStandardMaterial({ color: L.vest, roughness: 0.75, side: THREE.DoubleSide })); v.scale.set(1.03 * bw, 1, 0.68); chest.add(v);
+    const vb = lathe([[0.152, -0.1], [0.152, 0.25]], mat(L.vest, 0.75), 1.03 * bw, 0.7); vb.visible = false; }
+  if (L.shirtStyle === 'shirt') { // collar + buttons
+    const col = mesh(new THREE.TorusGeometry(0.058, 0.012, 6, 18, Math.PI * 1.5), shirtMat); col.rotation.set(Math.PI / 2 + 0.3, 0, Math.PI * 0.75); col.position.set(0, 0.265, 0.01); chest.add(col);
+    for (let i = 0; i < 4; i++) { const bt = mesh(new THREE.SphereGeometry(0.006, 6, 4), mat('#eeeeee', 0.4)); bt.position.set(0, 0.2 - i * 0.07, 0.112 + (i > 1 ? -0.004 : 0)); chest.add(bt); }
+  }
   const neckM = capsule(0.052, 0.07, skinMat); neckM.position.y = 0.03; neck.add(neckM);
 
   // Kameez (lamba kurta) — hips se ghutno tak
@@ -117,9 +134,11 @@ export function createCharacter(look = LOOKS.umer, seed = 1) {
   }
 
   // HEAD — realistic adult proportion (~1/7.3 of height)
-  const skull = mesh(new THREE.SphereGeometry(0.098, 32, 24), skinMat); skull.scale.set(0.88, 1.08, 0.98); skull.position.y = 0.105; head.add(skull);
-  const jaw = mesh(new THREE.SphereGeometry(0.08, 24, 16), skinMat); jaw.scale.set(0.98, 0.92, 1.0); jaw.position.set(0, 0.05, 0.016); head.add(jaw);
-  for (const sx of [-1, 1]) { const ck = mesh(new THREE.SphereGeometry(0.024, 12, 10), skinMat); ck.position.set(sx * 0.044, 0.074, 0.062); head.add(ck); }
+  const skull = lathe([[0, -0.012], [0.03, -0.008], fem ? [0.05, 0.012] : [0.056, 0.012], [0.068, 0.04], [0.074, 0.075], [0.08, 0.115], [0.085, 0.15], [0.083, 0.18], [0.07, 0.21], [0.045, 0.228], [0, 0.234]], skinMat, 0.9, 1.06, 32);
+  skull.position.set(0, 0.0, 0.004); head.add(skull);
+  const jaw = mesh(new THREE.SphereGeometry(0.03, 12, 8), skinMat); jaw.scale.set(1.3, 0.8, 0.9); jaw.position.set(0, 0.012, 0.055); head.add(jaw); // thoddi
+  const backHead = mesh(new THREE.SphereGeometry(0.08, 20, 14), skinMat); backHead.scale.set(0.95, 1.0, 0.9); backHead.position.set(0, 0.14, -0.025); head.add(backHead);
+  
   const face = new THREE.Group(); face.position.set(0, 0.1, 0.0); head.add(face);
   // eyes
   const eyeWhite = mat('#cfc4b8', 0.35); const iris = mat(L.eyes, 0.25); const lidMat = skinMat;
@@ -142,9 +161,9 @@ export function createCharacter(look = LOOKS.umer, seed = 1) {
   const mouthIn = mesh(new THREE.SphereGeometry(0.012, 12, 8), mat('#3a1712', 0.8), { cast: false }); mouthIn.scale.set(1.4, 0.05, 0.4); mouthIn.position.z = 0.0; mouth.add(mouthIn);
 
   // Hair (short natural crop, side part)
-  const hairCap = mesh(new THREE.SphereGeometry(0.102, 28, 18, 0, TAU, 0, Math.PI * 0.46), hairMat); hairCap.scale.set(0.94, 1.14, 1.04); hairCap.position.set(0, 0.112, -0.01); hairCap.rotation.x = -0.16; head.add(hairCap);
+  const hairCap = mesh(new THREE.SphereGeometry(0.102, 28, 18, 0, TAU, 0, Math.PI * 0.46), hairMat); hairCap.scale.set(0.98, 1.2, 1.1); hairCap.position.set(0, 0.122, -0.008); hairCap.rotation.x = -0.12; head.add(hairCap);
   const hairBack = mesh(new THREE.SphereGeometry(0.1, 24, 16, Math.PI, Math.PI, Math.PI * 0.35, Math.PI * 0.3), hairMat); hairBack.scale.set(0.93, 1.12, 1.03); hairBack.position.set(0, 0.105, -0.004); head.add(hairBack);
-  const quiff = mesh(new THREE.SphereGeometry(0.05, 16, 10), hairMat); quiff.scale.set(1.55, 0.32, 1.1); quiff.position.set(-0.008, 0.2, 0.045); quiff.rotation.set(-0.35, 0, 0.12); head.add(quiff);
+  const quiff = mesh(new THREE.SphereGeometry(0.05, 16, 10), hairMat); quiff.scale.set(1.55, 0.32, 1.1); quiff.position.set(-0.008, 0.215, 0.05); quiff.rotation.set(-0.35, 0, 0.12); head.add(quiff);
   for (const sx of [-1, 1]) { const side = mesh(new THREE.SphereGeometry(0.05, 12, 10), hairMat); side.scale.set(0.35, 0.9, 1.25); side.position.set(sx * 0.085, 0.13, -0.02); head.add(side); }
   if (L.grey) { hairCap.material = mat('#4a4540', 0.85); }
   if (L.female) { quiff.visible = false; }
@@ -156,7 +175,7 @@ export function createCharacter(look = LOOKS.umer, seed = 1) {
   }
   if (L.shirtStyle === 'hoodie') {
     const hood = mesh(new THREE.TorusGeometry(0.1, 0.045, 10, 20, Math.PI * 1.3), shirtMat); hood.rotation.set(Math.PI / 2 + 0.35, 0, Math.PI * 1.35); hood.position.set(0, 0.25, -0.03); chest.add(hood);
-    const pocket = mesh(new THREE.BoxGeometry(0.22, 0.09, 0.02), mat(L.shirt, 0.95)); pocket.position.set(0, -0.0, 0.118); spine.add(pocket);
+    const pocket = mesh(new THREE.BoxGeometry(0.2, 0.08, 0.006), mat('#2a6a35', 0.95)); pocket.position.set(0, 0.06, 0.103); spine.add(pocket);
     if (L.inner) { const tee = mesh(new THREE.CylinderGeometry(0.05, 0.065, 0.06, 14), mat(L.inner, 0.9)); tee.position.set(0, 0.245, 0.04); chest.add(tee); }
     for (const sx of [-1, 1]) { const dc = mesh(new THREE.CylinderGeometry(0.004, 0.004, 0.12, 6), mat('#e8e8e8', 0.6)); dc.position.set(sx * 0.03, 0.16, 0.122); chest.add(dc); }
   }
@@ -442,3 +461,19 @@ export function poseWork(C, t, w = 1) {
 }
 
 export function showCamBag(C, v) { if (C.J.camBag) { C.J.camBag.visible = v; C.J.camStraps.forEach(s => s.visible = v); } }
+
+// ---- VLOG camera poses ----
+// Selfie: haath aage-upar, lens chehre ki taraf. Forward (rear mode): haath seene ki unchai par aage, lens saamne.
+export function poseVlogForward(C, w = 1) {
+  const J = C.J;
+  J.upperArmR.rotation.x = lerp(J.upperArmR.rotation.x, -1.35, w);
+  J.upperArmR.rotation.z = lerp(J.upperArmR.rotation.z, 0.18, w);
+  J.forearmR.rotation.x = lerp(J.forearmR.rotation.x, -0.55, w);
+  J.wristR.rotation.y = lerp(J.wristR.rotation.y, 0, w);
+  setGrip(C, 'R', 0.85);
+}
+// Chabana (chewing) — munh dheere band/khula, jabra upar neeche
+export function chew(C, t, amt = 1) {
+  const k = Math.max(0, Math.sin(t * 2 * Math.PI * 1.6)) * amt;
+  C.mouth.children[1].scale.y = 0.05 + 0.25 * k; C.mouth.position.y = -0.05 - 0.004 * k;
+}

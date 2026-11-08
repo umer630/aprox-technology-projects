@@ -1,6 +1,6 @@
 // SEQUENCE X — Raaste mein Revo kharab: bhaap (steam), hazard lights, kinare par rukna, pareshani
 import * as THREE from 'three';
-import { buildKarachiScene, LANE_Z } from './seqB.js';
+import { buildKarachiScene, LANE_Z } from './lib/karachi.js';
 import { createCast, seatInRevo } from './lib/cast.js';
 import { poseWatch, poseWorried, poseCarryCam, poseReach, poseWork, faceUpdate, poseIdle, poseSelfie } from './lib/character.js';
 import { holdCamera, camLerp, handheld, speaking, V3 } from './lib/anim.js';

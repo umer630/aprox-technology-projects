@@ -6,3 +6,4 @@ logs/
 renders/preview/
 *.mp4
 *.wav
+assets/ext/

@@ -122,6 +122,7 @@ export function createRevo(color = '#f2f3f1') {
   { const cap = mesh(new THREE.CylinderGeometry(0.05, 0.05, 0.03, 12), mat('#c9a020', 0.4, 0.5)); cap.position.set(2.25, 1.13, -0.3); eng.add(cap); }
   const hoodPiv = new THREE.Group(); hoodPiv.position.set(1.06, 1.175, 0); g.add(hoodPiv);
   const hood = box(1.38, 0.035, W - 0.12, paint, 0.69, 0, 0); hood.rotation.z = -0.045; hoodPiv.add(hood);
+  { const cl = new THREE.PointLight('#fff2e0', 1.6, 3.2, 1.5); cl.position.set(0.2, 1.6, 0); g.add(cl); } // cabin fill light (andar chehre nazar aayein)
   // DOORS (Pakistan RHD: driver RIGHT/+Z) — front hinge, bahar khulte hain
   const doors = {};
   const mkDoor = (name, side, xHinge, len) => {

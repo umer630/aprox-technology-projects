@@ -1,6 +1,6 @@
 // SEQUENCE R — Jaldi jaldi airport ki taraf (Karachi shahrah)
 import * as THREE from 'three';
-import { buildKarachiScene, LANE_Z } from './seqB.js';
+import { buildKarachiScene, LANE_Z } from './lib/karachi.js';
 import { createCast, seatInRevo, selfieCam } from './lib/cast.js';
 import { faceUpdate } from './lib/character.js';
 import { camLerp, speaking, V3 } from './lib/anim.js';

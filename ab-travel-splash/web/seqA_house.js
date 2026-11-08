@@ -1,133 +1,89 @@
-// SEQUENCE A — Karachi: ghar ka main gate → Umer bahar aata hai → driver → Revo
+// SEQUENCE A (v3) — DHA ghar ka gate → Rashid Bhai → safed Revo (darwaze khulte/band) → trolley rear seat par →
+// Umer passenger seat → DHA gali se rawangi. Camera: Umer ka vlog camera (rear/selfie), andar selfie.
 import * as THREE from 'three';
-import { createCharacter, LOOKS, poseCarryCam, poseSelfie, posePullBag, poseSalaam, poseSit, poseReach, faceUpdate, setGrip, poseIdle, poseWave, showCamBag } from './lib/character.js';
-import { createVlogCam, createSuitcase } from './lib/props.js';
-import { createRevo, createCar, createBike } from './lib/vehicles.js';
+import { createCharacter, LOOKS, poseIdle, posePullBag, poseSalaam, poseReach, poseWave, poseWork, faceUpdate, showCamBag } from './lib/character.js';
+import { createSuitcase } from './lib/props.js';
+import { createCar } from './lib/vehicles.js';
 import { setupSkyAndLight, buildHouseStreet } from './lib/env.js';
-import { plan, applyPlan, evalPlan, attachBagToHand, holdCamera, handheld, camLerp, V3 } from './lib/anim.js';
-import { clamp, lerp, smooth, range } from './lib/util.js';
+import { createCast, seatInRevo } from './lib/cast.js';
+import { plan, applyPlan, attachBagToHand, placeWorld, speaking, V3 } from './lib/anim.js';
+import { modeAt, vlogPose, lensCam } from './lib/vlog.js';
+import { smooth, range, lerp } from './lib/util.js';
 
+const RX = 3.5, RZ = 2.8;
+const SUBS = [
+  [6.4, 10.0, 'Umer', 'Dekhiye — Rashid Bhai aa gaye hain, aur Revo bilkul ready hai!', 'دیکھیے، راشد بھائی آ گئے ہیں، اور ریوو بالکل ریڈی ہے!'],
+  [12.4, 14.8, 'Driver', 'Assalam-o-alaikum Umer bhai!', 'السلام علیکم عمر بھائی!'],
+  [15.0, 17.6, 'Umer', 'Walaikum Assalam Rashid Bhai! Kaise hain?', 'وعلیکم السلام راشد بھائی! کیسے ہیں؟'],
+  [17.8, 19.6, 'Driver', 'Alhamdulillah. Bag peeche rakh dein.', 'الحمدللہ۔ بیگ پیچھے رکھ دیں۔'],
+  [26.8, 31.0, 'Umer', 'Chaliye guys, safar shuru! Pehle DHA ki galiyon se nikalenge.', 'چلیے گائز، سفر شروع! پہلے ڈی ایچ اے کی گلیوں سے نکلیں گے۔'],
+  [31.6, 34.0, 'Ammi', 'Allah Hafiz beta!', 'اللہ حافظ بیٹا!']
+];
+const MODE = [[0, 1], [6.0, 0], [12.0, 1], [18.2, 1], [26.0, 0], [33.6, 1]];
 export const SEQ_A = {
-  id: 'A', ambience: 'street', sfx: [[4.6, 'gate'], [19.8, 'door'], [20.3, 'engine']], title: 'Karachi — Ghar se rawangi',
+  id: 'A', title: 'DHA — Ghar se rawangi', subs: SUBS, ambience: 'street', sfx: [[1.6, 'gate'], [19.4, 'door'], [23.4, 'door'], [25.2, 'door'], [29.6, 'engine']],
   build(scene, renderer) {
     const L = setupSkyAndLight(scene, renderer, { elev: 24, azim: 35, sunI: 3.2, hemiI: 0.85, fog: [0xd6dbd8, 60, 400], shadowSize: 22, sunColor: '#ffeccd' });
     const H = buildHouseStreet(scene);
-    const umer = createCharacter(LOOKS.umer, 1); scene.add(umer.root);
-    const driver = createCharacter(LOOKS.driver, 2); scene.add(driver.root);
-    const vcam = createVlogCam();
-    const bag = createSuitcase('#2e4a6b'); scene.add(bag.group);
-    const revo = createRevo('#f2f3f1'); revo.group.position.set(3.5, 0, 2.8); scene.add(revo.group); revo.setTail(1);
-    // parked car opposite + passing bike
-    const pc = createCar('hatch', 5); pc.group.position.set(-9, 0, 7.6); pc.group.rotation.y = Math.PI; scene.add(pc.group);
-    const bike = createBike(9); bike.group.rotation.y = Math.PI; scene.add(bike.group);
-    const ammi = createCharacter({ ...LOOKS.ammi, cameraBag: false }, 5); ammi.root.position.set(-1.3, 0, -1.2); ammi.root.rotation.y = 0.2; scene.add(ammi.root);
-    // plans
-    const uP = plan(umer, [-0.3, -2.8], 0, [
-      { at: 5.0, to: [-0.3, 0.9] },
-      { at: 13.0, face: -Math.PI / 2 + 0.25, dur: 0.6 }, // driver ki taraf (−X? nahi: driver +X par hai)
-      { at: 15.7, to: [4.05, 1.12] },
-      { at: 19.6, face: 0, dur: 0.5 }
-    ]);
-    // fix: driver Umer ke +X side par khara hai → heading +π/2
-    uP.segs[1].h = Math.PI / 2;
-    uP.segs[2].h0 = Math.PI / 2;
-    const dP = plan(driver, [1.25, 1.0], -2.3, [
-      { at: 12.4, to: [0.6, 0.92] },
-      { at: 13.0, face: -Math.PI / 2, dur: 0.5 },
-      { at: 15.75, to: [-0.15, 2.8] },
-      { at: 17.5, face: Math.PI / 2, dur: 0.5 }
-    ]);
-    const bedPos = new THREE.Vector3(3.5 - 2.15, 0.88, 2.8);
-    return { L, H, umer, driver, vcam, bag, revo, bike, uP, dP, bedPos, ammi };
+    const c = createCast(scene); // umer, driver, Revo (safed)
+    c.revo.group.position.set(RX, 0, RZ); c.revo.setTail(0);
+    c.revo.group.remove(c.bag.group); // purana bag nahi — Travel Splash trolley
+    const ts = createSuitcase('#111', 'travelsplash'); scene.add(ts.group);
+    const ammi = createCharacter({ ...LOOKS.ammi, cameraBag: false }, 5); ammi.root.position.set(-1.3, 0, -1.4); ammi.root.rotation.y = 0.2; scene.add(ammi.root);
+    for (const [x, z, k, r] of [[-9, 7.6, 'hatch', Math.PI], [14, 2.9, 'sedan', 0], [-16, 2.9, 'van', 0]]) { const v = createCar(k, x * 7 + 5); v.group.position.set(x, 0, z); v.group.rotation.y = r; scene.add(v.group); }
+    const uP = plan(c.umer, [-0.3, -5.0], 0, [{ at: 0.4, to: [-0.3, 0.7] }, { at: 6.0, to: [0.3, 1.2] }, { at: 12.0, face: Math.PI / 2, dur: 0.5 }, { at: 17.8, to: [2.7, 0.95] }, { at: 20.0, face: 0.15, dur: 0.3 }, { at: 23.8, to: [3.75, 1.0] }, { at: 24.8, face: 0.15, dur: 0.4 }]);
+    const dP = plan(c.driver, [-0.9, 0.55], -0.4, [{ at: 4.4, to: [1.9, 1.15] }, { at: 7.2, face: -Math.PI / 2, dur: 0.5 }, { at: 19.6, to: [6.6, 1.6] }, { at: 23.4, to: [5.0, 4.3] }]);
+    return { L, H, ts, ammi, uP, dP, ...c };
   },
   shots: [
-    { id: 'A01', dur: 4.5, desc: 'Wide establishing crane — ghar, gate, Revo, driver',
-      cam(t, c, cam) { camLerp(cam, V3(-15, 10, 17), V3(-10.5, 3.2, 13.5), V3(1.5, 2.2, -1), V3(1.0, 1.4, 0.5), t / 4.5, 38); } },
-    { id: 'A02', dur: 4.1, desc: 'Medium: gate khulta hai, Umer camera + suitcase ke saath bahar',
-      cam(t, c, cam) { const h = handheld(t, 0.6); camLerp(cam, V3(-1.6, 1.55, 6.6).add(h), V3(-1.3, 1.5, 5.4).add(h), V3(-0.3, 1.25, -1.5), V3(-0.3, 1.25, 0), t / 4.1, 40); } },
-    { id: 'A03', dur: 4.4, desc: 'Selfie vlog close-up — Assalam o Alaikum', selfie: true,
-      cam(t, c, cam) {
-        c.vcam.updateMatrixWorld(true); const p = new THREE.Vector3(); c.vcam.getWorldPosition(p);
-        const head = new THREE.Vector3(); c.umer.J.head.getWorldPosition(head); head.y += 0.07;
-        const dir = head.clone().sub(p).normalize(); cam.position.copy(p).addScaledVector(dir, 0.07).add(handheld(t, 0.8, 2)); cam.lookAt(head.x, head.y - 0.1, head.z); cam.fov = 72; cam.updateProjectionMatrix();
-      } },
-    { id: 'A04', dur: 2.6, desc: 'Two-shot: driver salaam karta hai',
-      cam(t, c, cam) { camLerp(cam, V3(0.15, 1.6, 3.9), V3(0.25, 1.58, 3.6), V3(0.15, 1.45, 0.9), V3(0.15, 1.45, 0.9), t / 2.6, 34); } },
-    { id: 'A05', dur: 4.0, desc: 'Wide side: driver suitcase Revo ke bed mein rakhta hai, Umer passenger door ki taraf',
-      cam(t, c, cam) { camLerp(cam, V3(-6.5, 2.4, 8.8), V3(-5.6, 2.2, 8.2), V3(0.6, 1.0, 2.2), V3(1.8, 1.0, 2.2), t / 4.0, 40); } },
-    { id: 'A06', dur: 5.0, desc: 'Low-angle tracking: Revo LEFT lane mein rawana',
-      cam(t, c, cam) { const x = c.revo.group.position.x; cam.position.set(15.5, 0.55, 7.7); cam.lookAt(x + 1.0, 1.0, 2.8); cam.fov = 36; cam.updateProjectionMatrix(); } }
+    { id: 'A01', dur: 6.0, desc: 'REAR: Umer trolley ke saath gate ki taraf, Rashid Bhai gate kholte hain', selfie: true, cam(t, c, cam) { lensCam(c.vcam, cam, t, { fov: 74 }); } },
+    { id: 'A02', dur: 6.0, desc: 'SELFIE: gate ke bahar, peeche ghar', selfie: true, cam(t, c, cam) { lensCam(c.vcam, cam, t + 6); } },
+    { id: 'A03', dur: 6.2, desc: 'REAR: Rashid Bhai aur safed Revo — salaam', selfie: true, cam(t, c, cam) { lensCam(c.vcam, cam, t + 12); } },
+    { id: 'A04', dur: 7.8, desc: 'REAR: pichla darwaza khulta hai, trolley rear seat par, darwaza band, aage ka darwaza', selfie: true, cam(t, c, cam) { lensCam(c.vcam, cam, t + 18.2); } },
+    { id: 'A05', dur: 7.6, desc: 'SELFIE andar passenger seat se — Revo chal padti hai', selfie: true, cam(t, c, cam) { lensCam(c.vcam, cam, t + 26, { fov: 78, shake: 0.8 }); } },
+    { id: 'A06', dur: 6.4, desc: 'REAR windshield se: DHA ki gali, left side', selfie: true, cam(t, c, cam) { lensCam(c.vcam, cam, t + 33.6, { fov: 78, shake: 1.0 }); } }
   ],
-  subs: [
-    [9.1, 11.2, 'Umer', 'Assalam o Alaikum dosto! Main hoon Umer.', 'السلام علیکم دوستو! میں ہوں عمر۔'],
-    [11.2, 13.0, 'Umer', 'Ab Travel Splash ke Episode 1 mein khush aamdeed!', 'اب ٹریول اسپلیش کی ایپی سوڈ ون میں خوش آمدید!'],
-    [13.4, 14.8, 'Driver', 'Walaikum Assalam, Umer bhai! Saman mujhe de dein.', 'وعلیکم السلام عمر بھائی! سامان مجھے دے دیں۔'],
-    [14.8, 15.6, 'Umer', 'Shukriya chacha!', 'شکریہ چچا!'],
-    [16.0, 19.0, 'Umer', 'Aaj ka safar — Karachi se Islamabad. Chalo, airport chalte hain!', 'آج کا سفر، کراچی سے اسلام آباد۔ چلو، ایئرپورٹ چلتے ہیں!'],
-    [20.2, 22.6, 'Ammi', 'Allah Hafiz beta, Fi Amanillah!', 'اللہ حافظ بیٹا، فی امان اللہ!']
-  ],
-  update(t, c) {
-    const { umer, driver, vcam, bag, revo, H, L, ammi } = c;
-    ammi.setNeutral(); poseIdle(ammi, t); ammi.root.visible = t > 5.5; if (t > 15) poseWave(ammi, t, 'R', smooth(range(t, 15, 15.5))); faceUpdate(ammi, t, t > 20.2 && t < 22.6 ? 1 : 0);
-    // gate: 4.6 → 6.4 andar ki taraf khulta hai
-    const g = smooth(range(t, 4.6, 6.6)) * 1.45; H.leafL.rotation.y = g; H.leafR.rotation.y = -g;
-    // passing motorbike (−X heading → far lane z>5.2, left-hand traffic)
-    const bx = 30 - (t - 1) * 9; c.bike.group.position.set(bx, 0, 6.9); c.bike.roll(t * 9);
-    const seated = t >= 19.6;
-    if (!seated) {
-      // ---- UMER ----
-      const us = applyPlan(umer, c.uP, t);
-      poseCarryCam(umer, 1);
-      if (t < 15.5) posePullBag(umer, 1);
-      const sw = smooth(range(t, 8.5, 9.0)) * (1 - smooth(range(t, 12.7, 13.1)));
-      if (sw > 0) poseSelfie(umer, sw, Math.sin(t * 2));
-      // camera look direction: selfie → face; warna aage
-      umer.root.updateMatrixWorld(true);
-      const head = new THREE.Vector3(); umer.J.head.getWorldPosition(head); head.y += 0.08;
-      const fwd = new THREE.Vector3(Math.sin(umer.root.rotation.y), 0, Math.cos(umer.root.rotation.y));
-      const ahead = umer.root.position.clone().add(fwd.multiplyScalar(4)); ahead.y = 1.0;
-      holdCamera(umer, vcam, sw > 0.5 ? head : ahead);
-      faceUpdate(umer, t, (t > 9.1 && t < 13.0) || (t > 14.8 && t < 15.5) ? 1 : 0);
-      if (t > 14.6 && t < 15.6) { umer.J.head.rotation.x = 0.12 * Math.sin((t - 14.6) * Math.PI); } // nod
-      // ---- DRIVER ----
-      applyPlan(driver, c.dP, t);
-      const sal = smooth(range(t, 13.3, 13.7)) * (1 - smooth(range(t, 14.6, 15.0)));
-      if (sal > 0) poseSalaam(driver, sal);
-      faceUpdate(driver, t, t > 13.4 && t < 14.8 ? 1 : 0);
-      // driver bag le leta hai (15.4)
-      if (t > 15.0 && t < 15.5) poseReach(driver, 'R', 0.5 * smooth(range(t, 15.0, 15.4)), 1);
-      // ---- BAG ----
-      if (t < 15.45) { bag.setExtend(1); attachBagToHand(umer, 'L', bag); }
-      else if (t < 17.6) { bag.setExtend(1 - smooth(range(t, 15.45, 15.8))); setGrip(driver, 'R', 0.9); driver.J.forearmR.rotation.x = -0.3; attachBagToHand(driver, 'R', bag, { lift: true }); }
-      else if (t < 18.8) { // lift into bed (arc)
-        const u = smooth(range(t, 17.6, 18.7));
-        poseReach(driver, 'R', lerp(0.4, 1.25, Math.sin(u * Math.PI * 0.5)), 1); poseReach(driver, 'L', lerp(0.0, 1.25, Math.sin(u * Math.PI * 0.5)), 1);
-        driver.J.spine.rotation.x = 0.25 * u;
-        const hp = attachBagToHand(driver, 'R', bag, { lift: true, yaw: Math.PI / 2 }).clone();
-        const target = c.bedPos;
-        const p = new THREE.Vector3().lerpVectors(hp, target, u); p.y = Math.max(lerp(hp.y, target.y, u), 0) + Math.sin(u * Math.PI) * 0.35;
-        p.y = Math.max(p.y, u > 0.35 ? 0.88 : 0); bag.group.position.copy(p); bag.group.rotation.set(0, Math.PI / 2, 0);
-      } else { bag.setExtend(0); bag.group.position.copy(c.bedPos); bag.group.rotation.set(0, Math.PI / 2, 0); }
-      // tailgate close 18.9–19.5
-      revo.setTail(1 - smooth(range(t, 18.9, 19.5)));
-      if (t > 18.8 && t < 19.6) { poseReach(driver, 'R', 0.9, 1); poseReach(driver, 'L', 0.9, 1); }
-      revo.group.position.x = 3.5; revo.roll(0);
-      L.follow(new THREE.Vector3(1, 0, 1.5));
+  update(t, c, cam, shot) {
+    const { umer, driver, vcam, ts, revo, H, ammi, L } = c; const scene = revo.group.parent;
+    const g = smooth(range(t, 1.4, 3.6)) * 1.45; H.leafL.rotation.y = g; H.leafR.rotation.y = -g;
+    ammi.setNeutral(); poseIdle(ammi, t); ammi.root.visible = t > 2; if (t > 30) poseWave(ammi, t, 'R', 1); faceUpdate(ammi, t, speaking(SUBS, t, 'Ammi'));
+    // Revo: 30s tak khadi, phir left lane mein aage
+    const u = Math.max(0, t - 29.8); const dx = u < 6 ? 0.75 * u * u : 27 + 9 * (u - 6);
+    revo.group.position.set(RX + dx, 0, RZ); revo.roll(dx);
+    revo.setDoor('RL', smooth(range(t, 19.4, 20.2)) * (1 - smooth(range(t, 22.8, 23.6))));
+    revo.setDoor('FL', smooth(range(t, 25.0, 25.8)) * (1 - smooth(range(t, 26.4, 27.2))));
+    revo.setDoor('FR', smooth(range(t, 23.6, 24.2)) * (1 - smooth(range(t, 25.0, 25.6))));
+    const inCar = t >= 26.0;
+    if (!inCar) {
+      if (umer.root.parent !== scene) scene.add(umer.root);
+      if (driver.root.parent !== scene) scene.add(driver.root);
+      umer.setNeutral(); driver.setNeutral(); showCamBag(umer, false);
+      applyPlan(umer, c.uP, t); applyPlan(driver, c.dP, t);
+      const m = modeAt(MODE, t);
+      let ft = null; if (t > 12 && t < 18.2) ft = driver.root.position.clone().setY(1.4); if (t >= 18.2) ft = V3(RX - 0.4, 1.0, RZ);
+      vlogPose(umer, vcam, m, ft, t);
+      // trolley: left haath → rear seat (20.4–21.8)
+      if (t < 21.8 && ts.group.parent !== scene) scene.add(ts.group);
+      if (t < 20.4) { posePullBag(umer, 1); ts.setExtend(t < 19.6 ? 1 : 1 - smooth(range(t, 19.6, 20.3))); attachBagToHand(umer, 'L', ts); }
+      else if (t < 21.8) { const k = smooth(range(t, 20.4, 21.8)); poseReach(umer, 'L', 1.0, 1); const p0 = attachBagToHand(umer, 'L', ts, { lift: true }).clone(); const seat = V3(-0.45, 0.82, -0.35).applyMatrix4(revo.group.matrixWorld); ts.group.position.lerpVectors(p0, seat, k); ts.group.position.y = Math.max(ts.group.position.y, lerp(0, 0.82, k) + Math.sin(k * Math.PI) * 0.25); ts.group.rotation.set(0, 0, 0); }
+      else { if (ts.group.parent !== revo.group) revo.group.add(ts.group); ts.group.position.set(-0.45, 0.82, -0.35); ts.group.rotation.set(0, Math.PI / 2, 0); ts.setExtend(0); }
+      if ((t > 19.0 && t < 20.2) || (t > 22.6 && t < 23.6) || (t > 24.8 && t < 25.8)) poseReach(umer, 'L', 1.0, 1);
+      // Rashid Bhai: gate dhakelna, salaam
+      if (t < 4.2) poseReach(driver, 'R', 1.1, 1), poseReach(driver, 'L', 1.1, 1);
+      if (t > 12.2 && t < 15) poseSalaam(driver, 1);
+      faceUpdate(umer, t, speaking(SUBS, t, 'Umer')); faceUpdate(driver, t, speaking(SUBS, t, 'Driver'));
     } else {
-      // ---- dono Revo ke andar (driver RIGHT seat, Umer LEFT seat), saman bed mein ----
-      if (umer.root.parent !== revo.group) { revo.group.add(umer.root); revo.group.add(driver.root); revo.group.add(bag.group); }
-      for (const [C, seat] of [[umer, revo.seats.passenger], [driver, revo.seats.driver]]) {
-        C.setNeutral(); poseSit(C, 1); C.root.position.set(seat.x - 0.1, 0.43, seat.z); C.root.rotation.y = Math.PI / 2;
-        faceUpdate(C, t, 0);
-      }
-      driver.J.upperArmL.rotation.x = -0.9; driver.J.upperArmR.rotation.x = -0.9; driver.J.forearmL.rotation.x = -0.5; driver.J.forearmR.rotation.x = -0.5; // steering
-      poseCarryCam(umer, 1); holdCamera(umer, vcam, null);
-      vcam.rotation.set(0, 0, 0);
-      bag.group.position.set(-2.15, 0.88, 0); bag.group.rotation.set(0, Math.PI / 2, 0); bag.setExtend(0);
-      revo.setTail(0);
-      const tt = Math.max(0, t - 20.2); const d = 0.5 * 2.2 * tt * tt;
-      revo.group.position.x = 3.5 + d; revo.roll(d);
-      L.follow(new THREE.Vector3(revo.group.position.x, 0, 3));
+      if (ts.group.parent !== revo.group) revo.group.add(ts.group);
+      ts.group.position.set(-0.45, 0.82, -0.35); ts.group.rotation.set(0, Math.PI / 2, 0); ts.setExtend(0);
+      seatInRevo(c, t, {});
+      // car ke andar vlog: selfie ↔ windshield
+      const m = modeAt(MODE, t);
+      revo.group.updateMatrixWorld(true);
+      const ahead = V3(14, 1.2, 0).applyMatrix4(revo.group.matrixWorld);
+      umer.root.updateMatrixWorld(true);
+      vlogPose(umer, vcam, m, ahead, t);
+      faceUpdate(umer, t, speaking(SUBS, t, 'Umer')); faceUpdate(driver, t, 0);
     }
+    L.follow(new THREE.Vector3(RX + dx * 0.8, 0, 1.5));
   }
 };

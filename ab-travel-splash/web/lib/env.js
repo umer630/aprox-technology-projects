@@ -16,7 +16,7 @@ export function setupSkyAndLight(scene, renderer, { elev = 25, azim = 140, turbi
   dl.shadow.mapSize.set(2048, 2048); const sc = dl.shadow.camera; sc.left = -shadowSize; sc.right = shadowSize; sc.top = shadowSize; sc.bottom = -shadowSize; sc.near = 1; sc.far = 400;
   dl.shadow.bias = -0.0004; dl.shadow.normalBias = 0.03; dl.shadow.radius = 3;
   scene.add(dl); scene.add(dl.target);
-  const hemi = new THREE.HemisphereLight('#cfe2ff', '#7a6a52', hemiI * 1.0); scene.add(hemi);
+  const hemi = new THREE.HemisphereLight('#d6e6ff', '#8a7a62', hemiI * 1.5); scene.add(hemi);
   if (fog) scene.fog = new THREE.Fog(fog[0], fog[1], fog[2]);
   return { sky, sun, dl, hemi, follow(p) { dl.position.copy(p).add(sun.clone().multiplyScalar(100)); dl.target.position.copy(p); } };
 }

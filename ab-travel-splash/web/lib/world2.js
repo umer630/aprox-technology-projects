@@ -176,10 +176,23 @@ export function buildHomeInterior(scene) {
   for (const s of [-1, 1]) scene.add(box(0.7, 2.1, 0.05, mat('#3a5f8a', 0.95), 3.2 + s * 1.15, 1.75, 0.08));
   // BED (double), headboard back wall, pillows, blanket
   const bed = new THREE.Group(); bed.position.set(1.6, 0, 1.2); scene.add(bed);
-  bed.add(box(1.7, 0.45, 2.1, mat('#6b4a2e', 0.6), 0, 0.22, 1.05)); bed.add(box(1.6, 0.22, 2.0, mat('#f1efe8', 0.95), 0, 0.56, 1.05));
-  bed.add(box(1.8, 1.1, 0.1, mat('#5a3d24', 0.6), 0, 0.75, 0));
-  const pl = []; for (const s of [-0.4, 0.4]) { const p = rbox(0.6, 0.15, 0.35, 0.06, mat('#ffffff', 0.9)); p.position.set(s, 0.74, 0.3); bed.add(p); pl.push(p); }
-  const blanket = box(1.66, 0.1, 1.45, mat('#2f6f8f', 0.95), 0, 0.71, 1.4); bed.add(blanket);
+  const wood = new THREE.MeshStandardMaterial({ color: '#6b4a2e', roughness: 0.55, map: canvasTex(256, 256, (g, w, h) => { g.fillStyle = '#6b4a2e'; g.fillRect(0, 0, w, h); for (let i = 0; i < 60; i++) { g.strokeStyle = `rgba(40,22,10,${0.1 + Math.random() * 0.2})`; g.lineWidth = 1 + Math.random() * 2; g.beginPath(); const y = Math.random() * h; g.moveTo(0, y); g.bezierCurveTo(w * 0.3, y + 8, w * 0.6, y - 8, w, y + 3); g.stroke(); } }) });
+  // takht frame + legs
+  bed.add(box(1.72, 0.26, 2.12, wood, 0, 0.27, 1.05)); for (const [x, z] of [[-0.82, 0.05], [0.82, 0.05], [-0.82, 2.06], [0.82, 2.06]]) bed.add(box(0.08, 0.16, 0.08, wood, x, 0.08, z));
+  // headboard with panels
+  bed.add(box(1.84, 1.15, 0.08, wood, 0, 0.78, 0)); for (const x of [-0.45, 0.45]) bed.add(box(0.7, 0.55, 0.02, mat('#5a3d24', 0.5), x, 0.95, 0.05));
+  bed.add(box(1.72, 0.18, 0.06, wood, 0, 0.45, 2.12)); // footboard
+  // mattress (rounded) + chadar (bedsheet print, kinare latakte hue)
+  const matt = rbox(1.6, 0.2, 2.0, 0.05, mat('#f4f1ea', 0.95)); matt.position.set(0, 0.5, 1.05); bed.add(matt);
+  const sheetT = canvasTex(512, 512, (g, w, h) => { g.fillStyle = '#e9eef6'; g.fillRect(0, 0, w, h); g.strokeStyle = '#3a5f9a'; g.lineWidth = 3; for (let y = 16; y < h; y += 64) for (let x = 16; x < w; x += 64) { g.beginPath(); g.arc(x, y, 14, 0, 7); g.stroke(); g.beginPath(); g.moveTo(x - 20, y); g.lineTo(x + 20, y); g.stroke(); } g.fillStyle = '#3a5f9a'; g.fillRect(0, 0, w, 10); g.fillRect(0, h - 10, w, 10); }, { repeat: [2, 2] });
+  const sheetM = new THREE.MeshStandardMaterial({ map: sheetT, roughness: 0.95, side: THREE.DoubleSide });
+  const sheet = box(1.7, 0.02, 2.06, sheetM, 0, 0.61, 1.07); bed.add(sheet);
+  for (const s2 of [-1, 1]) { const d = box(0.02, 0.22, 2.0, sheetM, s2 * 0.85, 0.5, 1.07); bed.add(d); }
+  // takiye (pillows) — phoole hue
+  const pl = []; for (const s2 of [-0.4, 0.4]) { const p = mesh(new THREE.SphereGeometry(0.3, 20, 12), new THREE.MeshStandardMaterial({ map: sheetT, roughness: 0.95 })); p.scale.set(1.0, 0.25, 0.55); p.position.set(s2, 0.68, 0.3); bed.add(p); pl.push(p); }
+  // kambal (blanket) — tah kiya hua, quilt texture
+  const quilt = canvasTex(256, 256, (g, w, h) => { g.fillStyle = '#2f6f8f'; g.fillRect(0, 0, w, h); g.strokeStyle = 'rgba(255,255,255,0.35)'; g.lineWidth = 2; for (let i = 0; i < w; i += 32) { g.beginPath(); g.moveTo(i, 0); g.lineTo(i, h); g.stroke(); g.beginPath(); g.moveTo(0, i); g.lineTo(w, i); g.stroke(); } }, { repeat: [3, 3] });
+  const blanket = rbox(1.66, 0.09, 1.45, 0.04, new THREE.MeshStandardMaterial({ map: quilt, roughness: 0.95 })); blanket.position.set(0, 0.71, 1.4); bed.add(blanket);
   // side table + alarm clock + lamp
   scene.add(box(0.5, 0.55, 0.45, mat('#6b4a2e', 0.6), 0.45, 0.27, 0.35));
   const clock = rbox(0.18, 0.12, 0.08, 0.02, mat('#222', 0.4)); clock.position.set(0.45, 0.62, 0.35); scene.add(clock);
@@ -196,6 +209,39 @@ export function buildHomeInterior(scene) {
   for (let i = 0; i < 4; i++) { const c = box(0.34, 0.1, 0.3, mat(clothCols[i], 0.95), -0.5 + i * 0.33, 1.3, 0.0); war.add(c); stacks.push(c); }
   for (let i = 0; i < 6; i++) { const sh = box(0.05, 0.6, 0.4, mat(clothCols[(i + 2) % 6], 0.95), -0.6 + i * 0.24, 1.75, 0); war.add(sh); }
   war.add(box(1.5, 0.03, 0.5, mat('#6b4a2e'), 0, 1.24, 0));
+  // almari ke andar aur cheezein: neeche shoes, travel pouch, chhota bag, upar boxes
+  const shelf2 = box(1.5, 0.03, 0.5, mat('#6b4a2e'), 0, 0.55, 0); war.add(shelf2);
+  for (let i = 0; i < 3; i++) { const sh2 = rbox(0.12, 0.08, 0.28, 0.03, mat(['#222', '#8a5a3a', '#eee'][i], 0.7)); sh2.position.set(-0.55 + i * 0.22, 0.6, 0.02); war.add(sh2); }
+  const pouch = rbox(0.25, 0.12, 0.16, 0.04, mat('#1f4a63', 0.8)); pouch.position.set(0.45, 0.64, 0); war.add(pouch);
+  const bx1 = box(0.4, 0.22, 0.4, mat('#c9b38a', 0.9), -0.4, 2.0, 0); war.add(bx1); const bx2 = box(0.35, 0.18, 0.4, mat('#9a8a6a', 0.9), 0.35, 1.98, 0); war.add(bx2);
+  for (let i = 0; i < 3; i++) { const tr = box(0.34, 0.06, 0.28, mat(['#2b3140', '#4a4f5a', '#6b5a3a'][i], 0.95), -0.5 + i * 0.36, 0.95, 0); war.add(tr); } // pants stacks
+  // switchboard (bijli ke button) — bedroom partition par
+  const sb = new THREE.Group(); sb.position.set(0.075, 1.25, 1.35); sb.rotation.y = Math.PI / 2; scene.add(sb);
+  sb.add(box(0.26, 0.16, 0.02, mat('#f4f2ec', 0.4), 0, 0, 0));
+  const fanSwitch = new THREE.Group(); fanSwitch.position.set(-0.06, 0, 0.015); sb.add(fanSwitch); fanSwitch.add(box(0.04, 0.06, 0.012, mat('#dcd8cf', 0.4), 0, 0, 0));
+  for (let i = 1; i < 4; i++) sb.add(box(0.04, 0.06, 0.012, mat('#dcd8cf', 0.4), -0.06 + i * 0.05, 0, 0.015));
+  const reg = mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.015, 12), mat('#222', 0.4)); reg.rotation.x = Math.PI / 2; reg.position.set(0.1, 0, 0.015); sb.add(reg);
+  // KITCHEN (left wall x≈-6): counter, chulha + tawa, sink, fridge, cabinets, bartan
+  const kit = new THREE.Group(); scene.add(kit);
+  const counterM = mat('#e9e4da', 0.35), cab = mat('#7a5534', 0.5);
+  kit.add(box(0.65, 0.88, 4.2, cab, -5.7, 0.44, 2.6)); kit.add(box(0.7, 0.05, 4.24, mat('#2b2b2e', 0.25, 0.2), -5.68, 0.905, 2.6));
+  for (let z = 0.9; z < 4.6; z += 0.6) kit.add(box(0.02, 0.8, 0.56, mat('#6b4a2e', 0.5), -5.37, 0.44, z));
+  kit.add(box(0.4, 0.6, 4.2, cab, -5.85, 2.1, 2.6)); // upar cabinets
+  const ktile = canvasTex(256, 256, (g, w, h) => { g.fillStyle = '#e6eef0'; g.fillRect(0, 0, w, h); g.strokeStyle = '#b8c9cf'; g.lineWidth = 3; for (let i = 0; i <= w; i += 32) { g.beginPath(); g.moveTo(i, 0); g.lineTo(i, h); g.stroke(); g.beginPath(); g.moveTo(0, i); g.lineTo(w, i); g.stroke(); } }, { repeat: [4, 1] });
+  const bs = mesh(new THREE.PlaneGeometry(4.2, 0.9), new THREE.MeshStandardMaterial({ map: ktile, roughness: 0.3 }), { cast: false }); bs.rotation.y = Math.PI / 2; bs.position.set(-6.0, 1.38, 2.6); kit.add(bs);
+  // chulha (2 burner) + tawa + paratha
+  kit.add(box(0.5, 0.06, 0.7, mat('#1a1a1a', 0.3, 0.6), -5.65, 0.96, 3.6));
+  const tawa = mesh(new THREE.CylinderGeometry(0.17, 0.15, 0.02, 24), mat('#111', 0.4, 0.7)); tawa.position.set(-5.6, 1.0, 3.75); kit.add(tawa);
+  const flame = mesh(new THREE.TorusGeometry(0.06, 0.012, 6, 16), new THREE.MeshStandardMaterial({ color: '#3a7bff', emissive: '#2b6bff', emissiveIntensity: 2 })); flame.rotation.x = Math.PI / 2; flame.position.set(-5.6, 0.985, 3.75); kit.add(flame);
+  const kpot = mesh(new THREE.CylinderGeometry(0.12, 0.1, 0.15, 18), mat('#b9bec4', 0.3, 0.9)); kpot.position.set(-5.65, 1.06, 3.3); kit.add(kpot);
+  // sink + nalka
+  kit.add(box(0.42, 0.04, 0.6, mat('#c9ced3', 0.2, 0.9), -5.6, 0.93, 1.4)); const tap = box(0.03, 0.25, 0.03, mat('#ccc', 0.2, 1), -5.85, 1.05, 1.4); kit.add(tap);
+  // fridge
+  kit.add(rbox(0.7, 1.75, 0.7, 0.04, mat('#e8ecef', 0.3, 0.2))); kit.children[kit.children.length - 1].position.set(-5.65, 0.875, 5.1);
+  // bartan: plates, glasses, masala jars
+  for (let i = 0; i < 5; i++) { const j = mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.12, 10), mat(['#c62', '#e8b923', '#7a3', '#a33', '#eee'][i], 0.4)); j.position.set(-5.85, 0.99, 2.0 + i * 0.12); kit.add(j); }
+  const atta = mesh(new THREE.CylinderGeometry(0.18, 0.15, 0.08, 18), mat('#c9a06a', 0.6)); atta.position.set(-5.6, 0.97, 2.7); kit.add(atta); // paraat (atta)
+  const pIn = mesh(new THREE.CylinderGeometry(0.12, 0.12, 0.012, 20), mat('#d9a556', 0.8)); pIn.position.set(-5.6, 1.016, 3.75); kit.add(pIn); // tawa par paratha
   // dressing mirror + chair
   scene.add(box(0.9, 1.2, 0.04, mirrorMat(), 7.0, 1.6, 4.92));
   // ceiling fan
@@ -225,7 +271,7 @@ export function buildHomeInterior(scene) {
   const bulb2 = new THREE.PointLight('#ffe9c4', 4, 8, 1.6); bulb2.position.set(-3, 2.6, 2.5); scene.add(bulb2);
   scene.background = new THREE.Color('#d9d2c4');
   scene.traverse(o => { if (o.isMesh && o.castShadow === undefined) o.castShadow = true; });
-  return { bed, blanket, fan, doors, stacks, clock, table: tb };
+  return { bed, blanket, fan, doors, stacks, clock, table: tb, fanSwitch, tawa, paratha: pIn, flame };
 }
 
 // ---------------- AIRPORT ENTRY CHECKPOINT + RAMPS ----------------
