@@ -7,3 +7,4 @@ renders/preview/
 *.mp4
 *.wav
 assets/ext/
+renders/_ref/
