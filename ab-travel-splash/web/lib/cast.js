@@ -47,7 +47,7 @@ export function selfieCam(c, cam, t, { fov = 70, shake = 0.8 } = {}) {
 }
 
 // Corolla Grande mein Umer khud driver seat (RIGHT, +Z) par — haath steering par
-export function seatInCorolla(c, car, t, { talk = 0 } = {}) {
+export function seatInCorolla(c, car, t, { talk = 0, forward = false } = {}) {
   const { umer, vcam } = c;
   if (umer.root.parent !== car.group) car.group.add(umer.root);
   umer.setNeutral(); poseSit(umer, 1);
@@ -57,7 +57,9 @@ export function seatInCorolla(c, car, t, { talk = 0 } = {}) {
   umer.J.head.rotation.y = 0.05 * Math.sin(t * 0.6);
   // vlog camera dashboard par mounted (Umer ki taraf)
   if (vcam.parent !== car.group) car.group.add(vcam);
-  vcam.position.set(0.85, 1.02, 0.15); vcam.scale.setScalar(1); vcam.rotation.set(0, -Math.PI / 2 + 0.35, 0);
+  vcam.scale.setScalar(1);
+  if (forward) { vcam.position.set(1.0, 1.1, 0.0); vcam.rotation.set(0, Math.PI / 2, 0); } // lens sadak ki taraf
+  else { vcam.position.set(0.85, 1.02, 0.15); vcam.rotation.set(0, -Math.PI / 2 + 0.35, 0); }
   faceUpdate(umer, t, talk);
 }
 export function dashCam(c, car, cam, t) {

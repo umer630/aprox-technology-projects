@@ -1,7 +1,7 @@
 #!/bin/bash
-# Episode 1 (v2, ~11.5 min): sequences → 360-frame chunks → 3 parallel workers (resume-safe) → concat
+# Episode 1 (v3, ~14 min, vlog camera grammar): sequences → 360-frame chunks → 3 parallel workers (resume-safe) → concat
 cd "$(dirname "$0")"; mkdir -p renders/_parts logs
-ORDER="I H A B X Y R J C K N G D F L M Q S E"
+ORDER="H A B X Y R J C K N G P D F L M Q E S O"
 CH=360; : > renders/_parts/jobs.txt
 for s in $ORDER; do
   n=$(node render.js --seqs $s --info 2>/dev/null | grep FRAMES | awk '{print $2}')
