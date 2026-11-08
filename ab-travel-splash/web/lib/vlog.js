@@ -29,14 +29,14 @@ export function vlogPose(C, vcam, m, forwardTarget = null, t = 0) {
   return tgt;
 }
 // Render camera = vlog camera ka lens (+ halki haath ki larzish)
-export function lensCam(vcam, cam, t, { fov = 74, shake = 1 } = {}) {
+export function lensCam(vcam, cam, t, { fov = 74, shake = 1, back = 0 } = {}) {
   vcam.updateMatrixWorld(true);
   const p = new THREE.Vector3(); vcam.getWorldPosition(p);
   const q = new THREE.Quaternion(); vcam.getWorldQuaternion(q);
   const fwd = new THREE.Vector3(0, 0, 1).applyQuaternion(q); // lens +Z
   const up = new THREE.Vector3(0, 1, 0);
   const sh = new THREE.Vector3(Math.sin(t * 1.7) * 0.005 + Math.sin(t * 4.3) * 0.002, Math.sin(t * 2.1) * 0.004, 0).multiplyScalar(shake);
-  cam.position.copy(p).addScaledVector(fwd, 0.06).add(sh);
+  cam.position.copy(p).addScaledVector(fwd, 0.06 - back).add(sh);
   cam.up.copy(up); cam.lookAt(cam.position.clone().add(fwd));
   cam.fov = fov; cam.updateProjectionMatrix();
 }

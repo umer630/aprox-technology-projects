@@ -281,7 +281,7 @@ export function buildAirportApproach(scene) {
   const concrete = new THREE.MeshStandardMaterial({ color: '#c9c3b6', roughness: 0.9, map: noiseTex('#c9c3b6', 18, 128, 99, [40, 4]) });
   // booth + canopy
   g.add(box(30, 0.6, 22, mat('#d8cfba', 0.8), 0, 7, 0)); for (const [x, z] of [[-14, -10], [14, -10], [-14, 10], [14, 10], [0, -10], [0, 10]]) g.add(box(0.7, 7, 0.7, mat('#e8e1cf', 0.7), x, 3.5, z));
-  const st = canvasTex(2048, 200, (c, w, h) => { c.fillStyle = '#0d4f8b'; c.fillRect(0, 0, w, h); c.fillStyle = '#fff'; c.font = 'bold 96px DejaVu Sans'; c.textBaseline = 'middle'; c.fillText('Jinnah International Airport', 40, h / 2); c.textAlign = 'right'; c.direction = 'rtl'; c.font = 'bold 84px DejaVu Sans'; c.fillText('جناح انٹرنیشنل ایئرپورٹ', w - 40, h / 2); });
+  const st = canvasTex(2048, 200, (c, w, h) => { c.fillStyle = '#0d4f8b'; c.fillRect(0, 0, w, h); c.fillStyle = '#fff'; c.font = 'bold 78px DejaVu Sans'; c.textBaseline = 'middle'; c.fillText('Jinnah International Airport', 40, h / 2); c.textAlign = 'right'; c.direction = 'rtl'; c.font = 'bold 66px DejaVu Sans'; c.fillText('جناح انٹرنیشنل ایئرپورٹ', w - 40, h / 2); });
   for (const s2 of [-1, 1]) for (const face of [0, 1]) { const sg = mesh(new THREE.PlaneGeometry(22, 2.15), new THREE.MeshStandardMaterial({ map: st })); sg.position.set(s2 * (15.35 + face * 0.1), 6.4, 0); sg.rotation.y = s2 * Math.PI / 2 + (face ? Math.PI : 0); g.add(sg); }
   const booth = new THREE.Group(); booth.position.set(0, 0, -1.2); g.add(booth);
   booth.add(box(2.2, 2.6, 1.6, mat('#e9e5da', 0.6), 0, 1.3, 0)); booth.add(box(2.25, 0.9, 1.65, mat('#1b232b', 0.15, 0.4), 0, 1.9, 0)); booth.add(box(2.6, 0.15, 2, mat('#c62828', 0.5), 0, 2.7, 0));

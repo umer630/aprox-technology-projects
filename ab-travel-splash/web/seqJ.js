@@ -8,6 +8,8 @@ import { createCharacter, LOOKS, poseIdle, poseReach, poseSalaam, faceUpdate } f
 import { createBoardingPass } from './lib/props.js';
 import { createTraffic } from './lib/vehicles.js';
 import { plan, applyPlan, attachToHand, camLerp, handheld, speaking, V3 } from './lib/anim.js';
+import { modeAt, vlogPose, lensCam } from './lib/vlog.js';
+const MODE = [[0, 1], [20.0, 0], [30.0, 1]];
 import { mat, mesh, box, smooth, range, clamp } from './lib/util.js';
 
 const LZ = -5.5;
@@ -51,16 +53,16 @@ export default {
     return { L, ap, traffic, guard, guard2, pass, mirror, gP, ...c };
   },
   shots: [
-    { id: 'J01', dur: 8.0, desc: 'Wide: entry checkpoint, canopy aur Jinnah International signage, Revo aati hai',
-      cam(t, c, cam) { camLerp(cam, V3(-26, 6, -18), V3(-20, 4, -16), V3(0, 4, 0), V3(-2, 2, -4), t / 8, 46); } },
-    { id: 'J02', dur: 12.0, desc: 'Guard ticket aur shanakhti card maangta hai',
-      cam(t, c, cam) { const h = handheld(t, 0.4); camLerp(cam, V3(2.6, 1.7, -1.2).add(h), V3(2.3, 1.65, -1.5).add(h), V3(-0.3, 1.35, -4.4), V3(-0.2, 1.35, -4.4), t / 12, 42); } },
-    { id: 'J03', dur: 10.0, desc: 'Under-vehicle mirror se gaari ki checking, barrier uthta hai',
-      cam(t, c, cam) { camLerp(cam, V3(-8, 2.2, 0.5), V3(-7, 2.4, 0.2), V3(0, 0.8, -4), V3(2, 1.2, -5), t / 10, 44); } },
-    { id: 'J04', dur: 10.0, desc: 'Departures ramp upar — Arrivals neeche (signs)',
-      cam(t, c, cam) { const p = c.revo.group.position; camLerp(cam, V3(20, 3.0, 9.5), V3(34, 5, 10), V3(p.x, p.y + 1, LZ), V3(p.x + 6, p.y + 1, LZ), t / 10, 48); } },
-    { id: 'J05', dur: 6.0, desc: 'Drone: ramp aur aage terminal',
-      cam(t, c, cam) { const p = c.revo.group.position; camLerp(cam, V3(p.x - 30, 22, 26), V3(p.x - 10, 30, 22), V3(p.x + 60, 4, 0), V3(p.x + 120, 8, 0), t / 6, 46); } }
+    { id: 'J01', dur: 8.0, desc: 'Wide: entry checkpoint, canopy aur Jinnah International signage, Revo aati hai', selfie: true,
+      cam(t, c, cam) { lensCam(c.vcam, cam, t + 0, { fov: 80 }); } },
+    { id: 'J02', dur: 12.0, desc: 'Guard ticket aur shanakhti card maangta hai', selfie: true,
+      cam(t, c, cam) { lensCam(c.vcam, cam, t + 8, { fov: 80 }); } },
+    { id: 'J03', dur: 10.0, desc: 'Under-vehicle mirror se gaari ki checking, barrier uthta hai', selfie: true,
+      cam(t, c, cam) { lensCam(c.vcam, cam, t + 20, { fov: 80 }); } },
+    { id: 'J04', dur: 10.0, desc: 'Departures ramp upar — Arrivals neeche (signs)', selfie: true,
+      cam(t, c, cam) { lensCam(c.vcam, cam, t + 30, { fov: 80 }); } },
+    { id: 'J05', dur: 6.0, desc: 'REAR windshield: terminal saamne, ramp', selfie: true,
+      cam(t, c, cam) { lensCam(c.vcam, cam, t + 40, { fov: 80 }); } }
   ],
   update(t, c, cam, shot) {
     const { revo, guard, guard2, pass, mirror, driver } = c; const scene = revo.group.parent;
@@ -70,6 +72,10 @@ export default {
     c.traffic.update(t, 0);
     c.ap.boom.rotation.x = 1.45 * smooth(range(t, 27.8, 29.2));
     seatInRevo(c, t, { talk: speaking(SUBS, t, 'Umer') });
+    revo.group.updateMatrixWorld(true);
+    { const gp = new THREE.Vector3(); c.guard.root.getWorldPosition(gp); gp.y = 1.5;
+      const ft = (t > 8 && t < 20) ? gp : V3(16, 1.4, 0).applyMatrix4(revo.group.matrixWorld);
+      vlogPose(c.umer, c.vcam, modeAt(MODE, t), ft, t); }
     if (t > 13 && t < 15.5) { poseReach(driver, 'R', 1.2, 1); driver.J.upperArmR.rotation.z = 1.0; }
     // guard
     guard.setNeutral(); guard2.setNeutral(); poseIdle(guard2, t); faceUpdate(guard2, t, 0);

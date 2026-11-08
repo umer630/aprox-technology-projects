@@ -9,7 +9,7 @@ export function createCast(scene, { revo = true, driver = true } = {}) {
   const umer = createCharacter(LOOKS.umer, 1); scene.add(umer.root);
   const drv = driver ? createCharacter(LOOKS.driver, 2) : null;
   const vcam = createVlogCam();
-  const bag = createSuitcase('#2e4a6b');
+  const bag = createSuitcase('#111', 'travelsplash');
   const rv = revo ? createRevo('#f2f3f1') : null;
   if (rv) { scene.add(rv.group); rv.group.add(bag.group); bag.group.position.set(-2.15, 0.88, 0); bag.group.rotation.y = Math.PI / 2; bag.setExtend(0); }
   if (rv && drv) rv.group.add(drv.root);

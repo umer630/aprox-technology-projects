@@ -6,6 +6,8 @@ import { createCast, seatInRevo } from './lib/cast.js';
 import { createCharacter, LOOKS, poseWork, poseWatch, poseWorried, poseCarryCam, poseReach, poseIdle, faceUpdate } from './lib/character.js';
 import { createCar } from './lib/vehicles.js';
 import { plan, applyPlan, holdCamera, camLerp, handheld, speaking, V3 } from './lib/anim.js';
+import { modeAt, vlogPose, lensCam } from './lib/vlog.js';
+const MODE = [[0, 1], [7.0, 1], [12.4, 0], [17.0, 1], [22.0, 0], [33.0, 1], [41.0, 0], [43.4, 1]];
 import { mat, mesh, box, smooth, range, rng } from './lib/util.js';
 
 const SUBS = [
@@ -16,7 +18,7 @@ const SUBS = [
   [33.6, 36.4, 'Mechanic', 'Lo ji, gaari bilkul theek!', 'لو جی، گاڑی بالکل ٹھیک!'],
   [36.8, 39.6, 'Umer', 'Shukriya ustad ji! Kitne paise?', 'شکریہ استاد جی! کتنے پیسے؟'],
   [39.8, 41.8, 'Mechanic', 'Bas aath sau rupay.', 'بس آٹھ سو روپے۔'],
-  [42.0, 45.0, 'Umer', 'Yeh lijiye. Chalo chacha, jaldi airport!', 'یہ لیجیے۔ چلو چچا، جلدی ایئرپورٹ!']
+  [42.0, 45.0, 'Umer', 'Yeh lijiye. Chalo Rashid Bhai, jaldi airport!', 'یہ لیجیے۔ چلو راشد بھائی، جلدی ایئرپورٹ!']
 ];
 export default {
   id: 'Y', title: 'Workshop — Auto Workshop', subs: SUBS, ambience: 'workshop', sfx: [[13.0, 'wrench'], [33.0, 'hood'], [44.0, 'engine']],
@@ -38,14 +40,14 @@ export default {
     return { L, mech, pace, wrench, ...c };
   },
   shots: [
-    { id: 'Y01', dur: 7.0, desc: 'Revo dheere dheere workshop par pohanchti hai',
-      cam(t, c, cam) { camLerp(cam, V3(18, 4, 9), V3(14, 3, 8), V3(-6, 1.5, -4), V3(0, 1.5, -6), t / 7, 44); } },
-    { id: 'Y02', dur: 11.0, desc: 'Mechanic bonnet ke andar kaam karta hai — Umer jaldi ka kehta hai',
-      cam(t, c, cam) { const h = handheld(t, 0.5); camLerp(cam, V3(6.4, 1.8, -3.0).add(h), V3(6.0, 1.75, -3.4).add(h), V3(2.6, 1.2, -6.2), V3(2.4, 1.2, -6.0), t / 11, 46); } },
-    { id: 'Y03', dur: 15.0, desc: 'Umer idhar udhar chakkar lagata hai, ghari dekhta hai',
-      cam(t, c, cam) { const p = c.umer.root.position; camLerp(cam, V3(-3, 1.7, 3.5), V3(-1, 1.7, 3.5), V3(p.x, 1.3, p.z), V3(p.x, 1.3, p.z), t / 15, 44); } },
-    { id: 'Y04', dur: 12.0, desc: 'Gaari theek, paise, rawangi',
-      cam(t, c, cam) { camLerp(cam, V3(9, 2.2, 2.5), V3(10, 2.6, 4), V3(1, 1.2, -5), V3(6, 1.0, -5), t / 12, 44); } }
+    { id: 'Y01', dur: 7.0, desc: 'Revo dheere dheere workshop par pohanchti hai', selfie: true,
+      cam(t, c, cam) { lensCam(c.vcam, cam, t + 0, { fov: 76 }); } },
+    { id: 'Y02', dur: 11.0, desc: 'Mechanic bonnet ke andar kaam karta hai — Umer jaldi ka kehta hai', selfie: true,
+      cam(t, c, cam) { lensCam(c.vcam, cam, t + 7, { fov: 76 }); } },
+    { id: 'Y03', dur: 15.0, desc: 'Umer idhar udhar chakkar lagata hai, ghari dekhta hai', selfie: true,
+      cam(t, c, cam) { lensCam(c.vcam, cam, t + 18, { fov: 76 }); } },
+    { id: 'Y04', dur: 12.0, desc: 'Gaari theek, paise, rawangi', selfie: true,
+      cam(t, c, cam) { lensCam(c.vcam, cam, t + 33, { fov: 76 }); } }
   ],
   update(t, c, cam, shot) {
     const { revo, umer, driver, mech, vcam } = c; const scene = revo.group.parent;
@@ -58,7 +60,7 @@ export default {
     if (t > 7.5 && t < 33) { poseWork(mech, t, 1); }
     if (t > 37 && t < 44) { mech.root.position.set(1.0, 0, -3.2); mech.root.rotation.y = Math.PI * 0.8; if (t > 41 && t < 43) poseReach(mech, 'R', 0.9, 1); }
     faceUpdate(mech, t, speaking(SUBS, t, 'Mechanic'));
-    if (t < 7 || t > 43) { seatInRevo(c, t); }
+    if (t < 7 || t > 43) { seatInRevo(c, t); revo.group.updateMatrixWorld(true); vlogPose(umer, vcam, modeAt(MODE, t), V3(14, 1.2, 0).applyMatrix4(revo.group.matrixWorld), t); }
     else {
       if (umer.root.parent !== scene) scene.add(umer.root);
       if (driver.root.parent !== scene) scene.add(driver.root);
@@ -70,7 +72,7 @@ export default {
       if (t > 7.6 && t < 11.6) poseWorried(umer, t, 0.6);
       if (t > 21 && t < 26) poseWatch(umer, 1);
       if (t > 41.5 && t < 43) poseReach(umer, 'L', 0.9, 1);
-      holdCamera(umer, vcam, V3(3, 1.2, -6));
+      vlogPose(umer, vcam, modeAt(MODE, t), V3(2.4, 1.2, -6.2), t);
       driver.root.position.set(-3.6, 0, -4.2); driver.root.rotation.y = 0.8;
       faceUpdate(umer, t, speaking(SUBS, t, 'Umer')); faceUpdate(driver, t, speaking(SUBS, t, 'Driver'));
     }

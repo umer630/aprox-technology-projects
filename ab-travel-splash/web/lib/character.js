@@ -161,7 +161,7 @@ export function createCharacter(look = LOOKS.umer, seed = 1) {
   const mouthIn = mesh(new THREE.SphereGeometry(0.012, 12, 8), mat('#3a1712', 0.8), { cast: false }); mouthIn.scale.set(1.4, 0.05, 0.4); mouthIn.position.z = 0.0; mouth.add(mouthIn);
 
   // Hair (short natural crop, side part)
-  const hairCap = mesh(new THREE.SphereGeometry(0.102, 28, 18, 0, TAU, 0, Math.PI * 0.46), hairMat); hairCap.scale.set(0.98, 1.2, 1.1); hairCap.position.set(0, 0.122, -0.008); hairCap.rotation.x = -0.12; head.add(hairCap);
+  const hairCap = mesh(new THREE.SphereGeometry(0.104, 28, 18, 0, TAU, 0, Math.PI * 0.52), hairMat); hairCap.scale.set(0.98, 1.2, 1.1); hairCap.position.set(0, 0.122, -0.008); hairCap.rotation.x = -0.12; head.add(hairCap);
   const hairBack = mesh(new THREE.SphereGeometry(0.1, 24, 16, Math.PI, Math.PI, Math.PI * 0.35, Math.PI * 0.3), hairMat); hairBack.scale.set(0.93, 1.12, 1.03); hairBack.position.set(0, 0.105, -0.004); head.add(hairBack);
   const quiff = mesh(new THREE.SphereGeometry(0.05, 16, 10), hairMat); quiff.scale.set(1.55, 0.32, 1.1); quiff.position.set(-0.008, 0.215, 0.05); quiff.rotation.set(-0.35, 0, 0.12); head.add(quiff);
   for (const sx of [-1, 1]) { const side = mesh(new THREE.SphereGeometry(0.05, 12, 10), hairMat); side.scale.set(0.35, 0.9, 1.25); side.position.set(sx * 0.085, 0.13, -0.02); head.add(side); }
