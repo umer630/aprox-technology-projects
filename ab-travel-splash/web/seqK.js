@@ -3,9 +3,11 @@ import * as THREE from 'three';
 import { buildCheckinHall } from './lib/env.js';
 import { createCast } from './lib/cast.js';
 import { createBoardingPass } from './lib/props.js';
-import { createCharacter, LOOKS, poseCarryCam, posePullBag, poseReach, faceUpdate, setGrip } from './lib/character.js';
-import { plan, applyPlan, attachBagToHand, holdCamera, attachToHand, placeWorld, camLerp, handheld, V3 } from './lib/anim.js';
+import { createCharacter, LOOKS, poseCarryCam, posePullBag, poseReach, poseIdle, faceUpdate, setGrip } from './lib/character.js';
+import { plan, applyPlan, attachBagToHand, holdCamera, attachToHand, placeWorld, camLerp, handheld, speaking, V3 } from './lib/anim.js';
 import { mat, mesh, box, rbox, smooth, range, lerp, clamp } from './lib/util.js';
+import { modeAt, vlogPose, lensCam } from './lib/vlog.js';
+const MODE = [[0, 1], [8.4, 0], [11.2, 1], [20.4, 0]];
 
 function buildSecurity(scene, X) {
   const g = new THREE.Group(); g.position.set(X, 0, 0); scene.add(g);
@@ -38,87 +40,101 @@ function buildSecurity(scene, X) {
 }
 
 export default {
-  id: 'K', ambience: 'hall', sfx: [[4.8, 'belt']], title: 'Check-in aur Security',
+  id: 'K', ambience: 'hall', sfx: [[4.8, 'belt'], [16.9, 'beep']], title: 'Check-in, Bag Drop aur Security',
   build(scene, renderer) {
     const hall = buildCheckinHall(scene);
     const c = createCast(scene, { revo: false, driver: false }); scene.add(c.bag.group);
-    const agent = createCharacter(LOOKS.agent, 7); agent.root.position.set(0.15, 0, -8.75); scene.add(agent.root);
-    const officer = createCharacter({ ...LOOKS.agent, vest: '#2b3a2b', shirt: '#cfd6cf', height: 1.78 }, 8); officer.root.position.set(40 + 1.6, 0, 2.6); officer.root.rotation.y = -Math.PI / 2 - 0.4; scene.add(officer.root);
-    // queue + other passengers at neighbouring counters
+    const agent = createCharacter({ ...LOOKS.checkinAgent }, 7); agent.root.position.set(0.15, 0, -8.75); scene.add(agent.root);
+    const bstaff = createCharacter({ ...LOOKS.baggageStaff }, 9); bstaff.root.position.set(-2.4, 0, -9.3); bstaff.root.rotation.y = 0.5; scene.add(bstaff.root);
+    const officer = createCharacter({ ...LOOKS.securityOfficer }, 8); officer.root.position.set(40 + 1.6, 0, 2.6); officer.root.rotation.y = -Math.PI / 2 - 0.4; scene.add(officer.root);
+    const screener = createCharacter({ ...LOOKS.screeningStaff }, 10); screener.root.position.set(41.5, 0, 0.0); screener.root.rotation.y = Math.PI; scene.add(screener.root);
     const npcs = [];
-    const looks = [{ ...LOOKS.driver, grey: false, hair: '#111', shirt: '#ece7dc', pants: '#ece7dc' }, { ...LOOKS.umer, cameraBag: false, shirt: '#6b4a2e', beardStyle: 'none', pants: '#1f1f1f' }, { ...LOOKS.agent, vest: null, shirt: '#3e5f7a', pants: '#2b2b2b' }, { ...LOOKS.driver, shirt: '#8aa0b4', pants: '#8aa0b4', grey: true }];
-    const spots = [[-3.4, -7.0, Math.PI], [3.0, -7.0, Math.PI], [6.2, -6.9, Math.PI], [-6.4, -7.0, Math.PI], [2.2, -3.6, Math.PI], [2.4, -2.4, Math.PI], [-4.5, -1.0, Math.PI * 0.9], [7.5, -1.5, -2.6]];
-    spots.forEach(([x, z, h], i) => { const n = createCharacter(looks[i % 4], 70 + i); n.root.position.set(x, 0, z); n.root.rotation.y = h; scene.add(n.root); npcs.push(n); });
-    for (const x of [-6.4, 6.4, 3.2, -3.2]) { const a = createCharacter(LOOKS.agent, 90 + x * 3); a.root.position.set(x + 0.2, 0, -8.75); scene.add(a.root); npcs.push(a); }
+    const looks = [LOOKS.passengerM, LOOKS.passengerF, LOOKS.businessTraveller, LOOKS.youngPassenger, LOOKS.loungePassenger];
+    const spots = [[-3.4, -7.0, Math.PI], [3.0, -7.0, Math.PI], [6.2, -6.9, Math.PI], [-6.4, -7.0, Math.PI], [2.2, -3.6, Math.PI], [2.4, -2.4, Math.PI], [-4.5, -1.0, Math.PI * 0.9], [7.5, -1.5, -2.6], [37.4, 1.4, -Math.PI / 2], [36.6, 1.5, -Math.PI / 2]];
+    spots.forEach(([x, z, h], i) => { const n = createCharacter({ ...looks[i % looks.length], cameraBag: false }, 70 + i); n.root.position.set(x, 0, z); n.root.rotation.y = h; scene.add(n.root); npcs.push(n); });
+    for (const x of [-6.4, 6.4, 3.2, -3.2]) { const a = createCharacter({ ...LOOKS.checkinAgent, tie: x > 0 ? '#2a6fd6' : '#1e4a8a' }, 90 + x * 3); a.root.position.set(x + 0.2, 0, -8.75); scene.add(a.root); npcs.push(a); }
     const sec = buildSecurity(scene, 40);
     const pass = createBoardingPass();
     const uP = plan(c.umer, [-0.75, -2.6], Math.PI, [{ at: 0.4, to: [-0.75, -6.95] }]);
-    const sP = plan(c.umer, [36.3, -0.35], Math.PI, [{ at: 13.0, to: [39.7, 1.3] }, { at: 16.45, to: [41.4, 1.3] }, { at: 18.0, to: [42.9, -0.3] }, { at: 20.0, face: Math.PI, dur: 0.4 }]);
-    return { hall, agent, officer, npcs, sec, pass, uP, sP, ...c };
+    const sP = plan(c.umer, [36.3, -0.35], Math.PI, [{ at: 13.0, to: [39.7, 1.3] }, { at: 16.3, to: [41.6, 1.3] }, { at: 18.0, to: [42.95, -0.25] }, { at: 19.6, face: Math.PI, dur: 0.4 }]);
+    return { hall, agent, bstaff, officer, screener, npcs, sec, pass, uP, sP, ...c };
   },
   shots: [
-    { id: 'K01', dur: 4.6, desc: 'Check-in hall wide: Umer queue se counter tak',
-      cam(t, c, cam) { camLerp(cam, V3(7.5, 3.4, 4.5), V3(5.0, 2.6, 1.5), V3(-1.0, 1.2, -6), V3(-0.8, 1.2, -7), t / 4.6, 44); } },
-    { id: 'K02', dur: 5.4, desc: 'Medium: bag belt par, boarding pass hand-to-hand',
-      cam(t, c, cam) { const h = handheld(t, 0.5); camLerp(cam, V3(2.2, 1.65, -5.0).add(h), V3(1.9, 1.6, -5.4).add(h), V3(-0.5, 1.25, -7.9), V3(-0.3, 1.25, -7.9), t / 5.4, 38); } },
-    { id: 'K03', dur: 2.0, desc: 'Insert close-up: boarding pass KHI → ISB',
-      cam(t, c, cam) { c.pass.updateMatrixWorld(true); const p = new THREE.Vector3(); c.pass.getWorldPosition(p); cam.position.set(p.x + 0.28, p.y + 0.12, p.z + 0.22 - t * 0.02); cam.lookAt(p); cam.fov = 40; } },
-    { id: 'K04', dur: 9.6, desc: 'Security: camera tray mein, tray x-ray se guzarti hai, Umer arch se, camera wapas haath mein',
-      cam(t, c, cam) { camLerp(cam, V3(40 - 2.5, 2.4, 5.8), V3(40 + 2.0, 2.2, 5.4), V3(40 - 2.6, 1.0, -0.5), V3(40 + 2.8, 1.0, -0.5), t / 9.6, 46); } }
+    { id: 'K01', dur: 4.6, desc: 'REAR: check-in hall, queue se counter tak', selfie: true, cam(t, c, cam) { lensCam(c.vcam, cam, t, { fov: 78 }); } },
+    { id: 'K02', dur: 3.8, desc: 'REAR on agent: bag drop belt, CNIC + ticket', selfie: true, cam(t, c, cam) { lensCam(c.vcam, cam, t + 4.6, { fov: 72 }); } },
+    { id: 'K03', dur: 3.6, desc: 'SELFIE: boarding pass mil gaya, shukriya', selfie: true, cam(t, c, cam) { lensCam(c.vcam, cam, t + 8.4, { fov: 72 }); } },
+    { id: 'K04', dur: 0.8, desc: 'REAR: security line, tray', selfie: true, cam(t, c, cam) { lensCam(c.vcam, cam, t + 12.0, { fov: 76 }); } },
+    { id: 'K05', dur: 7.6, desc: 'CAMERA TRAY MEIN: x-ray se nikal kar Umer ko arch se guzarte dekhta hai', selfie: true, cam(t, c, cam) { lensCam(c.vcam, cam, t + 12.8, { fov: 74, shake: 0 }); } },
+    { id: 'K06', dur: 1.6, desc: 'SELFIE: camera wapas haath mein', selfie: true, cam(t, c, cam) { lensCam(c.vcam, cam, t + 20.4, { fov: 74 }); } }
   ],
   subs: [
     [5.0, 6.8, 'Agent', 'Assalam o Alaikum! Aap ka CNIC aur ticket, please.', 'السلام علیکم! آپ کا شناختی کارڈ اور ٹکٹ، پلیز۔'],
     [6.9, 8.4, 'Agent', 'Yeh rahi aap ki boarding pass. Safar mubarak!', 'یہ رہا آپ کا بورڈنگ پاس۔ سفر مبارک!'],
-    [8.4, 10.0, 'Umer', 'Bohat shukriya!', 'بہت شکریہ!'],
-    [12.2, 14.4, 'Umer', 'Camera tray mein — security check zaroori hai.', 'کیمرا ٹرے میں، سیکیورٹی چیک ضروری ہے۔'],
-    [20.2, 21.6, 'Umer', 'Camera wapas mil gaya! Ab gate ki taraf.', 'کیمرا واپس مل گیا! اب گیٹ کی طرف۔']
+    [8.6, 11.6, 'Umer', 'Bohat shukriya! Dosto, bag drop ho gaya — ab security.', 'بہت شکریہ! دوستو، بیگ ڈراپ ہو گیا، اب سیکیورٹی۔'],
+    [12.0, 14.4, 'Umer', 'Camera tray mein — security check zaroori hai.', 'کیمرا ٹرے میں، سیکیورٹی چیک ضروری ہے۔'],
+    [17.0, 18.6, 'Officer', 'Theek hai, aage chalein.', 'ٹھیک ہے، آگے چلیں۔'],
+    [20.4, 22.0, 'Umer', 'Camera wapas mil gaya! Ab lounge ki taraf.', 'کیمرا واپس مل گیا! اب لاؤنج کی طرف۔']
   ],
   update(t, c, cam, shot) {
-    const { umer, bag, vcam, agent, pass, sec } = c;
-    for (const n of c.npcs) { n.setNeutral(); n.J.chest.rotation.x = 0.01 * Math.sin(t + n.root.id); faceUpdate(n, t, 0); }
+    const { umer, bag, vcam, agent, pass, sec } = c; const scene = umer.root.parent;
+    for (const n of c.npcs) { n.setNeutral(); poseIdle(n, t + n.root.id); faceUpdate(n, t, 0); }
     agent.setNeutral(); faceUpdate(agent, t, (t > 5.0 && t < 8.4) ? 1 : 0);
-    c.officer.setNeutral(); faceUpdate(c.officer, t, 0);
+    c.bstaff.setNeutral(); poseIdle(c.bstaff, t); faceUpdate(c.bstaff, t, 0);
+    c.officer.setNeutral(); poseIdle(c.officer, t); faceUpdate(c.officer, t, (t > 17 && t < 18.6) ? 1 : 0);
+    c.screener.setNeutral(); poseIdle(c.screener, t); c.screener.J.head.rotation.x = 0.25; faceUpdate(c.screener, t, 0);
     if (t < 12.0) {
-      // ---- CHECK-IN ----
-      applyPlan(umer, c.uP, t); poseCarryCam(umer, 1);
+      // ---- CHECK-IN + BAG DROP ----
+      umer.setNeutral(); applyPlan(umer, c.uP, t);
       const bagLift = range(t, 4.7, 5.9);
-      if (t < 4.7) { posePullBag(umer, 1); bag.setExtend(1); attachBagToHand(umer, 'L', bag); }
-      else if (t < 5.9) { // left haath se bag utha kar belt/scale par
+      let bagPose = null;
+      if (t < 4.7) { bagPose = 'pull'; }
+      else if (t < 5.9) bagPose = 'lift';
+      // vlog camera right haath mein (rear → agent, selfie → shukriya)
+      const ap = new THREE.Vector3(); agent.J.head.getWorldPosition(ap);
+      let ft = t > 4.0 && t < 8.4 ? ap : V3(-0.75, 1.3, -12);
+      vlogPose(umer, vcam, modeAt(MODE, t), ft, t);
+      if (bagPose === 'pull') { posePullBag(umer, 1); bag.setExtend(1); attachBagToHand(umer, 'L', bag); }
+      else if (bagPose === 'lift') {
         const u = smooth(bagLift); bag.setExtend(1 - u);
         umer.J.upperArmL.rotation.z = lerp(0.2, 0.75, Math.sin(u * Math.PI)); umer.J.upperArmL.rotation.x = -0.15; setGrip(umer, 'L', 0.9);
-        umer.J.spine.rotation.z = -0.12 * Math.sin(u * Math.PI);
         const a = attachBagToHand(umer, 'L', bag).clone(); const target = new THREE.Vector3(-1.6, 0.38, -7.95);
         const p = a.clone().lerp(target, u); p.y = lerp(0, 0.38, u) + Math.sin(u * Math.PI) * 0.18; bag.group.position.copy(p); bag.group.rotation.set(0, Math.PI, 0);
       } else { bag.setExtend(0); bag.group.rotation.set(0, Math.PI, 0); bag.group.position.set(-1.6, 0.38, -7.95 - range(t, 9.0, 11.5) * 1.2); }
-      // boarding pass: agent ka right haath → Umer ka left haath (7.1 – 7.6)
+      if (t > 6.0 && t < 7.0) poseReach(c.bstaff, 'R', 0.7, 1);
       const reachA = smooth(range(t, 6.6, 7.1)) * (1 - smooth(range(t, 7.7, 8.2)));
       const reachU = smooth(range(t, 6.9, 7.3)) * (1 - smooth(range(t, 8.3, 8.9)));
       if (reachA > 0) { poseReach(agent, 'R', 1.25 * reachA, 1); agent.J.spine.rotation.x = 0.15 * reachA; }
-      if (reachU > 0 && t > 5.9) { poseReach(umer, 'L', 1.25 * reachU, 1); umer.J.spine.rotation.x = 0.1 * reachU; setGrip(umer, 'L', 0.6); }
+      if (reachU > 0 && t > 5.9) { poseReach(umer, 'L', 1.25 * reachU, 1); setGrip(umer, 'L', 0.6); }
       if (t < 6.4) { pass.visible = false; }
       else if (t < 7.45) { pass.visible = true; attachToHand(pass, agent, 'R', new THREE.Vector3(0.02, -0.1, 0.06), new THREE.Euler(0, Math.PI / 2, Math.PI / 2)); setGrip(agent, 'R', 0.55); }
       else { pass.visible = true; attachToHand(pass, umer, 'L', new THREE.Vector3(-0.02, -0.1, 0.06), new THREE.Euler(0, -Math.PI / 2, -Math.PI / 2)); setGrip(umer, 'L', 0.55); }
-      if (t >= 8.9) { umer.J.upperArmL.rotation.x = -0.55; umer.J.forearmL.rotation.x = -1.2; } // pass ko dekhte hue
-      umer.root.updateMatrixWorld(true);
-      holdCamera(umer, vcam, new THREE.Vector3(-0.75, 1.1, -10));
-      faceUpdate(umer, t, (t > 8.4 && t < 10.0) ? 1 : 0);
+      if (t >= 8.9) { umer.J.upperArmL.rotation.x = -1.0; umer.J.upperArmL.rotation.z = 0.25; umer.J.forearmL.rotation.x = -0.9; }
+      faceUpdate(umer, t, speaking(this.subs, t, 'Umer'));
       for (const tr of sec.trays) tr.visible = false;
     } else {
-      // ---- SECURITY (lt = t-12) ----
+      // ---- SECURITY ----
       const st = t; pass.visible = false; bag.group.visible = false;
-      applyPlan(umer, c.sP, st);
-      const tray = sec.trays[0]; tray.visible = true; tray.position.set(40 - 3.6, 0.84, -1);
-      // tray belt par chalti hai 13.2 → 16.6 (x: -3.6 → +3.0)
-      const tx = 40 - 3.6 + smooth(range(st, 13.2, 16.6)) * 6.6; tray.position.x = tx;
-      // camera: haath mein → tray (12.6–13.0) → tray ke saath → haath mein wapas (17.6)
-      if (st < 12.8) { poseCarryCam(umer, 1); holdCamera(umer, vcam, new THREE.Vector3(40, 1, -1)); if (st > 12.2) { poseReach(umer, 'R', 0.9 * smooth(range(st, 12.2, 12.7)), 1); umer.J.spine.rotation.x = 0.25 * smooth(range(st, 12.2, 12.7)); holdCamera(umer, vcam, new THREE.Vector3(40 - 3.6, 0.5, -1)); } }
-      else if (st < 20.3) { placeWorld(vcam, c.umer.root.parent, new THREE.Vector3(tx, 0.93, -1), Math.PI / 2); vcam.rotation.set(-Math.PI / 2, 0, 0); setGrip(umer, 'R', 0.2); }
-      else { poseCarryCam(umer, 1); poseReach(umer, 'R', 0.9 * (1 - smooth(range(st, 20.3, 20.9))), 1); holdCamera(umer, vcam, new THREE.Vector3(48, 1, 0)); }
-      if (st > 19.9 && st < 20.3) { poseReach(umer, 'R', 0.9 * smooth(range(st, 19.9, 20.25)), 1); umer.J.spine.rotation.x = 0.2; }
-      // officer haath se ishara karta hai
-      if (st > 13.6 && st < 15.0) { poseReach(c.officer, 'L', 0.8 * Math.sin(range(st, 13.6, 15.0) * Math.PI), 1); }
-      sec.lamp.material.emissive.set(st > 14.9 && st < 15.4 ? '#14ff4a' : '#0a8a2a');
-      faceUpdate(umer, st, (st > 12.2 && st < 14.4) || (st > 20.2 && st < 21.6) ? 1 : 0);
+      umer.setNeutral(); applyPlan(umer, c.sP, st);
+      const tray = sec.trays[0]; tray.visible = true;
+      const tx = 40 - 3.6 + smooth(range(st, 13.2, 15.3)) * 6.6; tray.position.set(tx, 0.84, -1);
+      if (st < 12.8) {
+        vlogPose(umer, vcam, 1, V3(40 - 3.6, 0.6, -1), st);
+        const r = smooth(range(st, 12.2, 12.7)); if (r > 0) { poseReach(umer, 'R', 0.9 * r, 1); umer.J.spine.rotation.x = 0.25 * r; umer.root.updateMatrixWorld(true); }
+      } else if (st < 20.3) {
+        // camera tray mein seedha khara, lens arch / Umer ki taraf (x-ray ke baad)
+        if (vcam.parent !== scene) scene.add(vcam);
+        vcam.scale.setScalar(1); vcam.position.set(tx, 0.97, -1.02);
+        const up = umer.root.position; const yaw = st < 15.3 ? 0 : Math.atan2(up.x - tx, up.z + 1.02);
+        const sy = st < 15.3 ? 0 : smooth(range(st, 15.3, 16.0));
+        vcam.rotation.set(-0.22, yaw * sy, 0, 'YXZ'); vcam.updateMatrixWorld(true);
+        setGrip(umer, 'R', 0.2); poseIdle(umer, st);
+        if (st > 19.6) { const r = smooth(range(st, 19.6, 20.2)); poseReach(umer, 'R', 0.95 * r, 1); umer.J.spine.rotation.x = 0.22 * r; }
+      } else {
+        vlogPose(umer, vcam, modeAt(MODE, st), V3(48, 1.2, 0), st);
+      }
+      if (st > 14.2 && st < 15.6) { poseReach(c.officer, 'L', 0.8 * Math.sin(range(st, 14.2, 15.6) * Math.PI), 1); }
+      sec.lamp.material.emissive.set(st > 16.7 && st < 17.3 ? '#14ff4a' : '#0a8a2a');
+      faceUpdate(umer, st, speaking(this.subs, st, 'Umer'));
     }
   }
 };

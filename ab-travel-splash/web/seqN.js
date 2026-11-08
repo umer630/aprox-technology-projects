@@ -8,6 +8,8 @@ import { createCast } from './lib/cast.js';
 import { createCharacter, LOOKS, poseIdle, poseSit, poseEat, poseReach, poseCarryFront, poseCarryCam, poseWave, faceUpdate } from './lib/character.js';
 import { plan, applyPlan, holdCamera, attachToHand, placeWorld, camLerp, handheld, speaking, V3 } from './lib/anim.js';
 import { mat, mesh, box, canvasTex, smooth, range } from './lib/util.js';
+import { modeAt, vlogPose, lensCam } from './lib/vlog.js';
+const MODE = [[0, 1], [39.0, 0], [49.4, 1]];
 
 const SUBS = [
   [9.0, 12.4, 'Umer', 'Ek burger, fries aur ek chai, please.', 'ایک برگر، فرائز اور ایک چائے، پلیز۔'],
@@ -16,12 +18,13 @@ const SUBS = [
   [24.8, 29.6, 'Umer', 'Haan yaar! Raaste mein gaari kharab ho gayi thi, bas abhi pohancha hoon.', 'ہاں یار! راستے میں گاڑی خراب ہو گئی تھی، بس ابھی پہنچا ہوں۔'],
   [30.0, 33.6, 'Hamza', 'Shukar hai pohanch gaye! Chalo, araam se nashta karo.', 'شکر ہے پہنچ گئے! چلو، آرام سے ناشتہ کرو۔'],
   [34.4, 37.6, 'Umer', 'Yeh burger to zabardast hai, yaar!', 'یہ برگر تو زبردست ہے یار!'],
-  [41.0, 49.0, 'Announcement', 'Mohtaram musafiron, Islamabad jane wali parwaz ki boarding shuru ho chuki hai. Baraye meharbani gate ki taraf tashreef le jayen. Shukriya.', 'محترم مسافروں، اسلام آباد جانے والی پرواز کی بورڈنگ شروع ہو چکی ہے۔ برائے مہربانی گیٹ کی طرف تشریف لے جائیں۔ شکریہ۔'],
+  [41.0, 45.0, 'Announcement', 'Mohtaram musafiron, Islamabad jane wali parwaz ki boarding shuru ho chuki hai.', 'محترم مسافروں، اسلام آباد جانے والی پرواز کی بورڈنگ شروع ہو چکی ہے۔'],
+  [45.2, 49.2, 'Announcement', 'Baraye meharbani gate number 5 ki taraf tashreef le jayen. Shukriya.', 'برائے مہربانی گیٹ نمبر پانچ کی طرف تشریف لے جائیں۔ شکریہ۔'],
   [49.6, 52.4, 'Umer', 'Chalo yaar, boarding shuru!', 'چلو یار، بورڈنگ شروع!']
 ];
 const TBL = new THREE.Vector3(-4, 0, -6);
 export default {
-  id: 'N', title: 'Departure Lounge', exposure: 0.66, subs: SUBS, ambience: 'hall', sfx: [[40.2, 'chime']],
+  id: 'N', title: 'Departure Lounge', exposure: 0.95, subs: SUBS, ambience: 'hall', sfx: [[40.2, 'chime']],
   build(scene, renderer) {
     const L = setupSkyAndLight(scene, renderer, { elev: 40, azim: 160, sunI: 2.6, hemiI: 0.6, fog: [0xdcd8d0, 200, 900], shadowSize: 30 });
     ground(scene, 2000, '#8f8f8a');
@@ -45,9 +48,9 @@ export default {
     const seats = []; for (let i = 0; i < 3; i++) { const a = i * Math.PI * 2 / 3 + Math.PI; const p = TBL.clone().add(V3(Math.sin(a) * 0.95, 0, Math.cos(a) * 0.95)); const st = mesh(new THREE.CylinderGeometry(0.2, 0.2, 0.46, 14), mat('#c0392b', 0.5)); st.position.set(p.x, 0.23, p.z); scene.add(st); seats.push({ p, face: a + Math.PI }); }
     const c = createCast(scene, { revo: false, driver: false });
     const bilal = createCharacter({ ...LOOKS.friend1, cameraBag: false }, 81), hamza = createCharacter({ ...LOOKS.friend2, cameraBag: false }, 82);
-    const staff = createCharacter({ ...LOOKS.agent, vest: '#da291c', cameraBag: false }, 83); staff.root.position.set(-7, 0, -12.9); scene.add(staff.root);
+    const staff = createCharacter({ ...LOOKS.loungeStaff, vest: '#da291c', tie: null, cameraBag: false }, 83); staff.root.position.set(-7, 0, -12.9); scene.add(staff.root);
     [bilal, hamza].forEach(x => scene.add(x.root));
-    const npcs = []; const looks = [LOOKS.driver, LOOKS.ammi, { ...LOOKS.agent, vest: null, shirt: '#6b8aa8' }, LOOKS.friend1];
+    const npcs = []; const looks = [LOOKS.passengerM, LOOKS.passengerF, LOOKS.businessTraveller, LOOKS.loungePassenger];
     for (let i = 0; i < 8; i++) { const n = createCharacter({ ...looks[i % 4], cameraBag: false }, 400 + i); n.root.position.set(-26 + i * 7, 0, i % 2 ? 11.2 : -1.5); n.root.rotation.y = i % 2 ? Math.PI : 0.3; scene.add(n.root); npcs.push(n); }
     const tray = foodTray(); scene.add(tray);
     const P1 = plan(c.umer, [-1.2, -4.2], -Math.PI / 2, [{ at: 0.3, to: [-6.6, -10.9] }, { at: 16.2, to: [-4.0, -7.75] }]);
@@ -56,13 +59,12 @@ export default {
     return { L, fc, seats, bilal, hamza, staff, npcs, tray, P1, P2, Pf, ...c };
   },
   shots: [
-    { id: 'N01', dur: 8.0, desc: 'Lounge wide: food court — McDonald\'s, Chai Khana, Karachi Biryani; glass ke bahar jahaz', cam(t, c, cam) { camLerp(cam, V3(14, 3.2, 8), V3(10, 2.8, 6), V3(-8, 2.6, -12), V3(-6, 2.0, -10), t / 8, 52); } },
-    { id: 'N02', dur: 10.0, desc: 'McDonald\'s counter par order, tray haath mein', cam(t, c, cam) { camLerp(cam, V3(-4.6, 1.75, -7.0), V3(-4.9, 1.7, -7.4), V3(-7, 1.4, -10.5), V3(-7, 1.4, -10.4), t / 10, 44); } },
-    { id: 'N03', dur: 21.0, desc: 'Doston (Bilal, Hamza) ke saath table par nashta, baatein', cam(t, c, cam) {
-      if (t < 10) camLerp(cam, V3(-1.4, 1.6, -3.6), V3(-1.6, 1.55, -3.9), V3(-4, 1.0, -6), V3(-4, 1.0, -6), t / 10, 44);
-      else camLerp(cam, V3(-6.4, 1.4, -4.2), V3(-6.2, 1.4, -4.4), V3(-4, 1.05, -6.1), V3(-4, 1.05, -6.1), (t - 10) / 11, 40); } },
-    { id: 'N04', dur: 12.0, desc: 'Speaker par announcement — sab upar dekhte hain', cam(t, c, cam) { camLerp(cam, V3(-1.0, 2.6, -1.0), V3(-1.4, 2.4, -1.6), V3(-4, 1.2, -6), V3(-4, 1.4, -6.2), t / 12, 48); } },
-    { id: 'N05', dur: 9.0, desc: 'Dost gate ki taraf chal padte hain', cam(t, c, cam) { const p = c.umer.root.position; cam.position.set(p.x + 2.5, 1.7, p.z + 4.2); cam.lookAt(p.x, 1.3, p.z); cam.fov = 50; } }
+    { id: 'N01', dur: 8.0, desc: 'REAR: lounge, food court — McDonald\'s, Chai Khana, Biryani; glass ke bahar jahaz', selfie: true, cam(t, c, cam) { lensCam(c.vcam, cam, t, { fov: 80 }); } },
+    { id: 'N02', dur: 12.0, desc: 'REAR on counter: order, tray left haath mein, table ki taraf', selfie: true, cam(t, c, cam) { lensCam(c.vcam, cam, t + 8, { fov: 74 }); } },
+    { id: 'N03', dur: 4.4, desc: 'REAR: Bilal hath hila kar bulata hai', selfie: true, cam(t, c, cam) { lensCam(c.vcam, cam, t + 20, { fov: 74 }); } },
+    { id: 'N04', dur: 15.6, desc: 'CAMERA TABLE PAR RAKHA: doston ke saath nashta, baatein', selfie: true, cam(t, c, cam) { lensCam(c.vcam, cam, t + 24.4, { fov: 80, shake: 0 }); } },
+    { id: 'N05', dur: 12.6, desc: 'SELFIE: speaker par boarding announcement — sab upar dekhte hain', selfie: true, cam(t, c, cam) { lensCam(c.vcam, cam, t + 40, { fov: 78 }); } },
+    { id: 'N06', dur: 9.0, desc: 'REAR: dost gate ki taraf chal padte hain', selfie: true, cam(t, c, cam) { lensCam(c.vcam, cam, t + 52.6, { fov: 78 }); } }
   ],
   update(t, c, cam, shot) {
     const { umer, bilal, hamza, staff, tray, vcam } = c; const scene = staff.root.parent;
@@ -70,18 +72,30 @@ export default {
     staff.setNeutral(); poseIdle(staff, t); faceUpdate(staff, t, speaking(SUBS, t, 'Staff'));
     const ann = t > 40.5 && t < 49.5;
     // Umer
+    umer.setNeutral();
     if (t < 52.6) {
       if (t < 20) { applyPlan(umer, c.P1, t); }
-      else { umer.setNeutral(); const s = c.seats[0]; umer.root.position.set(s.p.x, 0.07, s.p.z); umer.root.rotation.y = s.face; poseSit(umer, 1); if (t < 40) poseEat(umer, t, 1); }
+      else { const s = c.seats[0]; umer.root.position.set(s.p.x, 0.07, s.p.z); umer.root.rotation.y = s.face; poseSit(umer, 1); }
       if (t > 8.8 && t < 16.2) umer.root.rotation.y = Math.PI;
-      if (t > 15.4 && t < 20) { poseCarryFront(umer, 1); attachToHand(tray, umer, 'R', V3(0.17, -0.12, 0.08), new THREE.Euler(0, 0, Math.PI / 2)); }
-      else if (t >= 20) placeWorld(tray, scene, TBL.clone().add(V3(0, 0.78, 0.25)), 0);
+    } else { applyPlan(umer, c.P2, t); }
+    const rest = t >= 24.4 && t < 40;
+    if (rest) {
+      // vlog camera table par: Umer aur Hamza frame mein
+      placeWorld(vcam, scene, TBL.clone().add(V3(0.52, 0.84, 0.4)), 0); vcam.lookAt(TBL.clone().add(V3(-0.3, 1.16, -0.35)));
+      if (t > 24.6) poseEat(umer, t, 1);
+    } else {
+      let ft = null;
+      if (t > 8 && t < 15.4) { ft = new THREE.Vector3(); staff.J.head.getWorldPosition(ft); }
+      else if (t >= 20 && t < 24.4) { ft = new THREE.Vector3(); bilal.J.head.getWorldPosition(ft); }
+      vlogPose(umer, vcam, modeAt(MODE, t), ft || V3(-7, 1.4, -12), t);
+    }
+    if (t < 52.6) {
+      if (t > 15.4 && t < 20) { poseReach(umer, 'L', 0.75, 1); umer.J.forearmL.rotation.x = -1.1; attachToHand(tray, umer, 'L', V3(-0.05, -0.08, 0.12), new THREE.Euler(0, 0, -Math.PI / 2)); umer.root.updateMatrixWorld(true); const hq = new THREE.Quaternion(); umer.J.handL.getWorldQuaternion(hq); tray.quaternion.copy(hq.invert().multiply(new THREE.Quaternion().setFromEuler(new THREE.Euler(0, umer.root.rotation.y, 0)))); }
+      else if (t >= 20) placeWorld(tray, scene, TBL.clone().add(V3(0, 0.78, -0.45)), 0);
       else { tray.visible = t > 13.6; placeWorld(tray, scene, V3(-7, 1.11, -11.9), 0); if (t > 13.6 && t < 15.4) poseReach(staff, 'R', 1.2, 1); }
-    } else { applyPlan(umer, c.P2, t); tray.visible = false; }
-    if (t < 15.4 || t >= 52.6) { poseCarryCam(umer, 1); holdCamera(umer, vcam, V3(-7, 1.4, -12)); }
-    else if (t >= 20) { placeWorld(vcam, scene, TBL.clone().add(V3(0.35, 0.8, -0.3)), 0); vcam.rotation.set(0, 2.4, 0); }
+    } else tray.visible = false;
     if (ann) umer.J.head.rotation.x = -0.35;
-    faceUpdate(umer, t, speaking(SUBS, t, 'Umer') && !(t > 20 && t < 40 && Math.sin(t * 2.2) > 0.6) ? 1 : 0);
+    faceUpdate(umer, t, speaking(SUBS, t, 'Umer') && !(t > 24.6 && t < 40 && Math.sin(t * 2.2) > 0.6) ? 1 : 0);
     // dost
     [[bilal, 1, 'Bilal'], [hamza, 2, 'Hamza']].forEach(([F, i, nm]) => {
       F.setNeutral();

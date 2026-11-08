@@ -392,7 +392,7 @@ export function buildCheckinHall(scene) {
 
 // ===================== RUNWAY / AIRSIDE =====================
 export function buildRunway(scene, { terrain = 'karachi' } = {}) {
-  ground(scene, 8000, terrain === 'karachi' ? '#b09f7c' : '#6f8a4a', -0.02, 600);
+  ground(scene, 8000, terrain === 'karachi' ? '#b09f7c' : '#b4c084', -0.02, 600);
   // runway along X, width 46, centre z=0
   const len = 3400;
   const rwT = canvasTex(1024, 256, (g, w, h) => {
@@ -584,8 +584,13 @@ export function buildGateAndBridge(scene, FL = 2.25) {
   // ceiling lights inside
   for (let z = z0 - 1; z > z1; z -= 2.2) { const l = mesh(new THREE.PlaneGeometry(1.4, 0.3), new THREE.MeshBasicMaterial({ color: '#fffaf0' }), { cast: false }); l.rotation.x = Math.PI / 2; l.position.set(X, FL + Hh - 0.13, z); B.add(l); }
   // cab + bellows at aircraft door
-  B.add(box(3.4, 3.0, 1.6, mat('#e6e8ea', 0.5), X, FL + 1.35, -2.6));
-  for (let i = 0; i < 5; i++) B.add(box(3.0 - i * 0.05, 2.7, 0.08, mat('#2a2c2e', 0.9), X, FL + 1.3, -1.95 - i * 0.12));
+  { const cm = mat('#e6e8ea', 0.5); B.add(box(3.4, 0.2, 1.6, cm, X, FL + 2.75, -2.6)); for (const s of [-1, 1]) B.add(box(0.15, 2.9, 1.6, cm, X + s * 1.62, FL + 1.35, -2.6)); B.add(box(3.4, 0.12, 1.6, mat('#d9dcdf', 0.6), X, FL - 0.06, -2.6));
+    { const c = mesh(new THREE.PlaneGeometry(3.1, 1.6), new THREE.MeshStandardMaterial({ map: carpetT, roughness: 0.95 }), { cast: false }); c.rotation.x = -Math.PI / 2; c.position.set(X, FL + 0.006, -2.6); B.add(c); } }
+  for (let i = 0; i < 5; i++) { const bm = mat('#2a2c2e', 0.9); const z = -1.95 - i * 0.12; B.add(box(3.0, 0.15, 0.08, bm, X, FL + 2.6, z)); for (const s of [-1, 1]) B.add(box(0.15, 2.7, 0.08, bm, X + s * 1.45, FL + 1.3, z)); }
+  // khula aircraft darwaza: andar cabin ki roshni
+  { const d = mesh(new THREE.PlaneGeometry(0.95, 1.9), new THREE.MeshBasicMaterial({ color: '#e9e2d2' }), { cast: false }); d.position.set(X, FL + 0.95, -1.9); d.rotation.y = Math.PI; B.add(d);
+    const d2 = mesh(new THREE.PlaneGeometry(0.95, 1.9), new THREE.MeshBasicMaterial({ color: '#e9e2d2' }), { cast: false }); d2.position.set(X, FL + 0.95, -1.92); B.add(d2);
+    const wall = new THREE.MeshStandardMaterial({ color: '#d9dcdf', roughness: 0.6 }); for (const s of [-1, 1]) B.add(box(0.95, 2.6, 0.04, wall, X + s * 0.95, FL + 1.3, -1.88)); B.add(box(2.85, 0.7, 0.04, wall, X, FL + 2.25, -1.88)); }
   // drive leg + wheels
   B.add(box(0.35, FL, 0.35, steel, X, FL / 2, -16)); B.add(box(2.6, 0.4, 0.8, mat('#3b3f44', 0.6, 0.4), X, 0.6, -16));
   for (const s of [-1, 1]) { const w = mesh(new THREE.CylinderGeometry(0.4, 0.4, 0.35, 16), mat('#111', 0.9)); w.rotation.z = Math.PI / 2; w.position.set(X + s * 1.0, 0.4, -16); B.add(w); }
@@ -607,7 +612,7 @@ export function buildGateAndBridge(scene, FL = 2.25) {
   }
   for (let x = -60; x < 90; x += 8) { const l = mesh(new THREE.CircleGeometry(0.25, 12), new THREE.MeshBasicMaterial({ color: '#fffbee' }), { cast: false }); l.rotation.x = Math.PI / 2; for (const z of [-46, -54, -62]) { const c = l.clone(); c.position.set(x, FL + 7.79, z); T.add(c); } }
   // gate sign (no number/name — sirf "Gate" + icon)
-  const st = canvasTex(512, 128, (g, w, h) => { g.fillStyle = '#123a75'; g.fillRect(0, 0, w, h); g.fillStyle = '#ffd34d'; g.font = 'bold 70px DejaVu Sans'; g.fillText('GATE  ✈', 30, 90); });
+  const st = canvasTex(512, 128, (g, w, h) => { g.fillStyle = '#123a75'; g.fillRect(0, 0, w, h); g.fillStyle = '#ffd34d'; g.font = 'bold 70px DejaVu Sans'; g.fillText('GATE 5  ✈', 30, 90); });
   const sg = mesh(new THREE.PlaneGeometry(3, 0.75), new THREE.MeshBasicMaterial({ map: st }), { cast: false }); sg.position.set(X, FL + 3.4, -40.6); sg.rotation.y = Math.PI; T.add(sg);
   const sg2 = sg.clone(); sg2.rotation.y = 0; sg2.position.z = -41.0; T.add(sg2);
   B.traverse(o => { if (o.isMesh && o.material !== glass) { o.castShadow = true; o.receiveShadow = true; } });

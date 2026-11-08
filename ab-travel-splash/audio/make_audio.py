@@ -22,6 +22,9 @@ VOICE = {  # pitch factor, gain, pan, extra ffmpeg filter
     'Umer': (1.0, 1.0, 0.0, ''), 'Ammi': (1.24, 0.95, -0.1, ''), 'Driver': (0.88, 0.95, 0.1, ''),
     'Guard': (0.85, 0.95, 0.15, ''), 'Mechanic': (0.87, 0.95, 0.1, ''), 'Agent': (1.1, 0.9, 0.1, ''),
     'Staff': (1.07, 0.9, 0.1, ''), 'Bilal': (0.94, 0.95, -0.15, ''), 'Hamza': (1.05, 0.95, 0.15, ''),
+    'Officer': (0.84, 0.95, 0.15, ''), 'Checker': (0.9, 0.95, 0.12, ''), 'GateAgent': (1.22, 0.9, 0.1, ''),
+    'Crew': (1.25, 0.9, 0.12, ''), 'CrewM': (1.02, 0.9, 0.12, ''), 'Pilot': (0.86, 0.9, 0.0, ',highpass=f=250,lowpass=f=4200'),
+    'Reception': (1.06, 0.9, 0.1, ''), 'Passenger': (0.95, 0.85, -0.12, ''),
     'Announcement': (1.12, 0.8, 0.0, ',highpass=f=300,lowpass=f=3800,aecho=0.8:0.7:120|260:0.35|0.2'),
 }
 model = tok = None
@@ -122,6 +125,8 @@ def sfx(name):
             i = int(rng.uniform(0, 17) * SR); d = int(0.12 * SR); t = np.arange(d) / SR; f = rng.uniform(2800, 4200) + 900 * np.sin(2 * np.pi * 18 * t)
             out[i:i + d] += (0.05 * np.sin(2 * np.pi * np.cumsum(f) / SR) * np.sin(np.pi * t / 0.12)).astype(np.float32)
         return out
+    if name == 'beep': return tone(1320, 0.35, 0.18)
+    if name == 'ding': return tone(1046, 0.6, 0.2)
     if name == 'music_sting': return np.zeros(1, np.float32)
     return np.zeros(1, np.float32)
 for e in T['sfx']: place(sfx(e['name']), e['t'], 1.0, 0.0)

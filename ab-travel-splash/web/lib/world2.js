@@ -402,9 +402,11 @@ export function buildFoodCourt(scene, at) {
     const s = new THREE.Group(); s.position.set(x, 0, 0); g.add(s);
     s.add(box(6, 1.1, 1.0, mat('#f2efe8', 0.4), 0, 0.55, 0)); s.add(box(6, 3.2, 0.2, mat('#efe9df', 0.6), 0, 1.6, -2.2));
     const t = canvasTex(1024, 220, (c, w, h) => { c.fillStyle = bg; c.fillRect(0, 0, w, h); c.fillStyle = fg; c.font = 'bold 120px DejaVu Sans'; c.textBaseline = 'middle'; c.textAlign = 'center'; c.fillText(name, w / 2, h * 0.45); if (sub) { c.font = '600 40px DejaVu Sans'; c.fillText(sub, w / 2, h * 0.86); } });
-    const sg = mesh(new THREE.PlaneGeometry(6, 1.3), new THREE.MeshStandardMaterial({ map: t, emissive: '#fff', emissiveMap: t, emissiveIntensity: 0.25 }), { cast: false }); sg.position.set(0, 3.6, -2.0); s.add(sg);
+    const sg = mesh(new THREE.PlaneGeometry(4.2, 0.9), new THREE.MeshStandardMaterial({ map: t, emissive: '#fff', emissiveMap: t, emissiveIntensity: 0.25 }), { cast: false }); sg.position.set(0, 3.3, -2.0); s.add(sg);
+    for (const rx of [-1.6, 1.4]) { s.add(box(0.36, 0.22, 0.3, mat('#222', 0.4), rx, 1.22, 0)); s.add(box(0.3, 0.2, 0.02, mat('#0d1a26', 0.2), rx, 1.42, -0.06)); }
+    s.add(box(5.6, 0.9, 0.5, mat('#c9c4bb', 0.5, 0.4), 0, 1.1, -1.9));
     const menu = canvasTex(512, 256, (c, w, h) => { c.fillStyle = '#111'; c.fillRect(0, 0, w, h); c.fillStyle = '#ffd34d'; c.font = 'bold 34px DejaVu Sans'; ['Burger  Rs 650', 'Fries  Rs 300', 'Chai  Rs 150', 'Paratha Roll  Rs 450'].forEach((l, i) => c.fillText(l, 20, 50 + i * 55)); });
-    const mn = mesh(new THREE.PlaneGeometry(2.4, 1.2), new THREE.MeshBasicMaterial({ map: menu }), { cast: false }); mn.position.set(0, 2.2, -2.05); s.add(mn);
+    const mn = mesh(new THREE.PlaneGeometry(2.0, 1.0), new THREE.MeshBasicMaterial({ map: menu }), { cast: false }); mn.position.set(0, 2.5, -2.05); s.add(mn);
   };
   stall(-7, "McDonald's", '#da291c', '#ffc72c', 'Burgers · Fries · Breakfast');
   stall(0, 'Chai Khana', '#2d5016', '#f2e6c9', 'Karak chai · Paratha');

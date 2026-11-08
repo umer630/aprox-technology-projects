@@ -13,7 +13,7 @@ export function modeAt(keys, t) {
   return clamp(m);
 }
 // Umer ka haath + camera pose, aur lens ka target set karo. forwardTarget = rear mode mein camera kahan dekhe (world point)
-export function vlogPose(C, vcam, m, forwardTarget = null, t = 0) {
+export function vlogPose(C, vcam, m, forwardTarget = null, t = 0, { free = false } = {}) {
   poseCarryCam(C, 1);
   const sw = 1 - m;
   if (sw > 0.001) poseSelfie(C, sw, Math.sin(t * 2) * 0.5);
@@ -23,8 +23,12 @@ export function vlogPose(C, vcam, m, forwardTarget = null, t = 0) {
   // rear mode hamesha Umer ke saamne (jidhar wo mun karta hai); forwardTarget sirf unchai/doori ke liye
   const q = new THREE.Quaternion(); C.root.getWorldQuaternion(q); const fwd = new THREE.Vector3(0, 0, 1).applyQuaternion(q); fwd.y = 0; fwd.normalize();
   let ft = head.clone().addScaledVector(fwd, 4); ft.y = 1.2;
-  if (forwardTarget) { const d = forwardTarget.clone().sub(head); d.y = 0; if (d.dot(fwd) > 0.2 * d.length()) ft = forwardTarget.clone(); }
-  const tgt = head.clone().lerp(ft, smooth(m));
+  if (forwardTarget) { const d = forwardTarget.clone().sub(head); d.y = 0; if (free || d.dot(fwd) > 0.2 * d.length()) ft = forwardTarget.clone(); }
+  // lens ki direction ko ghumao (point lerp camera ke peeche se guzar jata tha → chhat dikhti thi)
+  holdCamera(C, vcam, null); const p = new THREE.Vector3(); vcam.getWorldPosition(p);
+  const d0 = head.clone().sub(p).normalize(), d1 = ft.clone().sub(p).normalize(); const s = smooth(m);
+  let d = d0.clone().lerp(d1, s); if (d.length() < 0.35) { const side = new THREE.Vector3().crossVectors(d0, new THREE.Vector3(0, 1, 0)).normalize(); d.addScaledVector(side, Math.sin(s * Math.PI) * 0.8); }
+  d.normalize(); const tgt = p.clone().addScaledVector(d, 3);
   holdCamera(C, vcam, tgt);
   return tgt;
 }
