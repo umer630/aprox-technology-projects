@@ -21,11 +21,11 @@ export const LOOKS = {
   // photo milte hi yahan adjust ho jati hain aur har shot mein same locked model use hota hai.
   umer: {
     height: 1.76, skin: '#b5774f', hair: '#1a1411', beard: '#3a2b21', beardStyle: 'trim',
-    shirt: '#3a6ea5', shirtStyle: 'polo', pants: '#3d4350', shoes: '#e8e4dc', sole: '#5a4a3a',
-    kameez: false, cap: false, glasses: false, build: 1.0, eyes: '#2a1a10', cameraBag: true
+    shirt: '#3f8f4a', shirtStyle: 'hoodie', pants: '#2b3445', shoes: '#ecebe6', sole: '#9a9a9a',
+    kameez: false, cap: false, glasses: false, build: 1.0, eyes: '#2a1a10', cameraBag: false, backpack: '#1c1d20', inner: '#1f4a63'
   },
   driver: {
-    height: 1.71, skin: '#9c6644', hair: '#2a2420', beard: '#2a2420', beardStyle: 'moustache',
+    name: 'Rashid Bhai', height: 1.71, skin: '#9c6644', hair: '#2a2420', beard: '#2a2420', beardStyle: 'moustache',
     shirt: '#d9d6cc', shirtStyle: 'kameez', pants: '#d9d6cc', shoes: '#3b2a1e', sole: '#2a1d14',
     kameez: true, cap: false, build: 1.05, eyes: '#24160d', grey: true
   },
@@ -52,6 +52,24 @@ export const LOOKS = {
     height: 1.79, skin: '#a8714c', hair: '#18120f', beard: null, beardStyle: 'none',
     shirt: '#b04848', shirtStyle: 'polo', pants: '#3b4a63', shoes: '#ddd', sole: '#555', kameez: false, build: 1.05, eyes: '#24160d'
   },
+  checkinAgent: { height: 1.74, skin: '#a8714c', hair: '#141110', beard: '#1a1411', beardStyle: 'trim', shirt: '#eef1f5', shirtStyle: 'shirt', pants: '#1b2230', shoes: '#111', sole: '#111', vest: '#1c2a4a', tie: '#2a6fd6', lanyard: '#1e4a8a', build: 1.0, eyes: '#24160d' },
+  securityOfficer: { height: 1.78, skin: '#9c6644', hair: '#121010', beard: '#121010', beardStyle: 'moustache', shirt: '#9fc0e6', shirtStyle: 'shirt', pants: '#1e2a40', shoes: '#111', sole: '#111', peakCap: '#1e2a40', build: 1.08, eyes: '#24160d', epaulettes: 2 },
+  entranceChecker: { height: 1.75, skin: '#a06c4a', hair: '#141110', beard: '#141110', beardStyle: 'moustache', shirt: '#9fc0e6', shirtStyle: 'shirt', pants: '#1e2a40', shoes: '#111', sole: '#111', beret: '#1e2a40', build: 1.02, eyes: '#24160d', epaulettes: 1 },
+  baggageStaff: { height: 1.72, skin: '#93603f', hair: '#1c1714', beard: '#1c1714', beardStyle: 'trim', shirt: '#2d4f8a', shirtStyle: 'shirt', pants: '#1f2a3a', shoes: '#222', sole: '#111', vest: '#e8c21a', build: 1.05, eyes: '#24160d' },
+  screeningStaff: { height: 1.62, skin: '#b8805a', hair: '#141110', beard: null, beardStyle: 'none', shirt: '#9fc0e6', shirtStyle: 'shirt', pants: '#1e2a40', shoes: '#111', sole: '#111', dupatta: '#1e2a40', female: true, build: 0.9, eyes: '#24160d' },
+  loungeStaff: { height: 1.7, skin: '#a8714c', hair: '#141110', beard: null, beardStyle: 'none', shirt: '#f2f2f2', shirtStyle: 'shirt', pants: '#111', shoes: '#111', sole: '#111', vest: '#3a3a3a', tie: '#8a1c2c', build: 0.95, eyes: '#24160d' },
+  gateAgent: { height: 1.64, skin: '#b5774f', hair: '#120e0c', beard: null, beardStyle: 'none', shirt: '#f2f4f8', shirtStyle: 'shirt', pants: '#14306f', shoes: '#111', sole: '#111', vest: '#14306f', scarf: '#2a6fd6', hairStyle: 'bun', female: true, build: 0.88, eyes: '#24160d', lanyard: '#14306f' },
+  cabinCrewF: { height: 1.66, skin: '#bf8a62', hair: '#120e0c', beard: null, beardStyle: 'none', shirt: '#14306f', shirtStyle: 'shirt', pants: '#14306f', shoes: '#111', sole: '#111', scarf: '#6fb2ff', hairStyle: 'bun', female: true, kameez: true, build: 0.86, eyes: '#24160d' },
+  cabinCrewM: { height: 1.77, skin: '#a8714c', hair: '#141110', beard: null, beardStyle: 'none', shirt: '#f2f4f8', shirtStyle: 'shirt', pants: '#14306f', shoes: '#111', sole: '#111', vest: '#14306f', tie: '#2a6fd6', build: 1.0, eyes: '#24160d' },
+  pilot: { height: 1.8, skin: '#a8714c', hair: '#141110', beard: '#1a1411', beardStyle: 'trim', shirt: '#f6f6f6', shirtStyle: 'shirt', pants: '#1a1f2e', shoes: '#0a0a0a', sole: '#0a0a0a', tie: '#1a1f2e', epaulettes: 4, peakCap: '#1a1f2e', build: 1.02, eyes: '#24160d' },
+  coPilot: { height: 1.76, skin: '#b5774f', hair: '#141110', beard: null, beardStyle: 'moustache', shirt: '#f6f6f6', shirtStyle: 'shirt', pants: '#1a1f2e', shoes: '#0a0a0a', sole: '#0a0a0a', tie: '#1a1f2e', epaulettes: 3, build: 1.0, eyes: '#24160d', glasses: 'sun' },
+  passengerM: { height: 1.74, skin: '#a8714c', hair: '#141110', beard: '#1a1411', beardStyle: 'trim', shirt: '#8a7a5c', shirtStyle: 'shirt', pants: '#2b2b2b', shoes: '#3a2a1e', sole: '#2a1d14', build: 1.0, eyes: '#24160d', backpack: '#4a3a2a' },
+  passengerF: { height: 1.6, skin: '#c08a64', hair: '#120e0c', beard: null, beardStyle: 'none', shirt: '#e78aa8', shirtStyle: 'kameez', pants: '#f3e6ea', shoes: '#c9a24a', sole: '#7a5a2a', kameez: true, dupatta: '#f2b6c8', female: true, build: 0.86, eyes: '#24160d' },
+  youngPassenger: { height: 1.68, skin: '#b5774f', hair: '#141110', beard: null, beardStyle: 'none', shirt: '#5b3a8a', shirtStyle: 'hoodie', pants: '#3b4a63', shoes: '#ddd', sole: '#888', build: 0.92, eyes: '#24160d', backpack: '#2a6fd6' },
+  businessTraveller: { height: 1.78, skin: '#a06c4a', hair: '#141110', beard: '#141110', beardStyle: 'trim', shirt: '#2a2f3a', shirtStyle: 'shirt', pants: '#2a2f3a', shoes: '#0a0a0a', sole: '#0a0a0a', tie: '#7a1d2c', build: 1.02, eyes: '#24160d', glasses: 'clear' },
+  technician: { height: 1.74, skin: '#93603f', hair: '#1c1714', beard: '#1c1714', beardStyle: 'trim', shirt: '#24406e', shirtStyle: 'shirt', pants: '#24406e', shoes: '#222', sole: '#111', vest: '#ff8a1a', build: 1.05, eyes: '#24160d', beret: '#24406e' },
+  hotelStaff: { height: 1.72, skin: '#a8714c', hair: '#141110', beard: null, beardStyle: 'moustache', shirt: '#f4f4f4', shirtStyle: 'shirt', pants: '#111', shoes: '#111', sole: '#111', vest: '#5a1a2a', tie: '#c9a24a', build: 0.98, eyes: '#24160d' },
+  loungePassenger: { height: 1.71, skin: '#b07650', hair: '#141110', beard: '#141110', beardStyle: 'trim', shirt: '#ece7dc', shirtStyle: 'kameez', pants: '#ece7dc', shoes: '#3a2a1e', sole: '#2a1d14', kameez: true, build: 1.0, eyes: '#24160d', glasses: 'clear' },
   agent: {
     height: 1.70, skin: '#a87452', hair: '#0f0c0b', beard: null, beardStyle: 'none',
     shirt: '#e9edf2', shirtStyle: 'shirt', pants: '#1b2230', shoes: '#111', sole: '#111',
@@ -136,6 +154,26 @@ export function createCharacter(look = LOOKS.umer, seed = 1) {
     const hood = mesh(new THREE.SphereGeometry(0.115, 26, 16, Math.PI * 0.8, Math.PI * 1.4, 0, Math.PI * 0.6), dm); hood.scale.set(0.95, 1.1, 1.05); hood.position.set(0, 0.11, -0.012); head.add(hood);
     const drape = mesh(new THREE.CylinderGeometry(0.13, 0.2, 0.26, 22, 1, true, Math.PI * 0.35, Math.PI * 1.3), dm); drape.position.set(0, 0.17, -0.01); drape.scale.z = 0.75; chest.add(drape);
   }
+  if (L.shirtStyle === 'hoodie') {
+    const hood = mesh(new THREE.TorusGeometry(0.1, 0.045, 10, 20, Math.PI * 1.3), shirtMat); hood.rotation.set(Math.PI / 2 + 0.35, 0, Math.PI * 1.35); hood.position.set(0, 0.25, -0.03); chest.add(hood);
+    const pocket = mesh(new THREE.BoxGeometry(0.22, 0.09, 0.02), mat(L.shirt, 0.95)); pocket.position.set(0, -0.0, 0.118); spine.add(pocket);
+    if (L.inner) { const tee = mesh(new THREE.CylinderGeometry(0.05, 0.065, 0.06, 14), mat(L.inner, 0.9)); tee.position.set(0, 0.245, 0.04); chest.add(tee); }
+    for (const sx of [-1, 1]) { const dc = mesh(new THREE.CylinderGeometry(0.004, 0.004, 0.12, 6), mat('#e8e8e8', 0.6)); dc.position.set(sx * 0.03, 0.16, 0.122); chest.add(dc); }
+  }
+  if (L.tie) { const t = mesh(new THREE.BoxGeometry(0.035, 0.24, 0.01), mat(L.tie, 0.5)); t.position.set(0, 0.11, 0.126); t.rotation.x = -0.12; chest.add(t); const k = mesh(new THREE.BoxGeometry(0.03, 0.03, 0.02), mat(L.tie, 0.5)); k.position.set(0, 0.235, 0.12); chest.add(k); }
+  if (L.epaulettes) for (const sx of [-1, 1]) { const e = mesh(new THREE.BoxGeometry(0.1, 0.012, 0.05), mat('#111a2e', 0.5)); e.position.set(sx * 0.15, 0.275, 0); e.rotation.z = -sx * 0.25; chest.add(e); for (let i = 0; i < L.epaulettes; i++) { const st = mesh(new THREE.BoxGeometry(0.008, 0.014, 0.052), mat('#d9b84a', 0.3, 0.9)); st.position.set(sx * (0.12 + i * 0.016), 0.28 - i * 0.004, 0); chest.add(st); } }
+  if (L.peakCap) { const cp = new THREE.Group(); cp.position.set(0, 0.2, 0.0); head.add(cp);
+    const top = mesh(new THREE.CylinderGeometry(0.115, 0.1, 0.06, 20), mat(L.peakCap, 0.6)); cp.add(top); const band = mesh(new THREE.CylinderGeometry(0.102, 0.102, 0.03, 20), mat('#111', 0.5)); band.position.y = -0.03; cp.add(band);
+    const peak = mesh(new THREE.CylinderGeometry(0.09, 0.09, 0.008, 18, 1, false, -Math.PI / 2, Math.PI), mat('#0b0b0b', 0.3)); peak.position.set(0, -0.045, 0.05); peak.rotation.x = 0.2; cp.add(peak);
+    const badge = mesh(new THREE.CircleGeometry(0.018, 12), mat('#d9b84a', 0.3, 0.9)); badge.position.set(0, -0.005, 0.111); cp.add(badge); }
+  if (L.scarf) { const sc = mesh(new THREE.TorusGeometry(0.06, 0.018, 8, 16), mat(L.scarf, 0.7)); sc.rotation.x = Math.PI / 2; sc.position.set(0, 0.27, 0.0); chest.add(sc); const kn = mesh(new THREE.ConeGeometry(0.03, 0.07, 8), mat(L.scarf, 0.7)); kn.position.set(0.03, 0.22, 0.12); kn.rotation.z = 0.4; chest.add(kn); }
+  if (L.lanyard) { const ly = mesh(new THREE.TorusGeometry(0.11, 0.004, 4, 20, Math.PI), mat(L.lanyard, 0.6)); ly.rotation.set(0, 0, Math.PI); ly.position.set(0, 0.25, 0.1); ly.scale.set(0.7, 1.4, 1); chest.add(ly); const card = mesh(new THREE.BoxGeometry(0.05, 0.07, 0.004), mat('#f4f4f4', 0.5)); card.position.set(0, 0.07, 0.13); chest.add(card); }
+  if (L.hairStyle === 'long' && !L.dupatta) { hairCap.scale.set(1.0, 1.18, 1.1); const back = mesh(new THREE.CapsuleGeometry(0.075, 0.16, 6, 12), hairMat); back.position.set(0, 0.03, -0.06); back.scale.z = 0.6; head.add(back); quiff.visible = false; }
+  if (L.hairStyle === 'bun' && !L.dupatta) { quiff.visible = false; const bun = mesh(new THREE.SphereGeometry(0.045, 14, 10), hairMat); bun.position.set(0, 0.16, -0.1); head.add(bun); }
+  if (L.glasses) { for (const sx of [-1, 1]) { const g = mesh(new THREE.TorusGeometry(0.019, 0.003, 6, 16), mat(L.glasses === 'sun' ? '#111' : '#333', 0.3, 0.6)); g.position.set(sx * 0.033, 0.112, 0.097); head.add(g); if (L.glasses === 'sun') { const ln = mesh(new THREE.CircleGeometry(0.018, 14), mat('#0a0a0a', 0.1, 0.5)); ln.position.set(sx * 0.033, 0.112, 0.098); head.add(ln); } } const br = mesh(new THREE.BoxGeometry(0.03, 0.004, 0.004), mat('#222', 0.3)); br.position.set(0, 0.114, 0.1); head.add(br); }
+  if (L.backpack) { const bp = new THREE.Group(); bp.position.set(0, 0.06, -0.17); chest.add(bp); J.backpack = bp;
+    const body = mesh(new THREE.BoxGeometry(0.3, 0.42, 0.14), mat(L.backpack, 0.85)); bp.add(body); const pk = mesh(new THREE.BoxGeometry(0.24, 0.16, 0.05), mat(L.backpack, 0.85)); pk.position.set(0, -0.1, -0.09); bp.add(pk);
+    for (const sx of [-1, 1]) { const st = mesh(new THREE.BoxGeometry(0.04, 0.4, 0.015), mat('#111', 0.8)); st.position.set(sx * 0.1, 0.0, 0.16); bp.add(st); const zp = mesh(new THREE.BoxGeometry(0.26, 0.008, 0.01), mat('#555', 0.4)); zp.position.set(0, 0.17 * sx, -0.072); bp.add(zp); } }
   if (L.beret) { const b = mesh(new THREE.CylinderGeometry(0.105, 0.11, 0.05, 18), mat(L.beret, 0.9)); b.position.set(0.01, 0.2, -0.005); b.rotation.z = -0.2; head.add(b); }
 
   // Beard / moustache

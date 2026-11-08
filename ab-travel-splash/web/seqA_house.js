@@ -16,7 +16,7 @@ export const SEQ_A = {
     const driver = createCharacter(LOOKS.driver, 2); scene.add(driver.root);
     const vcam = createVlogCam();
     const bag = createSuitcase('#2e4a6b'); scene.add(bag.group);
-    const revo = createRevo('#121416'); revo.group.position.set(3.5, 0, 2.8); scene.add(revo.group); revo.setTail(1);
+    const revo = createRevo('#f2f3f1'); revo.group.position.set(3.5, 0, 2.8); scene.add(revo.group); revo.setTail(1);
     // parked car opposite + passing bike
     const pc = createCar('hatch', 5); pc.group.position.set(-9, 0, 7.6); pc.group.rotation.y = Math.PI; scene.add(pc.group);
     const bike = createBike(9); bike.group.rotation.y = Math.PI; scene.add(bike.group);

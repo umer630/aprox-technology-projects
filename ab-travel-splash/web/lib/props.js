@@ -17,12 +17,28 @@ export function createVlogCam() {
 }
 
 // Rolling suitcase — origin ground par (wheels BOTTOM), handle TOP. Handle top height = handleH.
-export function createSuitcase(color = '#2f4f6f') {
+// Travel Splash cabin trolley: kala hard-shell, laal + neela spider-web pattern, "TRAVEL SPLASH" plate
+function webTex() {
+  return canvasTex(512, 512, (g, w, h) => {
+    g.fillStyle = '#121214'; g.fillRect(0, 0, w, h);
+    const cx = w * 0.5, cy = h * 0.55;
+    for (const [col, off] of [['#c8102e', 0], ['#1f4fd1', 0.18]]) {
+      g.strokeStyle = col; g.lineWidth = 5;
+      for (let k = 0; k < 12; k++) { const a = (k / 12) * Math.PI * 2 + off; g.beginPath(); g.moveTo(cx, cy); g.lineTo(cx + Math.cos(a) * w, cy + Math.sin(a) * w); g.stroke(); }
+      for (let r = 40; r < w; r += 46) { g.beginPath(); for (let k = 0; k <= 12; k++) { const a = (k / 12) * Math.PI * 2 + off; const rr = r * (k % 2 ? 0.93 : 1); const x = cx + Math.cos(a) * rr, y = cy + Math.sin(a) * rr; k ? g.lineTo(x, y) : g.moveTo(x, y); } g.stroke(); }
+    }
+    g.fillStyle = '#0a0a0a'; g.fillRect(w * 0.18, h * 0.08, w * 0.64, h * 0.12); g.strokeStyle = '#888'; g.lineWidth = 3; g.strokeRect(w * 0.18, h * 0.08, w * 0.64, h * 0.12);
+    g.fillStyle = '#ffffff'; g.font = 'bold 44px DejaVu Sans'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('TRAVEL SPLASH', w / 2, h * 0.14);
+  });
+}
+export function createSuitcase(color = '#2f4f6f', style = null) {
   const g = new THREE.Group(); g.name = 'suitcase';
   const W = 0.38, H = 0.56, D = 0.24, wheel = 0.05;
-  const shell = new THREE.MeshPhysicalMaterial({ color, roughness: 0.35, clearcoat: 0.6, clearcoatRoughness: 0.3 });
+  const shell = style === 'travelsplash' ? new THREE.MeshPhysicalMaterial({ color: '#ffffff', map: webTex(), roughness: 0.35, clearcoat: 0.7, clearcoatRoughness: 0.25 }) : new THREE.MeshPhysicalMaterial({ color, roughness: 0.35, clearcoat: 0.6, clearcoatRoughness: 0.3 });
   const body = rbox(W, H, D, 0.04, shell); body.position.y = wheel + H / 2; g.add(body);
-  for (let i = -1; i <= 1; i += 2) { const rib = rbox(0.02, H * 0.92, D + 0.008, 0.008, shell); rib.position.set(i * 0.1, wheel + H / 2, 0); g.add(rib); }
+  if (style) { const p = body.geometry.attributes.position, uv = body.geometry.attributes.uv; for (let i = 0; i < uv.count; i++) uv.setXY(i, (p.getX(i) + W / 2) / W, (p.getY(i) + H / 2) / H); }
+  const ribMat = style ? mat('#0c0c0d', 0.4) : shell;
+  for (let i = -1; i <= 1; i += 2) { const rib = rbox(0.02, H * 0.92, D + 0.008, 0.008, ribMat); rib.position.set(i * 0.1, wheel + H / 2, 0); g.add(rib); }
   const zip = box(W + 0.004, 0.012, 0.012, mat('#111', 0.8), 0, wheel + H / 2, 0); zip.scale.z = 1; zip.rotation.y = 0; g.add(zip);
   const zipS = box(0.006, H - 0.04, D + 0.01, mat('#111', 0.8), W / 2, wheel + H / 2, 0); g.add(zipS);
   const wm = mat('#111', 0.7);

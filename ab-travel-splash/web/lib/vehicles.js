@@ -48,7 +48,7 @@ function seat(g, x, z, color = '#222') {
 }
 
 // TOYOTA REVO-style double cab (reference images se proportions): 5.33 x 1.855 x 1.815 m
-export function createRevo(color = '#101214') {
+export function createRevo(color = '#f2f3f1') {
   const g = new THREE.Group(); g.name = 'revo';
   const paint = new THREE.MeshPhysicalMaterial({ color, roughness: 0.4, metalness: 0.15, clearcoat: 1, clearcoatRoughness: 0.06, envMapIntensity: 0.55 });
   const plastic = mat('#0c0c0c', 0.8); const chrome = mat('#c9ccd0', 0.15, 1);
@@ -122,8 +122,20 @@ export function createRevo(color = '#101214') {
   { const cap = mesh(new THREE.CylinderGeometry(0.05, 0.05, 0.03, 12), mat('#c9a020', 0.4, 0.5)); cap.position.set(2.25, 1.13, -0.3); eng.add(cap); }
   const hoodPiv = new THREE.Group(); hoodPiv.position.set(1.06, 1.175, 0); g.add(hoodPiv);
   const hood = box(1.38, 0.035, W - 0.12, paint, 0.69, 0, 0); hood.rotation.z = -0.045; hoodPiv.add(hood);
-  mergeChildren(g, [...wheels, tail, hoodPiv]);
-  const V = { group: g, wheels, tail, R, dist: 0, hoodPiv, setHood(o) { hoodPiv.rotation.z = o * 0.95; }, seats: { driver: new THREE.Vector3(0.38, 0.62, zDriver), passenger: new THREE.Vector3(0.38, 0.62, zPass) },
+  // DOORS (Pakistan RHD: driver RIGHT/+Z) — front hinge, bahar khulte hain
+  const doors = {};
+  const mkDoor = (name, side, xHinge, len) => {
+    const piv = new THREE.Group(); piv.position.set(xHinge, 0, side * (hw + 0.012)); g.add(piv);
+    const p1 = box(len, 0.52, 0.05, paint, -len / 2, 0.88, 0); piv.add(p1);
+    const gl = box(len - 0.12, 0.5, 0.03, glassMat(), -len / 2 - 0.02, 1.4, -side * 0.06); gl.rotation.x = side * 0.08; piv.add(gl);
+    const fr = box(len - 0.06, 0.04, 0.05, paint, -len / 2, 1.67, -side * 0.08); piv.add(fr);
+    piv.add(box(0.14, 0.03, 0.025, chrome, -len + 0.25, 1.0, side * 0.03));
+    const rec = box(len - 0.04, 0.95, 0.02, mat('#0b0b0b', 0.9), xHinge - len / 2, 1.1, side * (hw + 0.004)); g.add(rec); // khula darwaza → andar andhera
+    doors[name] = { piv, side, rec };
+  };
+  mkDoor('FL', -1, 1.0, 0.88); mkDoor('FR', 1, 1.0, 0.88); mkDoor('RL', -1, 0.12, 0.92); mkDoor('RR', 1, 0.12, 0.92);
+  mergeChildren(g, [...wheels, tail, hoodPiv, ...Object.values(doors).map(d => d.piv)]);
+  const V = { group: g, wheels, tail, R, dist: 0, hoodPiv, doors, setDoor(n, o) { const d = doors[n]; d.piv.rotation.y = d.side * 1.05 * o; }, setHood(o) { hoodPiv.rotation.z = o * 0.95; }, seats: { driver: new THREE.Vector3(0.38, 0.62, zDriver), passenger: new THREE.Vector3(0.38, 0.62, zPass) },
     roll(d) { this.dist = d; for (const w of wheels) w.rotation.z = -d / R; },
     setTail(open) { tail.rotation.z = open * (Math.PI / 2); } // open=1 → neeche khula
   };
