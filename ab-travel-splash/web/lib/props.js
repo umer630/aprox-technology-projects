@@ -1,0 +1,120 @@
+import * as THREE from 'three';
+import { mat, mesh, box, rbox, canvasTex } from './util.js';
+
+// Compact black vlog camera (lens +Z ki taraf). Origin = body center.
+export function createVlogCam() {
+  const g = new THREE.Group(); g.name = 'vlogCam';
+  const body = rbox(0.105, 0.06, 0.042, 0.008, mat('#141414', 0.45, 0.2)); g.add(body);
+  const grip = rbox(0.022, 0.056, 0.05, 0.008, mat('#0b0b0b', 0.9)); grip.position.set(0.042, 0, 0.006); g.add(grip);
+  const lensBarrel = mesh(new THREE.CylinderGeometry(0.019, 0.022, 0.03, 24), mat('#1d1d1d', 0.4, 0.4)); lensBarrel.rotation.x = Math.PI / 2; lensBarrel.position.set(-0.012, 0, 0.034); g.add(lensBarrel);
+  const glass = mesh(new THREE.CircleGeometry(0.0145, 24), new THREE.MeshPhysicalMaterial({ color: '#0a1830', roughness: 0.05, metalness: 0.2, clearcoat: 1 })); glass.position.set(-0.012, 0, 0.0496); g.add(glass);
+  const ring = mesh(new THREE.TorusGeometry(0.0175, 0.0025, 8, 24), mat('#5a5a5a', 0.3, 0.9)); ring.position.set(-0.012, 0, 0.049); g.add(ring);
+  const screen = box(0.07, 0.045, 0.004, mat('#05070a', 0.15, 0.1), -0.008, 0, -0.023); g.add(screen);
+  const mic = rbox(0.03, 0.014, 0.024, 0.005, mat('#2a2a2a', 0.95)); mic.position.set(-0.01, 0.038, 0.004); g.add(mic);
+  const rec = mesh(new THREE.SphereGeometry(0.0025, 8, 6), new THREE.MeshBasicMaterial({ color: '#ff2a2a' })); rec.position.set(0.03, 0.022, 0.0215); g.add(rec);
+  g.traverse(o => { if (o.isMesh) o.castShadow = true; });
+  return g;
+}
+
+// Rolling suitcase — origin ground par (wheels BOTTOM), handle TOP. Handle top height = handleH.
+// Travel Splash cabin trolley: kala hard-shell, laal + neela spider-web pattern, "TRAVEL SPLASH" plate
+function webTex() {
+  return canvasTex(512, 512, (g, w, h) => {
+    g.fillStyle = '#121214'; g.fillRect(0, 0, w, h);
+    const cx = w * 0.5, cy = h * 0.55;
+    for (const [col, off] of [['#c8102e', 0], ['#1f4fd1', 0.18]]) {
+      g.strokeStyle = col; g.lineWidth = 5;
+      for (let k = 0; k < 12; k++) { const a = (k / 12) * Math.PI * 2 + off; g.beginPath(); g.moveTo(cx, cy); g.lineTo(cx + Math.cos(a) * w, cy + Math.sin(a) * w); g.stroke(); }
+      for (let r = 40; r < w; r += 46) { g.beginPath(); for (let k = 0; k <= 12; k++) { const a = (k / 12) * Math.PI * 2 + off; const rr = r * (k % 2 ? 0.93 : 1); const x = cx + Math.cos(a) * rr, y = cy + Math.sin(a) * rr; k ? g.lineTo(x, y) : g.moveTo(x, y); } g.stroke(); }
+    }
+    g.fillStyle = '#0a0a0a'; g.fillRect(w * 0.18, h * 0.08, w * 0.64, h * 0.12); g.strokeStyle = '#888'; g.lineWidth = 3; g.strokeRect(w * 0.18, h * 0.08, w * 0.64, h * 0.12);
+    g.fillStyle = '#ffffff'; g.font = 'bold 44px DejaVu Sans'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('TRAVEL SPLASH', w / 2, h * 0.14);
+  });
+}
+export function createSuitcase(color = '#2f4f6f', style = null) {
+  const g = new THREE.Group(); g.name = 'suitcase';
+  const W = 0.38, H = 0.56, D = 0.24, wheel = 0.05;
+  const shell = style === 'travelsplash' ? new THREE.MeshPhysicalMaterial({ color: '#ffffff', map: webTex(), roughness: 0.35, clearcoat: 0.7, clearcoatRoughness: 0.25 }) : new THREE.MeshPhysicalMaterial({ color, roughness: 0.35, clearcoat: 0.6, clearcoatRoughness: 0.3 });
+  const body = rbox(W, H, D, 0.04, shell); body.position.y = wheel + H / 2; g.add(body);
+  if (style) { const p = body.geometry.attributes.position, uv = body.geometry.attributes.uv; for (let i = 0; i < uv.count; i++) uv.setXY(i, (p.getX(i) + W / 2) / W, (p.getY(i) + H / 2) / H); }
+  const ribMat = style ? mat('#0c0c0d', 0.4) : shell;
+  for (let i = -1; i <= 1; i += 2) { const rib = rbox(0.02, H * 0.92, D + 0.008, 0.008, ribMat); rib.position.set(i * 0.1, wheel + H / 2, 0); g.add(rib); }
+  const zip = box(W + 0.004, 0.012, 0.012, mat('#111', 0.8), 0, wheel + H / 2, 0); zip.scale.z = 1; zip.rotation.y = 0; g.add(zip);
+  const zipS = box(0.006, H - 0.04, D + 0.01, mat('#111', 0.8), W / 2, wheel + H / 2, 0); g.add(zipS);
+  const wm = mat('#111', 0.7);
+  for (const x of [-W / 2 + 0.04, W / 2 - 0.04]) for (const z of [-D / 2 + 0.035, D / 2 - 0.035]) {
+    const w = mesh(new THREE.CylinderGeometry(wheel / 2, wheel / 2, 0.02, 12), wm); w.rotation.z = Math.PI / 2; w.position.set(x, wheel / 2, z); g.add(w);
+  }
+  // telescopic handle (back side −Z)
+  const handle = new THREE.Group(); handle.position.set(0, wheel + H, -D / 2 + 0.03); g.add(handle);
+  const am = mat('#9aa0a6', 0.3, 0.9);
+  for (const x of [-0.08, 0.08]) { const r = box(0.014, 0.3, 0.014, am, x, -0.15, 0); handle.add(r); }
+  const grip = rbox(0.2, 0.03, 0.03, 0.012, mat('#1a1a1a', 0.8)); grip.position.y = 0.01; handle.add(grip);
+  const topH = rbox(0.12, 0.025, 0.03, 0.01, mat('#1a1a1a', 0.8)); topH.position.set(0, wheel + H + 0.012, 0.03); g.add(topH);
+  g.traverse(o => { if (o.isMesh) o.castShadow = true; });
+  const S = { group: g, handle, ext: 1, wheel, H, D, W,
+    setExtend(e) { this.ext = e; handle.position.y = wheel + H + e * 0.24; },
+    gripLocal() { return new THREE.Vector3(0, handle.position.y + 0.01, handle.position.z); }
+  };
+  S.setExtend(1);
+  return S;
+}
+
+export function createBoardingPass() {
+  const t = canvasTex(256, 128, (g, w, h) => {
+    g.fillStyle = '#f7f9fc'; g.fillRect(0, 0, w, h);
+    g.fillStyle = '#0b3d91'; g.fillRect(0, 0, w, 30);
+    g.fillStyle = '#fff'; g.font = 'bold 18px DejaVu Sans'; g.fillText('BOARDING PASS', 10, 22);
+    g.fillStyle = '#0b3d91'; g.font = 'bold 30px DejaVu Sans'; g.fillText('KHI', 14, 75); g.fillText('ISB', 160, 75);
+    g.fillStyle = '#333'; g.font = '13px DejaVu Sans'; g.fillText('Karachi', 14, 95); g.fillText('Islamabad', 160, 95);
+    g.fillText('→', 115, 70);
+    g.fillStyle = '#999'; g.fillRect(205, 30, 2, 98);
+  });
+  // do-tarfa: dono sides se text seedha parha jata hai (mirror nahi)
+  const m = new THREE.Group();
+  const mt = new THREE.MeshStandardMaterial({ map: t, roughness: 0.6 });
+  const a = mesh(new THREE.PlaneGeometry(0.2, 0.08), mt); m.add(a);
+  const b = mesh(new THREE.PlaneGeometry(0.2, 0.08), mt); b.rotation.y = Math.PI; m.add(b);
+  return m;
+}
+
+export function createToothbrush() {
+  const g = new THREE.Group();
+  g.add(box(0.012, 0.17, 0.01, mat('#2a7de1', 0.4), 0, 0, 0));
+  g.add(box(0.012, 0.025, 0.014, mat('#ffffff', 0.8), 0, 0.09, 0.008));
+  return g;
+}
+export function createPhone() {
+  const g = new THREE.Group();
+  g.add(rbox(0.072, 0.15, 0.009, 0.006, mat('#111', 0.3, 0.3)));
+  const sc = box(0.064, 0.138, 0.001, new THREE.MeshStandardMaterial({ color: '#0d2a45', emissive: '#1f5f9a', emissiveIntensity: 0.4 }), 0, 0, 0.005); g.add(sc);
+  return g;
+}
+export function createTeapot() {
+  const g = new THREE.Group(); const m = mat('#c0c4c8', 0.25, 0.9);
+  { const b = mesh(new THREE.SphereGeometry(0.08, 16, 12), m); b.scale.set(1, 0.8, 1); g.add(b); }
+  const sp = mesh(new THREE.CylinderGeometry(0.01, 0.018, 0.1, 8), m); sp.rotation.z = -1.0; sp.position.set(0.09, 0.02, 0); g.add(sp);
+  const h = mesh(new THREE.TorusGeometry(0.04, 0.008, 6, 12, Math.PI), m); h.position.set(-0.08, 0.02, 0); h.rotation.z = Math.PI / 2; g.add(h);
+  return g;
+}
+// Khula suitcase (bistar par letaya hua): base + lid (hinge -X side). Origin = base bottom centre.
+export function createOpenSuitcase(color = '#2e4a6b') {
+  const g = new THREE.Group(); const shell = new THREE.MeshPhysicalMaterial({ color, roughness: 0.35, clearcoat: 0.6 });
+  const lining = mat('#1d2633', 0.95);
+  const W = 0.38, L = 0.56, H = 0.11;
+  g.add(box(W, 0.012, L, shell, 0, 0.006, 0));
+  for (const s of [-1, 1]) { g.add(box(0.012, H, L, shell, s * W / 2, H / 2, 0)); g.add(box(W, H, 0.012, shell, 0, H / 2, s * L / 2)); }
+  g.add(box(W - 0.02, 0.005, L - 0.02, lining, 0, 0.014, 0));
+  const lidPiv = new THREE.Group(); lidPiv.position.set(-W / 2, H, 0); g.add(lidPiv);
+  const lid = new THREE.Group(); lidPiv.add(lid);
+  lid.add(box(W, 0.012, L, shell, W / 2, 0.1, 0)); for (const s of [-1, 1]) { lid.add(box(0.012, 0.1, L, shell, W / 2 + s * W / 2, 0.05, 0)); lid.add(box(W, 0.1, 0.012, shell, W / 2, 0.05, s * L / 2)); }
+  lid.add(box(W - 0.02, 0.005, L - 0.02, lining, W / 2, 0.092, 0));
+  g.traverse(o => o.isMesh && (o.castShadow = true));
+  return { group: g, lidPiv, setLid(open) { lidPiv.rotation.z = -Math.PI * 0.62 * open; }, // open=1 → khula (−X side par gira hua)
+    slots: [new THREE.Vector3(0, 0.02, -0.14), new THREE.Vector3(0, 0.02, 0.14), new THREE.Vector3(0, 0.06, 0)] };
+}
+export function createClothStack(color, n = 3) {
+  const g = new THREE.Group(); const m = new THREE.MeshStandardMaterial({ color, roughness: 0.95 });
+  for (let i = 0; i < n; i++) { const b = rbox(0.32, 0.03, 0.24, 0.012, m); b.position.y = 0.016 + i * 0.032; b.rotation.y = (i % 2 - 0.5) * 0.06; g.add(b); }
+  return g;
+}

@@ -1,0 +1,1513 @@
+{
+ "subs": [
+  {
+   "t0": 6.5,
+   "t1": 10.1,
+   "who": "Umer",
+   "text": "Uff... subah ke chhe baj gaye!",
+   "urdu": "اف... صبح کے چھ بج گئے!"
+  },
+  {
+   "t0": 18.1,
+   "t1": 21.1,
+   "who": "Umer",
+   "text": "Chalo Umer, uth jao — aaj safar ka din hai!",
+   "urdu": "چلو عمر، اٹھ جاؤ، آج سفر کا دن ہے!"
+  },
+  {
+   "t0": 26,
+   "t1": 30.1,
+   "who": "Umer",
+   "text": "Assalam o Alaikum dosto! Main hoon Umer, aur yeh hai Ab Travel Splash.",
+   "urdu": "السلام علیکم دوستو! میں ہوں عمر، اور یہ ہے اب ٹریول اسپلیش۔"
+  },
+  {
+   "t0": 30.3,
+   "t1": 33.9,
+   "who": "Umer",
+   "text": "Aaj hum Karachi se Islamabad ja rahe hain — bohat khaas din hai!",
+   "urdu": "آج ہم کراچی سے اسلام آباد جا رہے ہیں، بہت خاص دن ہے!"
+  },
+  {
+   "t0": 34.1,
+   "t1": 37.1,
+   "who": "Umer",
+   "text": "Lekin pehle... daant saaf karte hain!",
+   "urdu": "لیکن پہلے... دانت صاف کرتے ہیں!"
+  },
+  {
+   "t0": 58.1,
+   "t1": 61.1,
+   "who": "Umer",
+   "text": "Daant saaf, din saaf! Ab packing ka time.",
+   "urdu": "دانت صاف، دن صاف! اب پیکنگ کا ٹائم۔"
+  },
+  {
+   "t0": 64.1,
+   "t1": 68.1,
+   "who": "Umer",
+   "text": "Ammi! Ammi! Mera bag nikaal dein, please!",
+   "urdu": "امی! امی! میرا بیگ نکال دیں، پلیز!"
+  },
+  {
+   "t0": 69.9,
+   "t1": 72.9,
+   "who": "Ammi",
+   "text": "Aa rahi hoon beta! Yeh lo tumhara bag.",
+   "urdu": "آ رہی ہوں بیٹا! یہ لو تمہارا بیگ۔"
+  },
+  {
+   "t0": 75.5,
+   "t1": 79.1,
+   "who": "Umer",
+   "text": "Shukriya Ammi! Aur meri blue shirt kahan hai?",
+   "urdu": "شکریہ امی! اور میری بلیو شرٹ کہاں ہے؟"
+  },
+  {
+   "t0": 79.5,
+   "t1": 83.5,
+   "who": "Ammi",
+   "text": "Almari mein hai beta — sab istri karke rakha hai.",
+   "urdu": "الماری میں ہے بیٹا، سب استری کر کے رکھا ہے۔"
+  },
+  {
+   "t0": 95.5,
+   "t1": 99.1,
+   "who": "Ammi",
+   "text": "Charger aur dawai bhi rakh lena!",
+   "urdu": "چارجر اور دوائی بھی رکھ لینا!"
+  },
+  {
+   "t0": 101.5,
+   "t1": 104.5,
+   "who": "Umer",
+   "text": "Ji Ammi, sab rakh liya!",
+   "urdu": "جی امی، سب رکھ لیا!"
+  },
+  {
+   "t0": 111.5,
+   "t1": 115.1,
+   "who": "Umer",
+   "text": "Packing mukammal! Ab chacha ko phone karta hoon.",
+   "urdu": "پیکنگ مکمل! اب چچا کو فون کرتا ہوں۔"
+  },
+  {
+   "t0": 118.5,
+   "t1": 123.9,
+   "who": "Umer",
+   "text": "Hello chacha, Assalam o Alaikum! Revo le kar aa jayein — aath baje nikalna hai.",
+   "urdu": "ہیلو چچا، السلام علیکم! ریوو لے کر آ جائیں، آٹھ بجے نکلنا ہے۔"
+  },
+  {
+   "t0": 124.3,
+   "t1": 128.5,
+   "who": "Driver",
+   "text": "Walaikum Assalam Umer bhai! Bas aadhe ghante mein pohanch raha hoon.",
+   "urdu": "وعلیکم السلام عمر بھائی! بس آدھے گھنٹے میں پہنچ رہا ہوں۔"
+  },
+  {
+   "t0": 128.9,
+   "t1": 130.9,
+   "who": "Umer",
+   "text": "Theek hai, shukriya!",
+   "urdu": "ٹھیک ہے، شکریہ!"
+  },
+  {
+   "t0": 136.5,
+   "t1": 140.1,
+   "who": "Ammi",
+   "text": "Araam se khao beta, garam garam paratha hai.",
+   "urdu": "آرام سے کھاؤ بیٹا، گرم گرم پراٹھا ہے۔"
+  },
+  {
+   "t0": 141.5,
+   "t1": 145.9,
+   "who": "Umer",
+   "text": "Ammi, aap ke haath ka paratha — iska koi jawab nahi!",
+   "urdu": "امی، آپ کے ہاتھ کا پراٹھا، اس کا کوئی جواب نہیں!"
+  },
+  {
+   "t0": 147.5,
+   "t1": 152.5,
+   "who": "Ammi",
+   "text": "Safar mein apna khayal rakhna, aur pohanch kar phone karna.",
+   "urdu": "سفر میں اپنا خیال رکھنا، اور پہنچ کر فون کرنا۔"
+  },
+  {
+   "t0": 153.1,
+   "t1": 155.5,
+   "who": "Umer",
+   "text": "Ji Ammi, InshaAllah.",
+   "urdu": "جی امی، ان شاء اللہ۔"
+  },
+  {
+   "t0": 163.9,
+   "t1": 166.9,
+   "who": "Umer",
+   "text": "Lagta hai chacha aa gaye!",
+   "urdu": "لگتا ہے چچا آ گئے!"
+  },
+  {
+   "t0": 167.5,
+   "t1": 171.9,
+   "who": "Ammi",
+   "text": "Fi Amanillah beta — Allah ki amaan mein.",
+   "urdu": "فی امان اللہ بیٹا، اللہ کی امان میں۔"
+  },
+  {
+   "t0": 182.6,
+   "t1": 184.7,
+   "who": "Umer",
+   "text": "Assalam o Alaikum dosto! Main hoon Umer.",
+   "urdu": "السلام علیکم دوستو! میں ہوں عمر۔"
+  },
+  {
+   "t0": 184.7,
+   "t1": 186.5,
+   "who": "Umer",
+   "text": "Ab Travel Splash ke Episode 1 mein khush aamdeed!",
+   "urdu": "اب ٹریول اسپلیش کی ایپی سوڈ ون میں خوش آمدید!"
+  },
+  {
+   "t0": 186.9,
+   "t1": 188.3,
+   "who": "Driver",
+   "text": "Walaikum Assalam, Umer bhai! Saman mujhe de dein.",
+   "urdu": "وعلیکم السلام عمر بھائی! سامان مجھے دے دیں۔"
+  },
+  {
+   "t0": 188.3,
+   "t1": 189.1,
+   "who": "Umer",
+   "text": "Shukriya chacha!",
+   "urdu": "شکریہ چچا!"
+  },
+  {
+   "t0": 189.5,
+   "t1": 192.5,
+   "who": "Umer",
+   "text": "Aaj ka safar — Karachi se Islamabad. Chalo, airport chalte hain!",
+   "urdu": "آج کا سفر، کراچی سے اسلام آباد۔ چلو، ایئرپورٹ چلتے ہیں!"
+  },
+  {
+   "t0": 193.7,
+   "t1": 196.1,
+   "who": "Ammi",
+   "text": "Allah Hafiz beta, Fi Amanillah!",
+   "urdu": "اللہ حافظ بیٹا، فی امان اللہ!"
+  },
+  {
+   "t0": 204.1,
+   "t1": 207.29999999999998,
+   "who": "Umer",
+   "text": "Karachi ki subah — har taraf rush hi rush!",
+   "urdu": "کراچی کی صبح، ہر طرف رش ہی رش!"
+  },
+  {
+   "t0": 208.1,
+   "t1": 212.29999999999998,
+   "who": "Umer",
+   "text": "Dekhiye dosto, Karachi mein sab apni left side par chalte hain.",
+   "urdu": "دیکھیے دوستو، کراچی میں سب اپنی لیفٹ سائیڈ پر چلتے ہیں۔"
+  },
+  {
+   "t0": 215.1,
+   "t1": 218.5,
+   "who": "Driver",
+   "text": "Signal laal hai, Umer bhai — zara rukte hain.",
+   "urdu": "سگنل لال ہے عمر بھائی، ذرا رکتے ہیں۔"
+  },
+  {
+   "t0": 218.9,
+   "t1": 222.7,
+   "who": "Umer",
+   "text": "Zebra crossing par log guzar rahe hain — bilkul theek!",
+   "urdu": "زیبرا کراسنگ پر لوگ گزر رہے ہیں، بالکل ٹھیک!"
+  },
+  {
+   "t0": 227.1,
+   "t1": 231.1,
+   "who": "Umer",
+   "text": "Woh dekhiye — Karachi Circular Railway ki train!",
+   "urdu": "وہ دیکھیے، کراچی سرکلر ریلوے کی ٹرین!"
+  },
+  {
+   "t0": 235.7,
+   "t1": 240.5,
+   "who": "Umer",
+   "text": "Har taraf Aprox AI, Aprox Technology aur Next Group ke banners!",
+   "urdu": "ہر طرف ایپروکس اے آئی، ایپروکس ٹیکنالوجی اور نیکسٹ گروپ کے بینرز!"
+  },
+  {
+   "t0": 246.5,
+   "t1": 249.5,
+   "who": "Driver",
+   "text": "Arey! Yeh bonnet se dhuaan kyun nikal raha hai?",
+   "urdu": "ارے! یہ بونٹ سے دھواں کیوں نکل رہا ہے؟"
+  },
+  {
+   "t0": 250.1,
+   "t1": 253.1,
+   "who": "Umer",
+   "text": "Chacha, gaari kinare par laga dein!",
+   "urdu": "چچا، گاڑی کنارے پر لگا دیں!"
+  },
+  {
+   "t0": 259.5,
+   "t1": 263.5,
+   "who": "Driver",
+   "text": "Umer bhai, radiator garam ho gaya hai — paani khatam!",
+   "urdu": "عمر بھائی، ریڈی ایٹر گرم ہو گیا ہے، پانی ختم!"
+  },
+  {
+   "t0": 264.5,
+   "t1": 269.1,
+   "who": "Umer",
+   "text": "Yaar yeh kya ho gaya! Main late ho raha hoon — meri flight nikal jayegi!",
+   "urdu": "یار یہ کیا ہو گیا! میں لیٹ ہو رہا ہوں، میری فلائٹ نکل جائے گی!"
+  },
+  {
+   "t0": 270.1,
+   "t1": 274.5,
+   "who": "Driver",
+   "text": "Fikar na karein, paas hi ek workshop hai. Dheere dheere le chalte hain.",
+   "urdu": "فکر نہ کریں، پاس ہی ایک ورکشاپ ہے۔ دھیرے دھیرے لے چلتے ہیں۔"
+  },
+  {
+   "t0": 275.5,
+   "t1": 280.5,
+   "who": "Umer",
+   "text": "Dosto, dekh rahe hain? Safar mein kuch bhi ho sakta hai... dua karein!",
+   "urdu": "دوستو، دیکھ رہے ہیں؟ سفر میں کچھ بھی ہو سکتا ہے... دعا کریں!"
+  },
+  {
+   "t0": 290.70000000000005,
+   "t1": 294.70000000000005,
+   "who": "Umer",
+   "text": "Ustad ji, jaldi kijiye please — meri flight ka time ho raha hai!",
+   "urdu": "استاد جی، جلدی کیجیے پلیز، میری فلائٹ کا ٹائم ہو رہا ہے!"
+  },
+  {
+   "t0": 295.3,
+   "t1": 299.90000000000003,
+   "who": "Mechanic",
+   "text": "Bas paanch minute sahib. Radiator ka pipe leak tha — naya laga raha hoon.",
+   "urdu": "بس پانچ منٹ صاحب۔ ریڈی ایٹر کا پائپ لیک تھا، نیا لگا رہا ہوں۔"
+  },
+  {
+   "t0": 304.1,
+   "t1": 308.1,
+   "who": "Umer",
+   "text": "Dosto, sach mein tension ho rahi hai... ghari dekhte reh jao!",
+   "urdu": "دوستو، سچ میں ٹینشن ہو رہی ہے... گھڑی دیکھتے رہ جاؤ!"
+  },
+  {
+   "t0": 309.1,
+   "t1": 312.5,
+   "who": "Driver",
+   "text": "Umer bhai, waqt hai abhi — pareshan na hon.",
+   "urdu": "عمر بھائی، وقت ہے ابھی، پریشان نہ ہوں۔"
+  },
+  {
+   "t0": 316.70000000000005,
+   "t1": 319.5,
+   "who": "Mechanic",
+   "text": "Lo ji, gaari bilkul theek!",
+   "urdu": "لو جی، گاڑی بالکل ٹھیک!"
+  },
+  {
+   "t0": 319.90000000000003,
+   "t1": 322.70000000000005,
+   "who": "Umer",
+   "text": "Shukriya ustad ji! Kitne paise?",
+   "urdu": "شکریہ استاد جی! کتنے پیسے؟"
+  },
+  {
+   "t0": 322.90000000000003,
+   "t1": 324.90000000000003,
+   "who": "Mechanic",
+   "text": "Bas aath sau rupay.",
+   "urdu": "بس آٹھ سو روپے۔"
+  },
+  {
+   "t0": 325.1,
+   "t1": 328.1,
+   "who": "Umer",
+   "text": "Yeh lijiye. Chalo chacha, jaldi airport!",
+   "urdu": "یہ لیجیے۔ چلو چچا، جلدی ایئرپورٹ!"
+  },
+  {
+   "t0": 329.1,
+   "t1": 332.5,
+   "who": "Umer",
+   "text": "Dosto, gaari theek ho gayi — ab full speed airport!",
+   "urdu": "دوستو، گاڑی ٹھیک ہو گئی، اب فل اسپیڈ ایئرپورٹ!"
+  },
+  {
+   "t0": 335.70000000000005,
+   "t1": 339.1,
+   "who": "Umer",
+   "text": "Dua karein flight na nikle!",
+   "urdu": "دعا کریں فلائٹ نہ نکلے!"
+  },
+  {
+   "t0": 339.70000000000005,
+   "t1": 343.70000000000005,
+   "who": "Driver",
+   "text": "Fikar na karein Umer bhai, bas das minute mein airport!",
+   "urdu": "فکر نہ کریں عمر بھائی، بس دس منٹ میں ایئرپورٹ!"
+  },
+  {
+   "t0": 359.1,
+   "t1": 362.5,
+   "who": "Guard",
+   "text": "Assalam o Alaikum. Ticket aur shanakhti card dikhayein.",
+   "urdu": "السلام علیکم۔ ٹکٹ اور شناختی کارڈ دکھائیں۔"
+  },
+  {
+   "t0": 362.90000000000003,
+   "t1": 365.90000000000003,
+   "who": "Umer",
+   "text": "Yeh lijiye — Karachi se Islamabad, aaj ki flight.",
+   "urdu": "یہ لیجیے، کراچی سے اسلام آباد، آج کی فلائٹ۔"
+  },
+  {
+   "t0": 366.70000000000005,
+   "t1": 369.70000000000005,
+   "who": "Guard",
+   "text": "Theek hai. Gaari ki checking hogi.",
+   "urdu": "ٹھیک ہے۔ گاڑی کی چیکنگ ہوگی۔"
+  },
+  {
+   "t0": 376.70000000000005,
+   "t1": 379.1,
+   "who": "Guard",
+   "text": "Sab theek hai — jaayein!",
+   "urdu": "سب ٹھیک ہے، جائیں!"
+  },
+  {
+   "t0": 381.1,
+   "t1": 385.70000000000005,
+   "who": "Umer",
+   "text": "Dosto, departure upar hai aur arrival neeche — hum upar ja rahe hain!",
+   "urdu": "دوستو، ڈیپارچر اوپر ہے اور ارائیول نیچے، ہم اوپر جا رہے ہیں!"
+  },
+  {
+   "t0": 390.70000000000005,
+   "t1": 394.70000000000005,
+   "who": "Umer",
+   "text": "Woh raha Jinnah International Airport!",
+   "urdu": "وہ رہا جناح انٹرنیشنل ایئرپورٹ!"
+  },
+  {
+   "t0": 401.3,
+   "t1": 403.3,
+   "who": "Driver",
+   "text": "Allah Hafiz Umer bhai, safar mubarak!",
+   "urdu": "اللہ حافظ عمر بھائی، سفر مبارک!"
+  },
+  {
+   "t0": 403.3,
+   "t1": 404.70000000000005,
+   "who": "Umer",
+   "text": "Allah Hafiz chacha, shukriya!",
+   "urdu": "اللہ حافظ چچا، شکریہ!"
+  },
+  {
+   "t0": 404.90000000000003,
+   "t1": 406.5,
+   "who": "Umer",
+   "text": "Chalein dosto — check-in karte hain.",
+   "urdu": "چلیں دوستو، چیک ان کرتے ہیں۔"
+  },
+  {
+   "t0": 411.5,
+   "t1": 413.3,
+   "who": "Agent",
+   "text": "Assalam o Alaikum! Aap ka CNIC aur ticket, please.",
+   "urdu": "السلام علیکم! آپ کا شناختی کارڈ اور ٹکٹ، پلیز۔"
+  },
+  {
+   "t0": 413.4,
+   "t1": 414.9,
+   "who": "Agent",
+   "text": "Yeh rahi aap ki boarding pass. Safar mubarak!",
+   "urdu": "یہ رہا آپ کا بورڈنگ پاس۔ سفر مبارک!"
+  },
+  {
+   "t0": 414.9,
+   "t1": 416.5,
+   "who": "Umer",
+   "text": "Bohat shukriya!",
+   "urdu": "بہت شکریہ!"
+  },
+  {
+   "t0": 418.7,
+   "t1": 420.9,
+   "who": "Umer",
+   "text": "Camera tray mein — security check zaroori hai.",
+   "urdu": "کیمرا ٹرے میں، سیکیورٹی چیک ضروری ہے۔"
+  },
+  {
+   "t0": 426.7,
+   "t1": 428.1,
+   "who": "Umer",
+   "text": "Camera wapas mil gaya! Ab gate ki taraf.",
+   "urdu": "کیمرا واپس مل گیا! اب گیٹ کی طرف۔"
+  },
+  {
+   "t0": 437.1,
+   "t1": 440.5,
+   "who": "Umer",
+   "text": "Ek burger, fries aur ek chai, please.",
+   "urdu": "ایک برگر، فرائز اور ایک چائے، پلیز۔"
+  },
+  {
+   "t0": 440.90000000000003,
+   "t1": 443.5,
+   "who": "Staff",
+   "text": "Ji sir, abhi lijiye!",
+   "urdu": "جی سر، ابھی لیجیے!"
+  },
+  {
+   "t0": 449.1,
+   "t1": 452.5,
+   "who": "Bilal",
+   "text": "Arey Umer! Tum bhi Islamabad ja rahe ho?",
+   "urdu": "ارے عمر! تم بھی اسلام آباد جا رہے ہو؟"
+  },
+  {
+   "t0": 452.90000000000003,
+   "t1": 457.70000000000005,
+   "who": "Umer",
+   "text": "Haan yaar! Raaste mein gaari kharab ho gayi thi, bas abhi pohancha hoon.",
+   "urdu": "ہاں یار! راستے میں گاڑی خراب ہو گئی تھی، بس ابھی پہنچا ہوں۔"
+  },
+  {
+   "t0": 458.1,
+   "t1": 461.70000000000005,
+   "who": "Hamza",
+   "text": "Shukar hai pohanch gaye! Chalo, araam se nashta karo.",
+   "urdu": "شکر ہے پہنچ گئے! چلو، آرام سے ناشتہ کرو۔"
+  },
+  {
+   "t0": 462.5,
+   "t1": 465.70000000000005,
+   "who": "Umer",
+   "text": "Yeh burger to zabardast hai, yaar!",
+   "urdu": "یہ برگر تو زبردست ہے یار!"
+  },
+  {
+   "t0": 469.1,
+   "t1": 477.1,
+   "who": "Announcement",
+   "text": "Mohtaram musafiron, Islamabad jane wali parwaz ki boarding shuru ho chuki hai. Baraye meharbani gate ki taraf tashreef le jayen. Shukriya.",
+   "urdu": "محترم مسافروں، اسلام آباد جانے والی پرواز کی بورڈنگ شروع ہو چکی ہے۔ برائے مہربانی گیٹ کی طرف تشریف لے جائیں۔ شکریہ۔"
+  },
+  {
+   "t0": 477.70000000000005,
+   "t1": 480.5,
+   "who": "Umer",
+   "text": "Chalo yaar, boarding shuru!",
+   "urdu": "چلو یار، بورڈنگ شروع!"
+  },
+  {
+   "t0": 488.70000000000005,
+   "t1": 491.70000000000005,
+   "who": "Umer",
+   "text": "Boarding shuru ho gayi — gate ki taraf chalte hain!",
+   "urdu": "بورڈنگ شروع ہو گئی، گیٹ کی طرف چلتے ہیں!"
+  },
+  {
+   "t0": 494.1,
+   "t1": 497.70000000000005,
+   "who": "Umer",
+   "text": "Yeh jet bridge seedha jahaz ke darwaze tak jata hai.",
+   "urdu": "یہ جیٹ برج سیدھا جہاز کے دروازے تک جاتا ہے۔"
+  },
+  {
+   "t0": 504.70000000000005,
+   "t1": 507.70000000000005,
+   "who": "Umer",
+   "text": "Boarding ho gayi — ab runway ki taraf!",
+   "urdu": "بورڈنگ ہو گئی، اب رن وے کی طرف!"
+  },
+  {
+   "t0": 509.5,
+   "t1": 512.5,
+   "who": "Umer",
+   "text": "Takeoff... Bismillah!",
+   "urdu": "ٹیک آف... بسم اللہ!"
+  },
+  {
+   "t0": 527.1,
+   "t1": 529.7,
+   "who": "Umer",
+   "text": "Dekhiye dosto — baadalon ke upar kya nazara hai!",
+   "urdu": "دیکھیے دوستو، بادلوں کے اوپر کیا نظارہ ہے!"
+  },
+  {
+   "t0": 532.4,
+   "t1": 534.7,
+   "who": "Umer",
+   "text": "Karachi peeche reh gaya — Islamabad ab zyada door nahi.",
+   "urdu": "کراچی پیچھے رہ گیا، اسلام آباد اب زیادہ دور نہیں۔"
+  },
+  {
+   "t0": 534.7,
+   "t1": 537.1,
+   "who": "Umer",
+   "text": "Thori der mein landing hogi, InshaAllah!",
+   "urdu": "تھوڑی دیر میں لینڈنگ ہوگی، ان شاء اللہ!"
+  },
+  {
+   "t0": 537.5,
+   "t1": 540.7,
+   "who": "Umer",
+   "text": "Islamabad aa gaya! Peeche Margalla Hills dekhiye.",
+   "urdu": "اسلام آباد آ گیا! پیچھے مارگلہ ہلز دیکھیے۔"
+  },
+  {
+   "t0": 542.1,
+   "t1": 544.7,
+   "who": "Umer",
+   "text": "Smooth landing — Alhamdulillah!",
+   "urdu": "اسموتھ لینڈنگ، الحمدللہ!"
+  },
+  {
+   "t0": 546.6,
+   "t1": 550.2,
+   "who": "Umer",
+   "text": "Islamabad pohanch gaye! Ab bas apna bag mil jaye...",
+   "urdu": "اسلام آباد پہنچ گئے! اب بس اپنا بیگ مل جائے..."
+  },
+  {
+   "t0": 553,
+   "t1": 556,
+   "who": "Umer",
+   "text": "Woh raha — mera blue bag!",
+   "urdu": "وہ رہا، میرا بلیو بیگ!"
+  },
+  {
+   "t0": 563,
+   "t1": 566,
+   "who": "Umer",
+   "text": "Dosto, yeh hai Islamabad International Airport!",
+   "urdu": "دوستو، یہ ہے اسلام آباد انٹرنیشنل ایئرپورٹ!"
+  },
+  {
+   "t0": 566.2,
+   "t1": 569.8000000000001,
+   "who": "Umer",
+   "text": "Kitna bada, saaf aur khoobsurat hai — maza aa gaya!",
+   "urdu": "کتنا بڑا، صاف اور خوبصورت ہے، مزہ آ گیا!"
+  },
+  {
+   "t0": 570.6,
+   "t1": 574.6,
+   "who": "Umer",
+   "text": "Bahar se dekhiye — Islamabad airport ki lehrati hui chhat!",
+   "urdu": "باہر سے دیکھیے، اسلام آباد ایئرپورٹ کی لہراتی ہوئی چھت!"
+  },
+  {
+   "t0": 578.6,
+   "t1": 582.2,
+   "who": "Umer",
+   "text": "Meri Corolla Grande parking mein khadi hai — chalo!",
+   "urdu": "میری کرولا گرینڈی پارکنگ میں کھڑی ہے، چلو!"
+  },
+  {
+   "t0": 590.6,
+   "t1": 594,
+   "who": "Umer",
+   "text": "Bag andar, seat belt laga li — Bismillah!",
+   "urdu": "بیگ اندر، سیٹ بیلٹ لگا لی، بسم اللہ!"
+  },
+  {
+   "t0": 598.6,
+   "t1": 603,
+   "who": "Umer",
+   "text": "Ab seedha Murree Road ki taraf — Islamabad ki sair!",
+   "urdu": "اب سیدھا مری روڈ کی طرف، اسلام آباد کی سیر!"
+  },
+  {
+   "t0": 608.6,
+   "t1": 612.6,
+   "who": "Umer",
+   "text": "Yeh hai Murree Road — upar Metro Bus chal rahi hai!",
+   "urdu": "یہ ہے مری روڈ، اوپر میٹرو بس چل رہی ہے!"
+  },
+  {
+   "t0": 624,
+   "t1": 628.6,
+   "who": "Umer",
+   "text": "Dekhiye dosto — Islamabad sirf hara bhara nahi, yahan bari bari imaratein aur malls bhi hain!",
+   "urdu": "دیکھیے دوستو، اسلام آباد صرف ہرا بھرا نہیں، یہاں بڑی بڑی عمارتیں اور مالز بھی ہیں!"
+  },
+  {
+   "t0": 629,
+   "t1": 632.6,
+   "who": "Umer",
+   "text": "Aur har jagah Aprox AI aur Next Group ke banners!",
+   "urdu": "اور ہر جگہ ایپروکس اے آئی اور نیکسٹ گروپ کے بینرز!"
+  },
+  {
+   "t0": 638.6,
+   "t1": 642.2,
+   "who": "Umer",
+   "text": "Signal laal — zebra crossing par log guzar rahe hain.",
+   "urdu": "سگنل لال، زیبرا کراسنگ پر لوگ گزر رہے ہیں۔"
+  },
+  {
+   "t0": 652.2,
+   "t1": 656.2,
+   "who": "Umer",
+   "text": "Aage Margalla Hills — aur phir Faisal Masjid!",
+   "urdu": "آگے مارگلہ ہلز، اور پھر فیصل مسجد!"
+  },
+  {
+   "t0": 659.1,
+   "t1": 662.9,
+   "who": "Umer",
+   "text": "Islamabad ki sarkein — saaf, hari bhari, aur peeche Margalla!",
+   "urdu": "اسلام آباد کی سڑکیں، صاف، ہری بھری، اور پیچھے مارگلہ!"
+  },
+  {
+   "t0": 664.6,
+   "t1": 668.6,
+   "who": "Umer",
+   "text": "Aur yeh hai Faisal Masjid... SubhanAllah.",
+   "urdu": "اور یہ ہے فیصل مسجد... سبحان اللہ۔"
+  },
+  {
+   "t0": 675.1,
+   "t1": 678.1,
+   "who": "Umer",
+   "text": "Dosto, Karachi se Islamabad ka safar mukammal hua!",
+   "urdu": "دوستو، کراچی سے اسلام آباد کا سفر مکمل ہوا!"
+  },
+  {
+   "t0": 678.1,
+   "t1": 680.9,
+   "who": "Umer",
+   "text": "Video pasand aaye to like, share aur subscribe zaroor karein.",
+   "urdu": "ویڈیو پسند آئے تو لائک، شیئر اور سبسکرائب ضرور کریں۔"
+  },
+  {
+   "t0": 680.9,
+   "t1": 683.4,
+   "who": "Umer",
+   "text": "Agli episode mein milte hain — Allah Hafiz!",
+   "urdu": "اگلی ایپی سوڈ میں ملتے ہیں، اللہ حافظ!"
+  }
+ ],
+ "sfx": [
+  {
+   "t": 0,
+   "name": "music_sting"
+  },
+  {
+   "t": 5.7,
+   "name": "alarm"
+  },
+  {
+   "t": 162.5,
+   "name": "horn"
+  },
+  {
+   "t": 178.1,
+   "name": "gate"
+  },
+  {
+   "t": 193.3,
+   "name": "door"
+  },
+  {
+   "t": 193.8,
+   "name": "engine"
+  },
+  {
+   "t": 227.1,
+   "name": "train"
+  },
+  {
+   "t": 246.1,
+   "name": "hiss"
+  },
+  {
+   "t": 257.3,
+   "name": "door"
+  },
+  {
+   "t": 258.1,
+   "name": "hood"
+  },
+  {
+   "t": 296.1,
+   "name": "wrench"
+  },
+  {
+   "t": 316.1,
+   "name": "hood"
+  },
+  {
+   "t": 327.1,
+   "name": "engine"
+  },
+  {
+   "t": 328.6,
+   "name": "engine"
+  },
+  {
+   "t": 378.1,
+   "name": "barrier"
+  },
+  {
+   "t": 400.3,
+   "name": "door"
+  },
+  {
+   "t": 411.3,
+   "name": "belt"
+  },
+  {
+   "t": 468.3,
+   "name": "chime"
+  },
+  {
+   "t": 504.1,
+   "name": "jet_taxi"
+  },
+  {
+   "t": 509.1,
+   "name": "jet_roar"
+  },
+  {
+   "t": 537.1,
+   "name": "jet_approach"
+  },
+  {
+   "t": 541.3000000000001,
+   "name": "touchdown"
+  },
+  {
+   "t": 587.1,
+   "name": "door"
+  },
+  {
+   "t": 593.2,
+   "name": "door"
+  },
+  {
+   "t": 594.6,
+   "name": "engine"
+  },
+  {
+   "t": 609.6,
+   "name": "metro"
+  },
+  {
+   "t": 669.1,
+   "name": "birds"
+  }
+ ],
+ "seqs": [
+  {
+   "id": "I",
+   "t0": 0,
+   "t1": 5.5,
+   "ambience": "street"
+  },
+  {
+   "id": "H",
+   "t0": 5.5,
+   "t1": 173.5,
+   "ambience": "room"
+  },
+  {
+   "id": "A",
+   "t0": 173.5,
+   "t1": 198.1,
+   "ambience": "street"
+  },
+  {
+   "id": "B",
+   "t0": 198.1,
+   "t1": 243.1,
+   "ambience": "street"
+  },
+  {
+   "id": "X",
+   "t0": 243.1,
+   "t1": 283.1,
+   "ambience": "street"
+  },
+  {
+   "id": "Y",
+   "t0": 283.1,
+   "t1": 328.1,
+   "ambience": "workshop"
+  },
+  {
+   "id": "R",
+   "t0": 328.1,
+   "t1": 350.1,
+   "ambience": "street"
+  },
+  {
+   "id": "J",
+   "t0": 350.1,
+   "t1": 396.1,
+   "ambience": "street"
+  },
+  {
+   "id": "C",
+   "t0": 396.1,
+   "t1": 406.5,
+   "ambience": "street"
+  },
+  {
+   "id": "K",
+   "t0": 406.5,
+   "t1": 428.1,
+   "ambience": "hall"
+  },
+  {
+   "id": "N",
+   "t0": 428.1,
+   "t1": 488.1,
+   "ambience": "hall"
+  },
+  {
+   "id": "G",
+   "t0": 488.1,
+   "t1": 504.1,
+   "ambience": "hall"
+  },
+  {
+   "id": "D",
+   "t0": 504.1,
+   "t1": 521.1,
+   "ambience": "jet"
+  },
+  {
+   "id": "F",
+   "t0": 521.1,
+   "t1": 537.1,
+   "ambience": "cabin"
+  },
+  {
+   "id": "L",
+   "t0": 537.1,
+   "t1": 545.6,
+   "ambience": "jet"
+  },
+  {
+   "id": "M",
+   "t0": 545.6,
+   "t1": 569.6,
+   "ambience": "hall"
+  },
+  {
+   "id": "Q",
+   "t0": 569.6,
+   "t1": 607.6,
+   "ambience": "street"
+  },
+  {
+   "id": "S",
+   "t0": 607.6,
+   "t1": 658.1,
+   "ambience": "street"
+  },
+  {
+   "id": "E",
+   "t0": 658.1,
+   "t1": 688.6,
+   "ambience": "outdoor"
+  }
+ ],
+ "shots": [
+  {
+   "seq": "I",
+   "id": "I01",
+   "t0": 0,
+   "t1": 5.5,
+   "desc": "Drone dawn shot — Karachi shahrah, title card"
+  },
+  {
+   "seq": "H",
+   "id": "H01",
+   "t0": 5.5,
+   "t1": 11.5,
+   "desc": "Close-up: alarm 6:00 baj raha hai, Umer bistar mein"
+  },
+  {
+   "seq": "H",
+   "id": "H02",
+   "t0": 11.5,
+   "t1": 17.5,
+   "desc": "Wide: Umer bistar par uth kar baithta hai"
+  },
+  {
+   "seq": "H",
+   "id": "H03",
+   "t0": 17.5,
+   "t1": 25.5,
+   "desc": "Bistar ke kinare baith kar angraai, phir khara hota hai"
+  },
+  {
+   "seq": "H",
+   "id": "H04",
+   "t0": 25.5,
+   "t1": 37.5,
+   "desc": "Bedroom selfie vlog intro"
+  },
+  {
+   "seq": "H",
+   "id": "H05",
+   "t0": 37.5,
+   "t1": 45.5,
+   "desc": "Bathroom ki taraf walk (tracking)"
+  },
+  {
+   "seq": "H",
+   "id": "H06",
+   "t0": 45.5,
+   "t1": 63.5,
+   "desc": "Sink par daant brush — Roman Urdu baatein"
+  },
+  {
+   "seq": "H",
+   "id": "H07",
+   "t0": 63.5,
+   "t1": 69.5,
+   "desc": "Bedroom wapas — Ammi ko awaaz"
+  },
+  {
+   "seq": "H",
+   "id": "H08",
+   "t0": 69.5,
+   "t1": 85.5,
+   "desc": "Ammi bag le kar aati hain, bistar par kholti hain"
+  },
+  {
+   "seq": "H",
+   "id": "H09",
+   "t0": 85.5,
+   "t1": 109.5,
+   "desc": "Almari khulti hai, kapre suitcase mein (3 chakkar)"
+  },
+  {
+   "seq": "H",
+   "id": "H10",
+   "t0": 109.5,
+   "t1": 117.5,
+   "desc": "Suitcase band, zip, neeche khara"
+  },
+  {
+   "seq": "H",
+   "id": "H11",
+   "t0": 117.5,
+   "t1": 133.5,
+   "desc": "Driver ko phone call"
+  },
+  {
+   "seq": "H",
+   "id": "H12",
+   "t0": 133.5,
+   "t1": 173.5,
+   "desc": "Nashta: paratha, chai, Ammi ki dua, bahar horn"
+  },
+  {
+   "seq": "A",
+   "id": "A01",
+   "t0": 173.5,
+   "t1": 178,
+   "desc": "Wide establishing crane — ghar, gate, Revo, driver"
+  },
+  {
+   "seq": "A",
+   "id": "A02",
+   "t0": 178,
+   "t1": 182.1,
+   "desc": "Medium: gate khulta hai, Umer camera + suitcase ke saath bahar"
+  },
+  {
+   "seq": "A",
+   "id": "A03",
+   "t0": 182.1,
+   "t1": 186.5,
+   "desc": "Selfie vlog close-up — Assalam o Alaikum"
+  },
+  {
+   "seq": "A",
+   "id": "A04",
+   "t0": 186.5,
+   "t1": 189.1,
+   "desc": "Two-shot: driver salaam karta hai"
+  },
+  {
+   "seq": "A",
+   "id": "A05",
+   "t0": 189.1,
+   "t1": 193.1,
+   "desc": "Wide side: driver suitcase Revo ke bed mein rakhta hai, Umer passenger door ki taraf"
+  },
+  {
+   "seq": "A",
+   "id": "A06",
+   "t0": 193.1,
+   "t1": 198.1,
+   "desc": "Low-angle tracking: Revo LEFT lane mein rawana"
+  },
+  {
+   "seq": "B",
+   "id": "B01",
+   "t0": 198.1,
+   "t1": 203.1,
+   "desc": "Aerial crane: Revo left carriageway par, railway line saath"
+  },
+  {
+   "seq": "B",
+   "id": "B02",
+   "t0": 203.1,
+   "t1": 207.6,
+   "desc": "Side tracking — wheels, driver RIGHT seat"
+  },
+  {
+   "seq": "B",
+   "id": "B03",
+   "t0": 207.6,
+   "t1": 212.6,
+   "desc": "Andar se selfie"
+  },
+  {
+   "seq": "B",
+   "id": "B04",
+   "t0": 212.6,
+   "t1": 226.1,
+   "desc": "Laal signal: Revo stop line par, zebra par log guzarte hain, phir hara"
+  },
+  {
+   "seq": "B",
+   "id": "B05",
+   "t0": 226.1,
+   "t1": 235.1,
+   "desc": "Railway: Circular Railway ki train road ke saath daudti hai"
+  },
+  {
+   "seq": "B",
+   "id": "B06",
+   "t0": 235.1,
+   "t1": 243.1,
+   "desc": "Brand banners montage — Aprox AI, Aprox Attendant, Aprox Technology, Next Group"
+  },
+  {
+   "seq": "X",
+   "id": "X01",
+   "t0": 243.1,
+   "t1": 250.1,
+   "desc": "Tracking: bonnet se bhaap nikalti hai"
+  },
+  {
+   "seq": "X",
+   "id": "X02",
+   "t0": 250.1,
+   "t1": 257.1,
+   "desc": "Revo left kinare par rukti hai, hazard lights"
+  },
+  {
+   "seq": "X",
+   "id": "X03",
+   "t0": 257.1,
+   "t1": 269.1,
+   "desc": "Driver bonnet kholta hai, bhaap; Umer bahar aa kar pareshan"
+  },
+  {
+   "seq": "X",
+   "id": "X04",
+   "t0": 269.1,
+   "t1": 276.1,
+   "desc": "Close: Umer ghari dekhta hai — late ho raha hoon!"
+  },
+  {
+   "seq": "X",
+   "id": "X05",
+   "t0": 276.1,
+   "t1": 283.1,
+   "desc": "Vlog: Umer camera se baat karta hai"
+  },
+  {
+   "seq": "Y",
+   "id": "Y01",
+   "t0": 283.1,
+   "t1": 290.1,
+   "desc": "Revo dheere dheere workshop par pohanchti hai"
+  },
+  {
+   "seq": "Y",
+   "id": "Y02",
+   "t0": 290.1,
+   "t1": 301.1,
+   "desc": "Mechanic bonnet ke andar kaam karta hai — Umer jaldi ka kehta hai"
+  },
+  {
+   "seq": "Y",
+   "id": "Y03",
+   "t0": 301.1,
+   "t1": 316.1,
+   "desc": "Umer idhar udhar chakkar lagata hai, ghari dekhta hai"
+  },
+  {
+   "seq": "Y",
+   "id": "Y04",
+   "t0": 316.1,
+   "t1": 328.1,
+   "desc": "Gaari theek, paise, rawangi"
+  },
+  {
+   "seq": "R",
+   "id": "R01",
+   "t0": 328.1,
+   "t1": 335.1,
+   "desc": "Low fast tracking — Revo overtake karti hai"
+  },
+  {
+   "seq": "R",
+   "id": "R02",
+   "t0": 335.1,
+   "t1": 344.1,
+   "desc": "Andar selfie — tension"
+  },
+  {
+   "seq": "R",
+   "id": "R03",
+   "t0": 344.1,
+   "t1": 350.1,
+   "desc": "Aerial — banners ke beech se tez raftar"
+  },
+  {
+   "seq": "J",
+   "id": "J01",
+   "t0": 350.1,
+   "t1": 358.1,
+   "desc": "Wide: entry checkpoint, canopy aur Jinnah International signage, Revo aati hai"
+  },
+  {
+   "seq": "J",
+   "id": "J02",
+   "t0": 358.1,
+   "t1": 370.1,
+   "desc": "Guard ticket aur shanakhti card maangta hai"
+  },
+  {
+   "seq": "J",
+   "id": "J03",
+   "t0": 370.1,
+   "t1": 380.1,
+   "desc": "Under-vehicle mirror se gaari ki checking, barrier uthta hai"
+  },
+  {
+   "seq": "J",
+   "id": "J04",
+   "t0": 380.1,
+   "t1": 390.1,
+   "desc": "Departures ramp upar — Arrivals neeche (signs)"
+  },
+  {
+   "seq": "J",
+   "id": "J05",
+   "t0": 390.1,
+   "t1": 396.1,
+   "desc": "Drone: ramp aur aage terminal"
+  },
+  {
+   "seq": "C",
+   "id": "C01",
+   "t0": 396.1,
+   "t1": 401.1,
+   "desc": "Wide establishing: Jinnah terminal, Revo drop-off lane mein rukti hai"
+  },
+  {
+   "seq": "C",
+   "id": "C02",
+   "t0": 401.1,
+   "t1": 406.5,
+   "desc": "Driver Allah Hafiz kehta hai, Umer terminal ki taraf"
+  },
+  {
+   "seq": "K",
+   "id": "K01",
+   "t0": 406.5,
+   "t1": 411.1,
+   "desc": "Check-in hall wide: Umer queue se counter tak"
+  },
+  {
+   "seq": "K",
+   "id": "K02",
+   "t0": 411.1,
+   "t1": 416.5,
+   "desc": "Medium: bag belt par, boarding pass hand-to-hand"
+  },
+  {
+   "seq": "K",
+   "id": "K03",
+   "t0": 416.5,
+   "t1": 418.5,
+   "desc": "Insert close-up: boarding pass KHI → ISB"
+  },
+  {
+   "seq": "K",
+   "id": "K04",
+   "t0": 418.5,
+   "t1": 428.1,
+   "desc": "Security: camera tray mein, tray x-ray se guzarti hai, Umer arch se, camera wapas haath mein"
+  },
+  {
+   "seq": "N",
+   "id": "N01",
+   "t0": 428.1,
+   "t1": 436.1,
+   "desc": "Lounge wide: food court — McDonald's, Chai Khana, Karachi Biryani; glass ke bahar jahaz"
+  },
+  {
+   "seq": "N",
+   "id": "N02",
+   "t0": 436.1,
+   "t1": 446.1,
+   "desc": "McDonald's counter par order, tray haath mein"
+  },
+  {
+   "seq": "N",
+   "id": "N03",
+   "t0": 446.1,
+   "t1": 467.1,
+   "desc": "Doston (Bilal, Hamza) ke saath table par nashta, baatein"
+  },
+  {
+   "seq": "N",
+   "id": "N04",
+   "t0": 467.1,
+   "t1": 479.1,
+   "desc": "Speaker par announcement — sab upar dekhte hain"
+  },
+  {
+   "seq": "N",
+   "id": "N05",
+   "t0": 479.1,
+   "t1": 488.1,
+   "desc": "Dost gate ki taraf chal padte hain"
+  },
+  {
+   "seq": "G",
+   "id": "G01",
+   "t0": 488.1,
+   "t1": 493.6,
+   "desc": "Gate lounge: steel seats, glass wall ke bahar aircraft, Umer gate ki taraf"
+  },
+  {
+   "seq": "G",
+   "id": "G02",
+   "t0": 493.6,
+   "t1": 499.6,
+   "desc": "Jet bridge: Umer ke peeche se tracking, glass ke bahar apron"
+  },
+  {
+   "seq": "G",
+   "id": "G03",
+   "t0": 499.6,
+   "t1": 504.1,
+   "desc": "Exterior: jet bridge aircraft ke port door se attached"
+  },
+  {
+   "seq": "D",
+   "id": "D01",
+   "t0": 504.1,
+   "t1": 509.1,
+   "desc": "Runway par taxi — nose aage, gear down, wheels ground par"
+  },
+  {
+   "seq": "D",
+   "id": "D02",
+   "t0": 509.1,
+   "t1": 514.1,
+   "desc": "Takeoff roll — runway follow shot, speed barhti hai"
+  },
+  {
+   "seq": "D",
+   "id": "D03",
+   "t0": 514.1,
+   "t1": 521.1,
+   "desc": "Rotation + liftoff + climb, gear retract — wide side"
+  },
+  {
+   "seq": "F",
+   "id": "F01",
+   "t0": 521.1,
+   "t1": 526.6,
+   "desc": "Exterior chase: aircraft cruise, wings level, baadal neeche"
+  },
+  {
+   "seq": "F",
+   "id": "F02",
+   "t0": 526.6,
+   "t1": 532.1,
+   "desc": "Window POV: wing, engine aur baadal (Umer ki nazar se)"
+  },
+  {
+   "seq": "F",
+   "id": "F03",
+   "t0": 532.1,
+   "t1": 537.1,
+   "desc": "Selfie vlog seat se"
+  },
+  {
+   "seq": "L",
+   "id": "L01",
+   "t0": 537.1,
+   "t1": 541.1,
+   "desc": "Final approach: runway se aligned, gear down, Margalla Hills peeche"
+  },
+  {
+   "seq": "L",
+   "id": "L02",
+   "t0": 541.1,
+   "t1": 545.6,
+   "desc": "Touchdown + rollout — main gear pehle, phir nose gear"
+  },
+  {
+   "seq": "M",
+   "id": "M01",
+   "t0": 545.6,
+   "t1": 556.6,
+   "desc": "Baggage carousel: bags belt par, Umer apna blue bag uthata hai"
+  },
+  {
+   "seq": "M",
+   "id": "M02",
+   "t0": 556.6,
+   "t1": 562.6,
+   "desc": "Arrival hall wide — teal signage band, Umer suitcase ke saath"
+  },
+  {
+   "seq": "M",
+   "id": "M03",
+   "t0": 562.6,
+   "t1": 569.6,
+   "desc": "Walking selfie"
+  },
+  {
+   "seq": "Q",
+   "id": "Q01",
+   "t0": 569.6,
+   "t1": 576.6,
+   "desc": "Drone: Islamabad International Airport ki wavy white chhat, Margalla peeche"
+  },
+  {
+   "seq": "Q",
+   "id": "Q02",
+   "t0": 576.6,
+   "t1": 581.6,
+   "desc": "Umer terminal se bahar nikalta hai (bag ke saath)"
+  },
+  {
+   "seq": "Q",
+   "id": "Q03",
+   "t0": 581.6,
+   "t1": 594.6,
+   "desc": "Parking: Corolla Grande, driver door khulta hai, bag andar, Umer baithta hai"
+  },
+  {
+   "seq": "Q",
+   "id": "Q04",
+   "t0": 594.6,
+   "t1": 599.6,
+   "desc": "Dashboard camera — Umer driving seat par"
+  },
+  {
+   "seq": "Q",
+   "id": "Q05",
+   "t0": 599.6,
+   "t1": 607.6,
+   "desc": "Corolla parking se nikal kar road par"
+  },
+  {
+   "seq": "S",
+   "id": "S01",
+   "t0": 607.6,
+   "t1": 615.6,
+   "desc": "Aerial: elevated Metro Bus guideway, Corolla left lane mein"
+  },
+  {
+   "seq": "S",
+   "id": "S02",
+   "t0": 615.6,
+   "t1": 622.6,
+   "desc": "\"Murree Road\" green sign ke neeche se Corolla"
+  },
+  {
+   "seq": "S",
+   "id": "S03",
+   "t0": 622.6,
+   "t1": 632.6,
+   "desc": "Dashboard camera: Umer driving karte hue baat karta hai"
+  },
+  {
+   "seq": "S",
+   "id": "S04",
+   "t0": 632.6,
+   "t1": 646.1,
+   "desc": "Signal laal, zebra par log, upar metro bus guzarti hai, phir hara"
+  },
+  {
+   "seq": "S",
+   "id": "S05",
+   "t0": 646.1,
+   "t1": 652.1,
+   "desc": "Mall + Islamabad towers ke saamne se"
+  },
+  {
+   "seq": "S",
+   "id": "S06",
+   "t0": 652.1,
+   "t1": 658.1,
+   "desc": "Aage Margalla Hills"
+  },
+  {
+   "seq": "E",
+   "id": "E01",
+   "t0": 658.1,
+   "t1": 664.1,
+   "desc": "Drone: Revo avenue par Faisal Masjid ki taraf, Margalla Hills peeche"
+  },
+  {
+   "seq": "E",
+   "id": "E02",
+   "t0": 664.1,
+   "t1": 669.1,
+   "desc": "Faisal Masjid establishing — minarets, tent-shaped hall, hills"
+  },
+  {
+   "seq": "E",
+   "id": "E03",
+   "t0": 669.1,
+   "t1": 674.6,
+   "desc": "Umer courtyard mein camera ke saath walk karta hai"
+  },
+  {
+   "seq": "E",
+   "id": "E04",
+   "t0": 674.6,
+   "t1": 683.6,
+   "desc": "Selfie vlog outro — Faisal Masjid peeche"
+  },
+  {
+   "seq": "E",
+   "id": "E05",
+   "t0": 683.6,
+   "t1": 688.6,
+   "desc": "Drone pull-back + end card"
+  }
+ ]
+}
