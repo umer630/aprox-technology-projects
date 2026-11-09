@@ -1,0 +1,13 @@
+# Single-node deployment. Put a TLS-terminating reverse proxy (Caddy/nginx) in front and set NEBIUS_PUBLIC_URL=https://…
+services:
+  nebius:
+    build: { context: .., dockerfile: deploy/Dockerfile }
+    env_file: nebius.env
+    ports: ["127.0.0.1:8090:8090"]
+    volumes:
+      - nebius-data:/data
+      - /var/run/docker.sock:/var/run/docker.sock   # privileged: dedicated host only (docs/DEPLOYMENT.md)
+    group_add: ["${DOCKER_GID:-999}"]
+    restart: unless-stopped
+volumes:
+  nebius-data:

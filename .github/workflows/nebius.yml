@@ -1,0 +1,26 @@
+name: nebius
+on:
+  push: { paths: ['nebius/**', '.github/workflows/nebius.yml'] }
+  pull_request: { paths: ['nebius/**'] }
+permissions: { contents: read }
+jobs:
+  backend:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - name: Build notebook kernel image
+        run: docker build -t nebius-jupyter:local -f nebius/deploy/jupyter.Dockerfile nebius/deploy
+      - name: Fetch Approx-Ai (read-only, for the Nick 4.8 integration test)
+        run: git clone --depth 1 https://github.com/umer630/Approx-Ai "$RUNNER_TEMP/approx-ai"
+      - name: Tests
+        working-directory: nebius/backend
+        env: { APPROX_REPO_PATH: '${{ runner.temp }}/approx-ai' }
+        run: npm test
+  android:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y aapt apksigner zipalign dalvik-exchange android-sdk-platform-23
+      - run: nebius/android/build.sh debug

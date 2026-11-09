@@ -9,7 +9,7 @@
   "scripts": {
     "start": "node --disable-warning=ExperimentalWarning src/server.js",
     "dev": "NEBIUS_ENV=development node --disable-warning=ExperimentalWarning src/server.js",
-    "test": "NEBIUS_ENV=test node --disable-warning=ExperimentalWarning --test --test-concurrency=1 test/",
+    "test": "NEBIUS_ENV=test node --disable-warning=ExperimentalWarning --test --test-concurrency=1 test/*.test.js",
     "cli": "node --disable-warning=ExperimentalWarning src/cli.js"
   }
 }
