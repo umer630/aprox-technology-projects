@@ -1,0 +1,15 @@
+{
+  "name": "nebius-backend",
+  "version": "0.1.0",
+  "description": "NEBIUS (provisional name) — AI cloud console backend: IAM, projects, storage, compute, free-only GPU providers, scheduler, training, notebooks, terminal, monitoring, API",
+  "type": "module",
+  "private": true,
+  "license": "UNLICENSED",
+  "engines": { "node": ">=22.13" },
+  "scripts": {
+    "start": "node --disable-warning=ExperimentalWarning src/server.js",
+    "dev": "NEBIUS_ENV=development node --disable-warning=ExperimentalWarning src/server.js",
+    "test": "NEBIUS_ENV=test node --disable-warning=ExperimentalWarning --test --test-concurrency=1 test/",
+    "cli": "node --disable-warning=ExperimentalWarning src/cli.js"
+  }
+}

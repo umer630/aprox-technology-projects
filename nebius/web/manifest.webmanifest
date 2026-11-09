@@ -1,0 +1,2 @@
+{ "name": "NEBIUS Console", "short_name": "NEBIUS", "start_url": "/#/dashboard", "display": "standalone", "background_color": "#0f1a2e", "theme_color": "#0f1a2e",
+  "icons": [{ "src": "/assets/logo.svg", "sizes": "any", "type": "image/svg+xml" }] }

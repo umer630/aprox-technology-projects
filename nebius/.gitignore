@@ -1,0 +1,5 @@
+data/
+node_modules/
+android/build/
+android/keystore/
+*.log
